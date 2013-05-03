@@ -168,6 +168,7 @@
 		3107EA531733E051007E8781 /* twitter_fail_whale_red_channnel_knockout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter_fail_whale_red_channnel_knockout.png; sourceTree = "<group>"; };
 		3107EA871733E0DE007E8781 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3107EA891733E0F3007E8781 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		31EA2CE617343C6A00B01CF6 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +278,7 @@
 		3107E9FF1733DEFE007E8781 /* Helpful */ = {
 			isa = PBXGroup;
 			children = (
+				31EA2CE617343C6A00B01CF6 /* Logging.h */,
 				3107EA0A1733E028007E8781 /* ConstantsAndMacros.h */,
 			);
 			path = Helpful;
@@ -667,6 +669,7 @@
 				3107E9F71733DD86007E8781 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

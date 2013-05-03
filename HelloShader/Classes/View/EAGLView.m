@@ -1,13 +1,14 @@
 //
 //  EAGLView.m
-//  HelloiPadGLSL
+//  HelloShader
 //
-//  Created by turner on 3/23/10.
-//  Copyright Douglass Turner Consulting 2010. All rights reserved.
+//  Created by Douglass Turner on 5/3/13.
+//  Copyright (c) 2013 Elastic Image Software. All rights reserved.
 //
 
 #import "EAGLView.h"
 #import "ES2Renderer.h"
+#import "Logging.h"
 
 @interface EAGLView (PrivateMethods)
 -(id)initializeEAGL;
@@ -30,45 +31,39 @@
 }
 
 -(id)initWithFrame:(CGRect)frame {
-	
-	NSLog(@"EAGL View - init With Frame: origin(%f %f) size(%f %f)", 
-		  frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-	
-    if ((self = [super initWithFrame:frame])) {
+
+    ALog(@"");
+
+    self = [super initWithFrame:frame];
+
+    if (nil != self) {
 		
 		self = [self initializeEAGL];
-		
-    } // if ((self = [super initWithFrame:frame]))
+    }
 	
     return self;
 }
 
-- (id)initWithCoder:(NSCoder*)coder {    
-	
-	NSLog(@"EAGL View - init With Coder");
-	
-    if ((self = [super initWithCoder:coder])) {
-		
-		self = [self initializeEAGL];
-		
-    } // if ((self = [super initWithCoder:coder]))
-	
+- (id)initWithCoder:(NSCoder*)coder {
+
+    ALog(@"");
+
+    self = [super initWithCoder:coder];
+
+    if (nil != self) {
+
+        self = [self initializeEAGL];
+    }
+
     return self;
 }
 
 -(id)initializeEAGL {
-	
-	NSLog(@"EAGL View - initialize EAGL");
-	
-	CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
-	
-	NSLog(@"bounds: %f %f %f %f", eaglLayer.bounds.origin.x, eaglLayer.bounds.origin.y, eaglLayer.bounds.size.width, eaglLayer.bounds.size.height);
-	//	NSLog(@"transform");
-	//	NSLog(@"%f %f %f %f", eaglLayer.transform.m11, eaglLayer.transform.m12, eaglLayer.transform.m13, eaglLayer.transform.m14);
-	//	NSLog(@"%f %f %f %f", eaglLayer.transform.m21, eaglLayer.transform.m22, eaglLayer.transform.m23, eaglLayer.transform.m24);
-	//	NSLog(@"%f %f %f %f", eaglLayer.transform.m31, eaglLayer.transform.m32, eaglLayer.transform.m33, eaglLayer.transform.m34);
-	//	NSLog(@"%f %f %f %f", eaglLayer.transform.m41, eaglLayer.transform.m42, eaglLayer.transform.m43, eaglLayer.transform.m44);
-	
+
+    ALog(@"");
+
+    CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+
 	eaglLayer.opaque = TRUE;
 	eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
 									[NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, 
@@ -80,17 +75,14 @@
 	if (nil == self.renderer) {
 		
 		[self release];
-		
 		return self.renderer;
-		
-	} // if (nil == self.renderer)
+	}
 	
 	m_animating				= FALSE;
 	animationFrameInterval	= 1;
 	m_displayLink			= nil;
 	
 	return self;
-	
 }
 
 - (void)drawView:(id)sender {
@@ -99,10 +91,10 @@
 }
 
 - (void)layoutSubviews {
-	
-	NSLog(@"EAGL View - layout Subviews");
-	
-	[self stopAnimation];
+
+    ALog(@"");
+
+    [self stopAnimation];
     [self.renderer resizeFromLayer:(CAEAGLLayer*)self.layer];
 	[self startAnimation];
 	
@@ -137,9 +129,9 @@
 }
 
 - (void)startAnimation {
-	
-	NSLog(@"EAGL View - start Animation");
-	
+
+    ALog(@"");
+
     if (!self.isAnimating) {
 		
 		self.displayLink = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget:self selector:@selector(drawView:)];

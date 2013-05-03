@@ -1,9 +1,9 @@
 //
 //  EAGLView.h
-//  HelloiPadGLSL
+//  HelloShader
 //
-//  Created by turner on 3/23/10.
-//  Copyright Douglass Turner Consulting 2010. All rights reserved.
+//  Created by Douglass Turner on 5/3/13.
+//  Copyright (c) 2013 Elastic Image Software. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -14,11 +14,6 @@
 @interface EAGLView : UIView {    
 	
 @private
-	
-    // Use of the CADisplayLink class is the preferred method for controlling your animation timing.
-    // CADisplayLink will link to the main display and fire every vsync when added to a given run-loop.
-    // The NSTimer class is used only as fallback when running on a pre 3.1 device where CADisplayLink
-    // isn't available.
     id				m_displayLink;
 	ES2Renderer		*m_renderer;
     BOOL			m_animating;
