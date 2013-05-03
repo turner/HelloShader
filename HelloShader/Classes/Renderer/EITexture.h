@@ -1,5 +1,5 @@
 //
-//  TEITexture.h
+//  EITexture.h
 //  HelloTexture
 //
 //  Created by turner on 5/26/09.
@@ -13,7 +13,7 @@
 #define	checkImageWidth  (64)
 #define	checkImageHeight (64)
 
-@interface TEITexture : NSObject {
+@interface EITexture : NSObject {
 	
 	GLuint	m_name;
 	GLuint	m_location;

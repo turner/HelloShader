@@ -9,9 +9,9 @@
 #import "EIViewController.h"
 #import "Logging.h"
 #import "GLView.h"
-#import "TEITexture.h"
+#import "EITexture.h"
 #import "GLRenderer.h"
-#import "TEIRendererHelper.h"
+#import "EIRenderHelper.h"
 
 @interface EIViewController ()
 - (NSString *)interfaceOrientationName:(UIInterfaceOrientation)interfaceOrientation;
@@ -28,10 +28,10 @@
 
 	GLView *glView = (GLView *)thang;
     
-	TEITexture	*texture_0 = [[ [TEITexture alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
+	EITexture *texture_0 = [[ [EITexture alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
 	[glView.renderer.rendererHelper.renderables setObject:texture_0 forKey:@"texture_0"];
 	
-	TEITexture	*texture_1 = [[ [TEITexture alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
+	EITexture *texture_1 = [[ [EITexture alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
 	[glView.renderer.rendererHelper.renderables setObject:texture_1 forKey:@"texture_1"];
 }
 

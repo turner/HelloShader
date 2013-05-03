@@ -9,13 +9,13 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-@class TEIRendererHelper;
+@class EIRenderHelper;
 @class CAEAGLLayer;
 
 @interface GLRenderer : NSObject {
 	
 @private
-	TEIRendererHelper *m_rendererHelper;
+	EIRenderHelper *m_rendererHelper;
 
 	EAGLContext *m_context;
 	
@@ -29,7 +29,7 @@
 	GLuint m_program;
 }
 
-@property (nonatomic, retain) TEIRendererHelper *rendererHelper;
+@property (nonatomic, retain) EIRenderHelper *rendererHelper;
 
 - (void) render;
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;

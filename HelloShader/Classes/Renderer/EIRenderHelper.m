@@ -1,15 +1,15 @@
 //
-//  TEIRendererHelper.m
+//  EIRenderHelper.m
 //  HelloiPhoneiPodTouchPanorama
 //
 //  Created by turner on 3/4/10.
 //  Copyright 2010 Douglass Turner Consulting. All rights reserved.
 //
 
-#import "TEIRendererHelper.h"
+#import "EIRenderHelper.h"
 #import "JLMMatrixLibrary.h"
 
-@implementation TEIRendererHelper
+@implementation EIRenderHelper
 
 @synthesize renderables = m_renderables;
 

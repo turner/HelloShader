@@ -1,5 +1,5 @@
 //
-//  TEIRendererHelper.h
+//  EIRenderHelper.h
 //  HelloiPhoneiPodTouchPanorama
 //
 //  Created by turner on 3/4/10.
@@ -14,7 +14,7 @@
 #import "ConstantsAndMacros.h"
 #import "VectorMatrix.h"
 
-@interface TEIRendererHelper : NSObject {
+@interface EIRenderHelper : NSObject {
 
 	M3DMatrix44f	m_projectionViewModelTransform;
 	M3DMatrix44f	m_viewModelTransform;

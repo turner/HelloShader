@@ -8,9 +8,9 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "GLRenderer.h"
-#import "TEIRendererHelper.h"
+#import "EIRenderHelper.h"
 #import "JLMMatrixLibrary.h"
-#import	"TEITexture.h"
+#import "EITexture.h"
 #import "Logging.h"
 
 static const GLfloat verticesST[] = {
@@ -111,7 +111,7 @@ enum {
 		
 		ALog(@"backing size %d x %d.", m_backingWidth, m_backingHeight);
 		
-		m_rendererHelper = [[TEIRendererHelper alloc] init];
+		m_rendererHelper = [[EIRenderHelper alloc] init];
 		
 		m_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         
@@ -258,12 +258,12 @@ enum {
     uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(m_program, "mySurfaceNormalMatrix");
     
 	
-	TEITexture *t = nil;
+	EITexture *t = nil;
 	
-	t = (TEITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
 	t.location = glGetUniformLocation(m_program, "myTexture_0");
 	
-	t = (TEITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
 	t.location = glGetUniformLocation(m_program, "myTexture_1");
 	
 	
@@ -295,13 +295,13 @@ enum {
 	[self.rendererHelper placeCameraAtLocation:eye target:target up:up];
 	
 	// Texture unit 0
-	t = (TEITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture(GL_TEXTURE_2D, t.name);
 	glUniform1i(t.location, 0);
 	
 	// Texture unit 1
-	t = (TEITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture(GL_TEXTURE_2D, t.name);
 	glUniform1i(t.location, 1);

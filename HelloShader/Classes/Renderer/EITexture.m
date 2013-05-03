@@ -1,16 +1,16 @@
 //
-//  TEITexture.m
+//  EITexture.m
 //  HelloTexture
 //
 //  Created by turner on 5/26/09.
 //  Copyright 2009 Douglass Turner Consulting. All rights reserved.
 //
 
-#import "TEITexture.h"
+#import "EITexture.h"
 
 static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 
-@implementation TEITexture
+@implementation EITexture
 
 @synthesize name = m_name;
 @synthesize location = m_location;
