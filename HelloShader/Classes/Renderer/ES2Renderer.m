@@ -12,6 +12,7 @@
 #import "JLMMatrixLibrary.h"
 #import	"TEITexture.h"
 #import "TEIRendererHelper.h"
+#import "Logging.h"
 
 static const GLfloat verticesST[] = {
 	
@@ -109,7 +110,7 @@ enum {
 		m_backingWidth = -1;
 		m_backingHeight = -1;
 		
-		NSLog(@"ES2 Renderer - init - backing size (%d %d)", m_backingWidth, m_backingHeight);
+		ALog(@"backing size %d x %d.", m_backingWidth, m_backingHeight);
 		
 		m_rendererHelper = [[TEIRendererHelper alloc] init];
 		
@@ -194,8 +195,8 @@ enum {
 }
 
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer {
-	
-	NSLog(@"ES2Renderer - resize From Layer");
+
+    ALog(@"");
 	
 	if (m_framebuffer) {
 		
@@ -235,8 +236,8 @@ enum {
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthbuffer);
 	
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		
-		NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+        ALog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
         return NO;
     }
     
@@ -246,8 +247,8 @@ enum {
 }
 
 - (void) setupGLView:(CGSize)size {
-	
-	NSLog(@"ES2 Renderer - setup GLView");
+
+    ALog(@"");
 	
 	// Associate textures with shaders
 	glUseProgram(m_program);
@@ -310,9 +311,9 @@ enum {
 }
 
 - (BOOL) loadShaders {
-	
-	NSLog(@"ES2 Renderer - load Shaders");
-	
+
+    ALog(@"");
+
     m_program = glCreateProgram();
 	
 	// Compile vertex and fragment shaders
@@ -322,8 +323,8 @@ enum {
 //	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"vsh"];
 	GLuint vertShader;
 	if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
-		
-		NSLog(@"ES2 Renderer - load Shaders: Failed to compile vertex shader");
+
+        ALog(@"Failed to compile vertex shader");
 		
 		return FALSE;
 		
@@ -335,8 +336,8 @@ enum {
 //	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"fsh"];
 	GLuint fragShader;
 	if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
-		
-		NSLog(@"ES2 Renderer - load Shaders: Failed to compile fragment shader");
+
+        ALog(@"Failed to compile fragment shader");
 		
 		return FALSE;
 		
@@ -353,8 +354,8 @@ enum {
     
 	// Link shader program
 	if (![self linkProgram:m_program]) {
-		
-		NSLog(@"ES2 Renderer - load Shaders: Failed to link program: %d", m_program);
+
+        ALog(@"Failed to link program: %d", m_program);
 		
 		return FALSE;
 		

@@ -22,11 +22,11 @@
 
 - (void)viewDidLoad {
 
-    ALog(@"");
-    
-    return;
+    id thang = [self.view.subviews objectAtIndex:0];
 
-	EAGLView *glView = (EAGLView *)self.view;
+    ALog(@"%@", [thang class]);
+
+	EAGLView *glView = (EAGLView *)thang;
     
 	TEITexture	*texture_0 = [[ [TEITexture alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
 	[glView.renderer.rendererHelper.renderables setObject:texture_0 forKey:@"texture_0"];
@@ -39,29 +39,29 @@
     return YES;
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-	
-	UIDeviceOrientation currentDeviceOrientation = [UIDevice currentDevice].orientation;
-	UIInterfaceOrientation currentInterfaceOrientation	= self.interfaceOrientation;
-	
-	ALog(@"Will Rotate To Interface: %@. Current Interface: %@. Current Device: %@",
-		  [self interfaceOrientationName:toInterfaceOrientation],
-		  [self interfaceOrientationName:currentInterfaceOrientation],
-		  [self deviceOrientationName:currentDeviceOrientation]);
-	
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-	
-	UIDeviceOrientation currentDeviceOrientation = [UIDevice currentDevice].orientation;
-	UIInterfaceOrientation currentInterfaceOrientation	= self.interfaceOrientation;
-
-    ALog(@"Did Rotate From Interface: %@. Current Interface: %@. Current Device: %@",
-		  [self interfaceOrientationName:fromInterfaceOrientation],
-		  [self interfaceOrientationName:currentInterfaceOrientation],
-		  [self deviceOrientationName:currentDeviceOrientation]);
-    
-}
+//- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+//
+//	UIDeviceOrientation currentDeviceOrientation = [UIDevice currentDevice].orientation;
+//	UIInterfaceOrientation currentInterfaceOrientation	= self.interfaceOrientation;
+//
+//	ALog(@"Will Rotate To Interface: %@. Current Interface: %@. Current Device: %@",
+//		  [self interfaceOrientationName:toInterfaceOrientation],
+//		  [self interfaceOrientationName:currentInterfaceOrientation],
+//		  [self deviceOrientationName:currentDeviceOrientation]);
+//
+//}
+//
+//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+//
+//	UIDeviceOrientation currentDeviceOrientation = [UIDevice currentDevice].orientation;
+//	UIInterfaceOrientation currentInterfaceOrientation	= self.interfaceOrientation;
+//
+//    ALog(@"Did Rotate From Interface: %@. Current Interface: %@. Current Device: %@",
+//		  [self interfaceOrientationName:fromInterfaceOrientation],
+//		  [self interfaceOrientationName:currentInterfaceOrientation],
+//		  [self deviceOrientationName:currentDeviceOrientation]);
+//
+//}
 
 - (NSString*)interfaceOrientationName:(UIInterfaceOrientation) interfaceOrientation {
 	
