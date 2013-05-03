@@ -32,8 +32,6 @@
 
 -(id)initWithFrame:(CGRect)frame {
 
-    ALog(@"");
-
     self = [super initWithFrame:frame];
 
     if (nil != self) {
@@ -46,8 +44,6 @@
 
 - (id)initWithCoder:(NSCoder*)coder {
 
-    ALog(@"");
-
     self = [super initWithCoder:coder];
 
     if (nil != self) {
@@ -59,8 +55,6 @@
 }
 
 -(id)initializeEAGL {
-
-    ALog(@"");
 
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
 
@@ -91,8 +85,6 @@
 }
 
 - (void)layoutSubviews {
-
-    ALog(@"");
 
     [self stopAnimation];
     [self.renderer resizeFromLayer:(CAEAGLLayer*)self.layer];

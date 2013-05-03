@@ -121,15 +121,16 @@ enum {
             [self release];
 			
             return nil;
-        } // if (!m_context || ![EAGLContext setCurrentContext:m_context] || ![self loadShaders])
-        
-	} // if (self = [super init])
+        }
+	}
 	
 	return self;
 }
 
 - (void) render {
-		
+
+    ALog(@"backing size %d x %d.", m_backingWidth, m_backingHeight);
+
     [EAGLContext setCurrentContext:m_context];
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
     glViewport(0, 0, m_backingWidth, m_backingHeight);
@@ -317,51 +318,41 @@ enum {
     m_program = glCreateProgram();
 	
 	// Compile vertex and fragment shaders
-	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowXYRaster" ofType:@"vsh"];
+//	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowXYRaster" ofType:@"vsh"];
 //	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITexturePairShader" ofType:@"vsh"];
-//	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"vsh"];
+	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"vsh"];
 //	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"vsh"];
 	GLuint vertShader;
 	if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
 
         ALog(@"Failed to compile vertex shader");
-		
 		return FALSE;
-		
-	} // if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname])
+	}
 	
-	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowXYRaster" ofType:@"fsh"];
+//	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowXYRaster" ofType:@"fsh"];
 //	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITexturePairShader" ofType:@"fsh"];
-//	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"fsh"];
+	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"fsh"];
 //	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"fsh"];
 	GLuint fragShader;
 	if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
 
         ALog(@"Failed to compile fragment shader");
-		
 		return FALSE;
-		
-	} // if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname])
-	
-    // Attach vertex and fragment shaders to program
+	}
+
     glAttachShader(m_program, vertShader);
     glAttachShader(m_program, fragShader);
-    
-	// Bind attributes between application and shaders
+
     glBindAttribLocation(m_program, VertexXYZAttributeHandle,	"myVertexXYZ");
 	glBindAttribLocation(m_program, VertexSTAttributeHandle,	"myVertexST");
     glBindAttribLocation(m_program, VertexRGBAAttributeHandle,	"myVertexRGBA");
-    
-	// Link shader program
+
 	if (![self linkProgram:m_program]) {
 
         ALog(@"Failed to link program: %d", m_program);
-		
 		return FALSE;
-		
-	} // if (![self linkProgram:m_program]) {
-	
-    // release vertex and fragment shaders
+	}
+
     if (vertShader) glDeleteShader(vertShader);
     if (fragShader) glDeleteShader(fragShader);
 	

@@ -18,8 +18,8 @@ void main() {
 	
 	vec2 st;
 	st = v_st;
-	st.s *= 2.0;
-	st.t *= 3.0;
+	st.s *= 1.0;
+	st.t *= 1.0;
 	
 	gl_FragColor = texture2D(myTexture_1, st);
 	
