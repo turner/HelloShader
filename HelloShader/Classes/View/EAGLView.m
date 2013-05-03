@@ -24,7 +24,7 @@
 - (void)dealloc {
 	
     [m_displayLink	release], m_displayLink	= nil;
-    [m_renderer		release], m_renderer		= nil;
+    [m_renderer		release], m_renderer	= nil;
 	
     [super dealloc];
 }
