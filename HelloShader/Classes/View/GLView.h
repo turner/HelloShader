@@ -9,20 +9,20 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-@class ES2Renderer;
+@class GLRenderer;
 
-@interface EAGLView : UIView {    
+@interface GLView : UIView {    
 	
 @private
     id				m_displayLink;
-	ES2Renderer		*m_renderer;
+	GLRenderer *m_renderer;
     BOOL			m_animating;
 	NSInteger		animationFrameInterval;
 	
 }
 
 @property(nonatomic,retain)id						displayLink;
-@property(nonatomic,retain)ES2Renderer				*renderer;
+@property(nonatomic,retain) GLRenderer *renderer;
 @property(nonatomic,assign,getter=isAnimating)BOOL	animating;
 @property (nonatomic) NSInteger						animationFrameInterval;
 

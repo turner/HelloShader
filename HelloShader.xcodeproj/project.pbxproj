@@ -19,37 +19,18 @@
 		3107E9F21733DD86007E8781 /* EIViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3107E9F01733DD86007E8781 /* EIViewController_iPad.xib */; };
 		3107EA021733DEFE007E8781 /* EIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107E9FB1733DEFE007E8781 /* EIAppDelegate.m */; };
 		3107EA031733DEFE007E8781 /* EIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107E9FE1733DEFE007E8781 /* EIViewController.m */; };
-		3107EA061733E00B007E8781 /* EAGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA051733E00B007E8781 /* EAGLViewController.m */; };
-		3107EA091733E01B007E8781 /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA081733E01B007E8781 /* EAGLView.m */; };
-		3107EA161733E036007E8781 /* ES2Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0C1733E036007E8781 /* ES2Renderer.m */; };
+		3107EA091733E01B007E8781 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA081733E01B007E8781 /* GLView.m */; };
+		3107EA161733E036007E8781 /* GLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0C1733E036007E8781 /* GLRenderer.m */; };
 		3107EA171733E036007E8781 /* JLMMatrixLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0E1733E036007E8781 /* JLMMatrixLibrary.cpp */; };
 		3107EA181733E036007E8781 /* TEIRendererHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA111733E036007E8781 /* TEIRendererHelper.m */; };
 		3107EA191733E036007E8781 /* TEITexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA131733E036007E8781 /* TEITexture.m */; };
 		3107EA1A1733E036007E8781 /* VectorMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA141733E036007E8781 /* VectorMatrix.cpp */; };
-		3107EA541733E051007E8781 /* ColorFragShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA1C1733E051007E8781 /* ColorFragShader.fsh */; };
-		3107EA551733E051007E8781 /* ColorVertShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA1D1733E051007E8781 /* ColorVertShader.vsh */; };
-		3107EA561733E051007E8781 /* HelloShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA1E1733E051007E8781 /* HelloShader.fsh */; };
-		3107EA571733E051007E8781 /* HelloShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA1F1733E051007E8781 /* HelloShader.vsh */; };
-		3107EA581733E051007E8781 /* LightFragShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA201733E051007E8781 /* LightFragShader.fsh */; };
-		3107EA591733E051007E8781 /* LightVertShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA211733E051007E8781 /* LightVertShader.vsh */; };
-		3107EA5A1733E051007E8781 /* NormalMapFragShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA221733E051007E8781 /* NormalMapFragShader.fsh */; };
-		3107EA5B1733E051007E8781 /* NormalMapVertShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA231733E051007E8781 /* NormalMapVertShader.vsh */; };
-		3107EA5C1733E051007E8781 /* ParallaxMapFragShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA241733E051007E8781 /* ParallaxMapFragShader.fsh */; };
-		3107EA5D1733E051007E8781 /* ParallaxMapVertShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA251733E051007E8781 /* ParallaxMapVertShader.vsh */; };
-		3107EA5E1733E051007E8781 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA261733E051007E8781 /* Shader.fsh */; };
-		3107EA5F1733E051007E8781 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA271733E051007E8781 /* Shader.vsh */; };
 		3107EA601733E051007E8781 /* ShowST.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA281733E051007E8781 /* ShowST.fsh */; };
 		3107EA611733E051007E8781 /* ShowST.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA291733E051007E8781 /* ShowST.vsh */; };
-		3107EA621733E051007E8781 /* ShowXYRaster.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2A1733E051007E8781 /* ShowXYRaster.fsh */; };
-		3107EA631733E051007E8781 /* ShowXYRaster.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2B1733E051007E8781 /* ShowXYRaster.vsh */; };
 		3107EA641733E051007E8781 /* TEITexturePairShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */; };
 		3107EA651733E051007E8781 /* TEITexturePairShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2D1733E051007E8781 /* TEITexturePairShader.vsh */; };
 		3107EA661733E051007E8781 /* TEITextureShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2E1733E051007E8781 /* TEITextureShader.fsh */; };
 		3107EA671733E051007E8781 /* TEITextureShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2F1733E051007E8781 /* TEITextureShader.vsh */; };
-		3107EA681733E051007E8781 /* TextureFragShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA301733E051007E8781 /* TextureFragShader.fsh */; };
-		3107EA691733E051007E8781 /* TextureVertShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA311733E051007E8781 /* TextureVertShader.vsh */; };
-		3107EA6A1733E051007E8781 /* VertexColorFragShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA321733E051007E8781 /* VertexColorFragShader.fsh */; };
-		3107EA6B1733E051007E8781 /* VertexColorVertShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA331733E051007E8781 /* VertexColorVertShader.vsh */; };
 		3107EA6C1733E051007E8781 /* .BridgeSort in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA351733E051007E8781 /* .BridgeSort */; };
 		3107EA6D1733E051007E8781 /* Brick.png in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA371733E051007E8781 /* Brick.png */; };
 		3107EA6E1733E051007E8781 /* Brick_2.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA381733E051007E8781 /* Brick_2.pvr */; };
@@ -99,14 +80,11 @@
 		3107E9FB1733DEFE007E8781 /* EIAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIAppDelegate.m; sourceTree = "<group>"; };
 		3107E9FD1733DEFE007E8781 /* EIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIViewController.h; sourceTree = "<group>"; };
 		3107E9FE1733DEFE007E8781 /* EIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIViewController.m; sourceTree = "<group>"; };
-		3107EA041733E00B007E8781 /* EAGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLViewController.h; sourceTree = "<group>"; };
-		3107EA051733E00B007E8781 /* EAGLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLViewController.m; sourceTree = "<group>"; };
-		3107EA071733E01B007E8781 /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
-		3107EA081733E01B007E8781 /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		3107EA071733E01B007E8781 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
+		3107EA081733E01B007E8781 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
 		3107EA0A1733E028007E8781 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
-		3107EA0B1733E036007E8781 /* ES2Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES2Renderer.h; sourceTree = "<group>"; };
-		3107EA0C1733E036007E8781 /* ES2Renderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ES2Renderer.m; sourceTree = "<group>"; };
-		3107EA0D1733E036007E8781 /* ESRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESRenderer.h; sourceTree = "<group>"; };
+		3107EA0B1733E036007E8781 /* GLRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderer.h; sourceTree = "<group>"; };
+		3107EA0C1733E036007E8781 /* GLRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLRenderer.m; sourceTree = "<group>"; };
 		3107EA0E1733E036007E8781 /* JLMMatrixLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JLMMatrixLibrary.cpp; sourceTree = "<group>"; };
 		3107EA0F1733E036007E8781 /* JLMMatrixLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLMMatrixLibrary.h; sourceTree = "<group>"; };
 		3107EA101733E036007E8781 /* TEIRendererHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TEIRendererHelper.h; sourceTree = "<group>"; };
@@ -115,30 +93,12 @@
 		3107EA131733E036007E8781 /* TEITexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TEITexture.m; sourceTree = "<group>"; };
 		3107EA141733E036007E8781 /* VectorMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VectorMatrix.cpp; sourceTree = "<group>"; };
 		3107EA151733E036007E8781 /* VectorMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VectorMatrix.h; sourceTree = "<group>"; };
-		3107EA1C1733E051007E8781 /* ColorFragShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorFragShader.fsh; sourceTree = "<group>"; };
-		3107EA1D1733E051007E8781 /* ColorVertShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorVertShader.vsh; sourceTree = "<group>"; };
-		3107EA1E1733E051007E8781 /* HelloShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HelloShader.fsh; sourceTree = "<group>"; };
-		3107EA1F1733E051007E8781 /* HelloShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HelloShader.vsh; sourceTree = "<group>"; };
-		3107EA201733E051007E8781 /* LightFragShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightFragShader.fsh; sourceTree = "<group>"; };
-		3107EA211733E051007E8781 /* LightVertShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightVertShader.vsh; sourceTree = "<group>"; };
-		3107EA221733E051007E8781 /* NormalMapFragShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalMapFragShader.fsh; sourceTree = "<group>"; };
-		3107EA231733E051007E8781 /* NormalMapVertShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NormalMapVertShader.vsh; sourceTree = "<group>"; };
-		3107EA241733E051007E8781 /* ParallaxMapFragShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParallaxMapFragShader.fsh; sourceTree = "<group>"; };
-		3107EA251733E051007E8781 /* ParallaxMapVertShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ParallaxMapVertShader.vsh; sourceTree = "<group>"; };
-		3107EA261733E051007E8781 /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
-		3107EA271733E051007E8781 /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		3107EA281733E051007E8781 /* ShowST.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.fsh; sourceTree = "<group>"; };
 		3107EA291733E051007E8781 /* ShowST.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.vsh; sourceTree = "<group>"; };
-		3107EA2A1733E051007E8781 /* ShowXYRaster.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowXYRaster.fsh; sourceTree = "<group>"; };
-		3107EA2B1733E051007E8781 /* ShowXYRaster.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowXYRaster.vsh; sourceTree = "<group>"; };
 		3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITexturePairShader.fsh; sourceTree = "<group>"; };
 		3107EA2D1733E051007E8781 /* TEITexturePairShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITexturePairShader.vsh; sourceTree = "<group>"; };
 		3107EA2E1733E051007E8781 /* TEITextureShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITextureShader.fsh; sourceTree = "<group>"; };
 		3107EA2F1733E051007E8781 /* TEITextureShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITextureShader.vsh; sourceTree = "<group>"; };
-		3107EA301733E051007E8781 /* TextureFragShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextureFragShader.fsh; sourceTree = "<group>"; };
-		3107EA311733E051007E8781 /* TextureVertShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextureVertShader.vsh; sourceTree = "<group>"; };
-		3107EA321733E051007E8781 /* VertexColorFragShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = VertexColorFragShader.fsh; sourceTree = "<group>"; };
-		3107EA331733E051007E8781 /* VertexColorVertShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = VertexColorVertShader.vsh; sourceTree = "<group>"; };
 		3107EA351733E051007E8781 /* .BridgeSort */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = .BridgeSort; sourceTree = "<group>"; };
 		3107EA371733E051007E8781 /* Brick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Brick.png; sourceTree = "<group>"; };
 		3107EA381733E051007E8781 /* Brick_2.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brick_2.pvr; sourceTree = "<group>"; };
@@ -267,8 +227,6 @@
 		3107E9FC1733DEFE007E8781 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				3107EA041733E00B007E8781 /* EAGLViewController.h */,
-				3107EA051733E00B007E8781 /* EAGLViewController.m */,
 				3107E9FD1733DEFE007E8781 /* EIViewController.h */,
 				3107E9FE1733DEFE007E8781 /* EIViewController.m */,
 			);
@@ -287,9 +245,8 @@
 		3107EA001733DEFE007E8781 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
-				3107EA0B1733E036007E8781 /* ES2Renderer.h */,
-				3107EA0C1733E036007E8781 /* ES2Renderer.m */,
-				3107EA0D1733E036007E8781 /* ESRenderer.h */,
+				3107EA0B1733E036007E8781 /* GLRenderer.h */,
+				3107EA0C1733E036007E8781 /* GLRenderer.m */,
 				3107EA0E1733E036007E8781 /* JLMMatrixLibrary.cpp */,
 				3107EA0F1733E036007E8781 /* JLMMatrixLibrary.h */,
 				3107EA101733E036007E8781 /* TEIRendererHelper.h */,
@@ -305,8 +262,8 @@
 		3107EA011733DEFE007E8781 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				3107EA071733E01B007E8781 /* EAGLView.h */,
-				3107EA081733E01B007E8781 /* EAGLView.m */,
+				3107EA071733E01B007E8781 /* GLView.h */,
+				3107EA081733E01B007E8781 /* GLView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -314,30 +271,12 @@
 		3107EA1B1733E051007E8781 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				3107EA1C1733E051007E8781 /* ColorFragShader.fsh */,
-				3107EA1D1733E051007E8781 /* ColorVertShader.vsh */,
-				3107EA1E1733E051007E8781 /* HelloShader.fsh */,
-				3107EA1F1733E051007E8781 /* HelloShader.vsh */,
-				3107EA201733E051007E8781 /* LightFragShader.fsh */,
-				3107EA211733E051007E8781 /* LightVertShader.vsh */,
-				3107EA221733E051007E8781 /* NormalMapFragShader.fsh */,
-				3107EA231733E051007E8781 /* NormalMapVertShader.vsh */,
-				3107EA241733E051007E8781 /* ParallaxMapFragShader.fsh */,
-				3107EA251733E051007E8781 /* ParallaxMapVertShader.vsh */,
-				3107EA261733E051007E8781 /* Shader.fsh */,
-				3107EA271733E051007E8781 /* Shader.vsh */,
 				3107EA281733E051007E8781 /* ShowST.fsh */,
 				3107EA291733E051007E8781 /* ShowST.vsh */,
-				3107EA2A1733E051007E8781 /* ShowXYRaster.fsh */,
-				3107EA2B1733E051007E8781 /* ShowXYRaster.vsh */,
 				3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */,
 				3107EA2D1733E051007E8781 /* TEITexturePairShader.vsh */,
 				3107EA2E1733E051007E8781 /* TEITextureShader.fsh */,
 				3107EA2F1733E051007E8781 /* TEITextureShader.vsh */,
-				3107EA301733E051007E8781 /* TextureFragShader.fsh */,
-				3107EA311733E051007E8781 /* TextureVertShader.vsh */,
-				3107EA321733E051007E8781 /* VertexColorFragShader.fsh */,
-				3107EA331733E051007E8781 /* VertexColorVertShader.vsh */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -460,30 +399,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3107EA541733E051007E8781 /* ColorFragShader.fsh in Resources */,
-				3107EA551733E051007E8781 /* ColorVertShader.vsh in Resources */,
-				3107EA561733E051007E8781 /* HelloShader.fsh in Resources */,
-				3107EA571733E051007E8781 /* HelloShader.vsh in Resources */,
-				3107EA581733E051007E8781 /* LightFragShader.fsh in Resources */,
-				3107EA591733E051007E8781 /* LightVertShader.vsh in Resources */,
-				3107EA5A1733E051007E8781 /* NormalMapFragShader.fsh in Resources */,
-				3107EA5B1733E051007E8781 /* NormalMapVertShader.vsh in Resources */,
-				3107EA5C1733E051007E8781 /* ParallaxMapFragShader.fsh in Resources */,
-				3107EA5D1733E051007E8781 /* ParallaxMapVertShader.vsh in Resources */,
-				3107EA5E1733E051007E8781 /* Shader.fsh in Resources */,
-				3107EA5F1733E051007E8781 /* Shader.vsh in Resources */,
 				3107EA601733E051007E8781 /* ShowST.fsh in Resources */,
 				3107EA611733E051007E8781 /* ShowST.vsh in Resources */,
-				3107EA621733E051007E8781 /* ShowXYRaster.fsh in Resources */,
-				3107EA631733E051007E8781 /* ShowXYRaster.vsh in Resources */,
 				3107EA641733E051007E8781 /* TEITexturePairShader.fsh in Resources */,
 				3107EA651733E051007E8781 /* TEITexturePairShader.vsh in Resources */,
 				3107EA661733E051007E8781 /* TEITextureShader.fsh in Resources */,
 				3107EA671733E051007E8781 /* TEITextureShader.vsh in Resources */,
-				3107EA681733E051007E8781 /* TextureFragShader.fsh in Resources */,
-				3107EA691733E051007E8781 /* TextureVertShader.vsh in Resources */,
-				3107EA6A1733E051007E8781 /* VertexColorFragShader.fsh in Resources */,
-				3107EA6B1733E051007E8781 /* VertexColorVertShader.vsh in Resources */,
 				3107E9DD1733DD86007E8781 /* InfoPlist.strings in Resources */,
 				3107E9E51733DD86007E8781 /* Default.png in Resources */,
 				3107E9E71733DD86007E8781 /* Default@2x.png in Resources */,
@@ -530,9 +451,8 @@
 				3107E9DF1733DD86007E8781 /* main.m in Sources */,
 				3107EA021733DEFE007E8781 /* EIAppDelegate.m in Sources */,
 				3107EA031733DEFE007E8781 /* EIViewController.m in Sources */,
-				3107EA061733E00B007E8781 /* EAGLViewController.m in Sources */,
-				3107EA091733E01B007E8781 /* EAGLView.m in Sources */,
-				3107EA161733E036007E8781 /* ES2Renderer.m in Sources */,
+				3107EA091733E01B007E8781 /* GLView.m in Sources */,
+				3107EA161733E036007E8781 /* GLRenderer.m in Sources */,
 				3107EA171733E036007E8781 /* JLMMatrixLibrary.cpp in Sources */,
 				3107EA181733E036007E8781 /* TEIRendererHelper.m in Sources */,
 				3107EA191733E036007E8781 /* TEITexture.m in Sources */,

@@ -8,9 +8,9 @@
 
 #import "EIViewController.h"
 #import "Logging.h"
-#import "EAGLView.h"
+#import "GLView.h"
 #import "TEITexture.h"
-#import "ES2Renderer.h"
+#import "GLRenderer.h"
 #import "TEIRendererHelper.h"
 
 @interface EIViewController ()
@@ -26,7 +26,7 @@
 
     ALog(@"%@", [thang class]);
 
-	EAGLView *glView = (EAGLView *)thang;
+	GLView *glView = (GLView *)thang;
     
 	TEITexture	*texture_0 = [[ [TEITexture alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
 	[glView.renderer.rendererHelper.renderables setObject:texture_0 forKey:@"texture_0"];

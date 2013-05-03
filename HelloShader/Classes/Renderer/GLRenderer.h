@@ -1,18 +1,18 @@
 //
-//  ES2Renderer.h
+//  GLRenderer.h
 //  HelloiPhoneiPodTouchPanorama
 //
 //  Created by turner on 2/25/10.
 //  Copyright Douglass Turner Consulting 2010. All rights reserved.
 //
 
-#import "ESRenderer.h"
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
 @class TEIRendererHelper;
+@class CAEAGLLayer;
 
-@interface ES2Renderer : NSObject <ESRenderer> {
+@interface GLRenderer : NSObject {
 	
 @private
 	TEIRendererHelper *m_rendererHelper;

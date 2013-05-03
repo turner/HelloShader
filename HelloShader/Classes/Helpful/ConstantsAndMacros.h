@@ -1,9 +1,9 @@
 //
-// HelloTextureconstants.h
-//  HelloTexture
+//  ConstantsAndMacros.h
+//  HelloShader
 //
-//  Created by turner on 5/26/09.
-//  Copyright Douglass Turner Consulting 2009. All rights reserved.
+//  Created by Douglass Turner on 5/3/13.
+//  Copyright (c) 2013 Elastic Image Software. All rights reserved.
 //
 
 #define TIEABS(a)		((a) <= 0 ? -(a) : (a) )

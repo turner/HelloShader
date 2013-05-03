@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Elastic Image Software. All rights reserved.
 //
 
-#import "EAGLView.h"
-#import "ES2Renderer.h"
+#import "GLView.h"
+#import "GLRenderer.h"
 #import "Logging.h"
 
-@interface EAGLView (PrivateMethods)
+@interface GLView (PrivateMethods)
 -(id)initializeEAGL;
 @end
 
-@implementation EAGLView
+@implementation GLView
 
 @synthesize displayLink = m_displayLink;
 @synthesize renderer = m_renderer;
@@ -64,7 +64,7 @@
 									kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, 
 									nil];
 	
-	self.renderer = [[[ES2Renderer alloc] init] autorelease];
+	self.renderer = [[[GLRenderer alloc] init] autorelease];
 	
 	if (nil == self.renderer) {
 		

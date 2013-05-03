@@ -1,17 +1,16 @@
 //
-//  ES2Renderer.m
+//  GLRenderer.m
 //  HelloiPhoneiPodTouchPanorama
 //
 //  Created by turner on 2/25/10.
 //  Copyright Douglass Turner Consulting 2010. All rights reserved.
 //
 
-#import "ES2Renderer.h"
+#import <QuartzCore/QuartzCore.h>
+#import "GLRenderer.h"
 #import "TEIRendererHelper.h"
-#import "ConstantsAndMacros.h"
 #import "JLMMatrixLibrary.h"
 #import	"TEITexture.h"
-#import "TEIRendererHelper.h"
 #import "Logging.h"
 
 static const GLfloat verticesST[] = {
@@ -56,14 +55,14 @@ enum {
     AttributeCount
 };
 
-@interface ES2Renderer (PrivateMethods)
+@interface GLRenderer (PrivateMethods)
 - (BOOL) loadShaders;
 - (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL) linkProgram:(GLuint)prog;
 - (BOOL) validateProgram:(GLuint)prog;
 @end
 
-@implementation ES2Renderer
+@implementation GLRenderer
 
 @synthesize rendererHelper = m_rendererHelper;
 
@@ -128,8 +127,6 @@ enum {
 }
 
 - (void) render {
-
-    ALog(@"backing size %d x %d.", m_backingWidth, m_backingHeight);
 
     [EAGLContext setCurrentContext:m_context];
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
@@ -318,7 +315,6 @@ enum {
     m_program = glCreateProgram();
 	
 	// Compile vertex and fragment shaders
-//	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowXYRaster" ofType:@"vsh"];
 //	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITexturePairShader" ofType:@"vsh"];
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"vsh"];
 //	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"vsh"];
@@ -329,7 +325,6 @@ enum {
 		return FALSE;
 	}
 	
-//	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowXYRaster" ofType:@"fsh"];
 //	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITexturePairShader" ofType:@"fsh"];
 	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"fsh"];
 //	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"fsh"];
