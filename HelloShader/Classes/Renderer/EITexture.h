@@ -15,10 +15,10 @@
 
 @interface EITexture : NSObject {
 	
-	GLuint	m_name;
-	GLuint	m_location;
-	GLuint	m_width;
-	GLuint	m_height;
+	GLuint _name;
+	GLuint _location;
+	GLuint _width;
+	GLuint _height;
 
 }
 

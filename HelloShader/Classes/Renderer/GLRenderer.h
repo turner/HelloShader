@@ -13,8 +13,7 @@
 @class CAEAGLLayer;
 
 @interface GLRenderer : NSObject {
-	
-@private
+
 	EIRenderHelper *m_rendererHelper;
 
 	EAGLContext *m_context;

@@ -12,14 +12,14 @@ static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 
 @implementation EITexture
 
-@synthesize name = m_name;
-@synthesize location = m_location;
-@synthesize width = m_width;
-@synthesize height = m_height;
+@synthesize name = _name;
+@synthesize location = _location;
+@synthesize width = _width;
+@synthesize height = _height;
 
 - (void)dealloc {
 	
-	glDeleteTextures(1, &m_name);
+	glDeleteTextures(1, &_name);
 	
 	[super dealloc];
 }
@@ -250,13 +250,13 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 	
 	if(nil != self) {
 		
-		m_width	= checkImageWidth;
-		m_height	= checkImageHeight;
+		_width = checkImageWidth;
+		_height = checkImageHeight;
 		
 		[self makeCheckImage];
 		
-		glGenTextures(1, &m_name);
-		glBindTexture(GL_TEXTURE_2D, m_name);
+		glGenTextures(1, &_name);
+		glBindTexture(GL_TEXTURE_2D, _name);
 		
 		// Wrap at texture boundaries
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -265,14 +265,14 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-		
-		//		glGenerateMipmapOES(GL_TEXTURE_2D);
-		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
 		GLenum err = glGetError();
 		if (err != GL_NO_ERROR) {
 			NSLog(@"Error Uploading Texture to GPU. glError: 0x%04X", err);
 		}
+
+        glBindTexture(GL_TEXTURE_2D, 0);
 
 	}
 	
@@ -294,16 +294,14 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 			int glColor				= GetGLColor(format);
 			int glFormat			= GetGLFormat(format);
 			
-			m_width	= NextPowerOfTwo(CGImageGetWidth(ui_image.CGImage));
-			m_height	= NextPowerOfTwo(CGImageGetHeight(ui_image.CGImage));
+			_width = (GLuint)NextPowerOfTwo(CGImageGetWidth(ui_image.CGImage));
+			_height = (GLuint)NextPowerOfTwo(CGImageGetHeight(ui_image.CGImage));
 			
 			uint8_t *data = GetImageData(ui_image.CGImage, format);
 			
-			glGenTextures(1, &m_name);
-			glBindTexture(GL_TEXTURE_2D, m_name);
+			glGenTextures(1, &_name);
+			glBindTexture(GL_TEXTURE_2D, _name);
 
-			
-			
 			// Wrap at texture boundaries
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -315,7 +313,7 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			
 			
-			glTexImage2D(GL_TEXTURE_2D, 0, glColor, m_width, m_height, 0, glColor, glFormat, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, glColor, _width, _height, 0, glColor, glFormat, data);
 			
 			glGenerateMipmap( GL_TEXTURE_2D );
 			
@@ -324,8 +322,9 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 			}
 			
 			free(data);
-			
-			
+
+            glBindTexture(GL_TEXTURE_2D, 0);
+
 		} // if (image != NULL)
 		
 		
@@ -348,9 +347,9 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 
 -(void) makeCheckImage {
 	
-	for (int i = 0; i < m_height; i++) {
+	for (int i = 0; i < _height; i++) {
 		
-		for (int j = 0; j < m_width; j++) {
+		for (int j = 0; j < _width; j++) {
 			
 			int c = ( ( ( (i & 0x8) == 0) ^ ( (j & 0x8) ) == 0) ) * 255;
 			
