@@ -7,10 +7,18 @@
 //
 
 #import "EITexture.h"
+#import "EISGLHelpful.h"
 
 static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 
-@implementation EITexture
+@implementation EITexture {
+
+    GLuint _name;
+    GLuint _location;
+    GLuint _width;
+    GLuint _height;
+
+}
 
 @synthesize name = _name;
 @synthesize location = _location;
@@ -20,7 +28,6 @@ static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 - (void)dealloc {
 	
 	glDeleteTextures(1, &_name);
-	
 	[super dealloc];
 }
 
@@ -343,6 +350,43 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 	}
 
 	return self;
+}
+
+- (id)initFBORenderTextureRGBA8Width:(NSUInteger)width height:(NSUInteger)height {
+
+    self = [super init];
+
+    if(nil != self) {
+
+        self.width  = width;
+        self.height = height;
+
+        glGenTextures(1, &_name);
+        glBindTexture(GL_TEXTURE_2D, _name);
+
+        // bi-linear interpolation
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        [EISGLHelpful checkGLError];
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        [EISGLHelpful checkGLError];
+
+        // clamp to edges
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        [EISGLHelpful checkGLError];
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        [EISGLHelpful checkGLError];
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.width, self.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        [EISGLHelpful checkGLError];
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+    }
+
+    return self;
+
 }
 
 -(void) makeCheckImage {

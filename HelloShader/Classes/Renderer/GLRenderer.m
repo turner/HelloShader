@@ -8,10 +8,10 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "GLRenderer.h"
-#import "EIRenderHelper.h"
-#import "JLMMatrixLibrary.h"
+#import "EISRendererHelper.h"
 #import "EITexture.h"
 #import "Logging.h"
+#include "EISVectorMatrix.h"
 
 static const GLfloat verticesST[] = {
 	
@@ -62,9 +62,26 @@ enum {
 - (BOOL) validateProgram:(GLuint)prog;
 @end
 
-@implementation GLRenderer
+@implementation GLRenderer {
+
+    EISRendererHelper *m_rendererHelper;
+
+    EAGLContext *m_context;
+
+    GLint m_backingWidth;
+    GLint m_backingHeight;
+
+    GLuint m_framebuffer;
+    GLuint m_colorbuffer;
+    GLuint m_depthbuffer;
+
+    GLuint m_program;
+
+    NSMutableDictionary *_texturePackages;
+}
 
 @synthesize rendererHelper = m_rendererHelper;
+@synthesize texturePackages = _texturePackages;
 
 - (void) dealloc {
 	
@@ -95,11 +112,11 @@ enum {
 	}
 	
 	if ([EAGLContext currentContext] == m_context) [EAGLContext setCurrentContext:nil];
-	
-	[m_context release];
-	m_context = nil;
-	
-	[super dealloc];
+	[m_context release]; m_context = nil;
+
+    self.texturePackages = nil;
+
+    [super dealloc];
 }
 
 - (id) init {
@@ -111,7 +128,7 @@ enum {
 		
 		ALog(@"backing size %d x %d.", m_backingWidth, m_backingHeight);
 		
-		m_rendererHelper = [[EIRenderHelper alloc] init];
+		m_rendererHelper = [[EISRendererHelper alloc] init];
 		
 		m_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         
@@ -126,6 +143,80 @@ enum {
 	return self;
 }
 
+-(NSMutableDictionary *)texturePackages {
+
+    if (nil == _texturePackages) self.texturePackages = [NSMutableDictionary dictionary];
+
+    return _texturePackages;
+}
+
+- (void) setupGLView:(CGSize)size {
+
+    ALog(@"");
+
+    // Associate textures with shaders
+    glUseProgram(m_program);
+
+    // Associate shader uniform variables with application space variables
+    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(m_program, "myProjectionViewModelMatrix");
+    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(m_program, "myViewModelMatrix");
+    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(m_program, "myModelMatrix");
+    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(m_program, "mySurfaceNormalMatrix");
+
+
+    EITexture *t = nil;
+
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    t.location = glGetUniformLocation(m_program, "myTexture_0");
+
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    t.location = glGetUniformLocation(m_program, "myTexture_1");
+
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
+    glFrontFace(GL_CCW);
+    glEnable (GL_BLEND);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    GLfloat near					=   0.1;
+    GLfloat far						= 100.0;
+    GLfloat fieldOfViewInDegreesY	=  90.0;
+
+    [self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY
+                                             aspectRatioWidthOverHeight:size.width/size.height
+                                                                   near:near
+                                                                    far:far];
+
+
+    // Aim the camera
+    EISVector3D eye;
+    EISVector3D target;
+    EISVector3D up;
+    EISVector3DSet(eye,	0.0f, 0.0f,   2.0);
+    EISVector3DSet(target, 0.0f, 0.0f,  -1.0f);
+    EISVector3DSet(up,		0.0f, 1.0f,   0.0f);
+
+    [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
+
+    // Texture unit 0
+    glActiveTexture( GL_TEXTURE0 );
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+    glUniform1i(t.location, 0);
+//    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // Texture unit 1
+    glActiveTexture( GL_TEXTURE1 );
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+    glUniform1i(t.location, 1);
+//    glBindTexture(GL_TEXTURE_2D, 0);
+
+
+}
+
 - (void) render {
 
     [EAGLContext setCurrentContext:m_context];
@@ -137,22 +228,24 @@ enum {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	static float angle = 0.0;
-	M3DMatrix44f rotation;
-	JLMMatrix3DSetRotationByDegrees(rotation, angle, 0.0, 0.0, 1.0);
+    EISMatrix4x4 rotation;
+//	JLMMatrix3DSetRotationByDegrees(rotation, angle, 0.0, 0.0, 1.0);
+    EISMatrix4x4SetZRotationUsingDegrees(rotation, angle);
 	angle += 1.0;	
 	
 	static float t = 0.0f;
-	M3DMatrix44f translation;
-	JLMMatrix3DSetTranslation(translation, 0.0, 0.0, (1.0) * cosf(t/4.0));
-	t += 0.075f/3.0;	
-    
-	M3DMatrix44f xform;
-	JLMMatrix3DMultiply(translation, rotation, xform);
+    EISMatrix4x4 translation;
+//	JLMMatrix3DSetTranslation(translation, 0.0, 0.0, (1.0) * cosf(t/4.0));
+    EISMatrix4x4SetTranslation(translation, 0, 0, (1.0) * cosf(t/4.0));
+	t += 0.075f/3.0;
 
+    EISMatrix4x4 xform;
+//	JLMMatrix3DMultiply(translation, rotation, xform);
+    EISMatrix4x4Multiply(translation, rotation, xform);
 	
     glUseProgram(m_program);
-		
-	// M - World space
+
+    // M - World space
 	[self.rendererHelper setModelTransform:xform];
 	glUniformMatrix4fv(uniforms[ModelMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
 	
@@ -160,12 +253,14 @@ enum {
 	glUniformMatrix4fv(uniforms[SurfaceNormalMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
 
 	// V * M - Eye space
-	JLMMatrix3DMultiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
+//	JLMMatrix3DMultiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
+    EISMatrix4x4Multiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
 	glUniformMatrix4fv(uniforms[ViewModelMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
 	
 	// P * V * M - Projection space
-	JLMMatrix3DMultiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
-	glUniformMatrix4fv(uniforms[ProjectionViewModelUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
+//	JLMMatrix3DMultiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
+    EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
+    glUniformMatrix4fv(uniforms[ProjectionViewModelUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
 	
 	
 	glEnableVertexAttribArray(VertexXYZAttributeHandle);
@@ -242,70 +337,6 @@ enum {
 	[self setupGLView:layer.bounds.size];
 	
     return YES;
-}
-
-- (void) setupGLView:(CGSize)size {
-
-    ALog(@"");
-	
-	// Associate textures with shaders
-	glUseProgram(m_program);
-	
-	// Associate shader uniform variables with application space variables
-    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(m_program, "myProjectionViewModelMatrix");
-    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(m_program, "myViewModelMatrix");
-    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(m_program, "myModelMatrix");
-    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(m_program, "mySurfaceNormalMatrix");
-    
-	
-	EITexture *t = nil;
-	
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-	t.location = glGetUniformLocation(m_program, "myTexture_0");
-	
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-	t.location = glGetUniformLocation(m_program, "myTexture_1");
-	
-	
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_DEPTH_TEST);
-	glFrontFace(GL_CCW);	
-	glEnable (GL_BLEND);
-	
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	GLfloat near					=   0.1; 
-	GLfloat far						= 100.0; 
-	GLfloat fieldOfViewInDegreesY	=  90.0; 
-	
-	[self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY 
-											 aspectRatioWidthOverHeight:size.width/size.height 
-																   near:near 
-																	far:far];
-	
-	
-	// Aim the camera
-	M3DVector3f eye;
-	M3DVector3f target;
-	M3DVector3f up;
-	m3dLoadVector3f(eye,	0.0f, 0.0f,   2.0);
-	m3dLoadVector3f(target, 0.0f, 0.0f,  -1.0f);
-	m3dLoadVector3f(up,		0.0f, 1.0f,   0.0f);
-	
-	[self.rendererHelper placeCameraAtLocation:eye target:target up:up];
-	
-	// Texture unit 0
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-	glActiveTexture( GL_TEXTURE0 );
-	glBindTexture(GL_TEXTURE_2D, t.name);
-	glUniform1i(t.location, 0);
-	
-	// Texture unit 1
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-	glActiveTexture( GL_TEXTURE1 );
-	glBindTexture(GL_TEXTURE_2D, t.name);
-	glUniform1i(t.location, 1);
-	
 }
 
 - (BOOL) loadShaders {

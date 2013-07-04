@@ -11,7 +11,7 @@
 #import "GLView.h"
 #import "EITexture.h"
 #import "GLRenderer.h"
-#import "EIRenderHelper.h"
+#import "EISRendererHelper.h"
 
 @interface EIViewController ()
 - (NSString *)interfaceOrientationName:(UIInterfaceOrientation)interfaceOrientation;
