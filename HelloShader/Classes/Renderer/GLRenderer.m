@@ -313,11 +313,13 @@ enum {
     ALog(@"");
 
     m_program = glCreateProgram();
-	
+
+    NSString *shaderPrefix = @"TEITexturePairShader";
+//    NSString *shaderPrefix = @"TEITextureShader";
+//    NSString *shaderPrefix = @"ShowST";
+
 	// Compile vertex and fragment shaders
-//	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITexturePairShader" ofType:@"vsh"];
-	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"vsh"];
-//	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"vsh"];
+	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];
 	GLuint vertShader;
 	if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
 
@@ -325,9 +327,7 @@ enum {
 		return FALSE;
 	}
 	
-//	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITexturePairShader" ofType:@"fsh"];
-	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"TEITextureShader" ofType:@"fsh"];
-//	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"ShowST" ofType:@"fsh"];
+	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"fsh"];
 	GLuint fragShader;
 	if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
 
