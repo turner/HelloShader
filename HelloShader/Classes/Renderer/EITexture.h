@@ -19,24 +19,18 @@
 	GLuint	m_location;
 	GLuint	m_width;
 	GLuint	m_height;
-	
-	NSMutableArray *m_pvrTextureData;
-	
+
 }
 
 @property(nonatomic,assign)GLuint name;
 @property(nonatomic,assign)GLuint location;
 @property(nonatomic,assign)GLuint width;
 @property(nonatomic,assign)GLuint height;
-@property(nonatomic,retain)NSMutableArray *pvrTextureData;
 
 - (id)initWithTextureFile:(NSString *)name mipmap:(BOOL)mipmap;
 
-- (id)initWithPVRTextureFile:(NSString *)path mipmap:(BOOL)mipmap;
-
 - (id)initWithImageFile:(NSString *)name extension:(NSString *)extension mipmap:(BOOL)mipmap;
 
-- (BOOL)ingestPVRTextureFile:(NSData *)data;
 - (void) makeCheckImage;
 
 @end

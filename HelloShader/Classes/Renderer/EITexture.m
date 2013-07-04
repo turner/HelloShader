@@ -16,11 +16,9 @@ static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 @synthesize location = m_location;
 @synthesize width = m_width;
 @synthesize height = m_height;
-@synthesize pvrTextureData = m_pvrTextureData;
 
 - (void)dealloc {
 	
-    [m_pvrTextureData release], m_pvrTextureData = nil;
 	glDeleteTextures(1, &m_name);
 	
 	[super dealloc];
@@ -275,9 +273,7 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 		if (err != GL_NO_ERROR) {
 			NSLog(@"Error Uploading Texture to GPU. glError: 0x%04X", err);
 		}
-		
-		m_pvrTextureData = [[NSMutableArray alloc] init];
-		
+
 	}
 	
 	return self;
@@ -346,197 +342,8 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 		
 		return [self initWithTextureFile:fullPath mipmap:mipmap];
 	}
-	
-	if ([extension isEqualToString:@"pvr"]) {
-		
-		return [self initWithPVRTextureFile:fullPath mipmap:mipmap];
-	}
-	
+
 	return self;
-}
-
-- (id)initWithPVRTextureFile:(NSString *)path mipmap:(BOOL)mipmap {
-	
-	self = [super init];
-	
-	if(self != nil) {
-		
-		NSData *data = [NSData dataWithContentsOfFile:path];
-		
-		m_pvrTextureData = [[NSMutableArray alloc] init];
-		
-		if (!data) {
-			
-			[self release];
-			self = nil;
-			return self;
-		}
-		
-		BOOL success = FALSE;
-		success = [self ingestPVRTextureFile:data];
-		
-		if (success == FALSE) {
-			
-			[self release];
-			self = nil;
-			return self;
-		}
-		
-	} // if(self != nil)
-	
-	return self;
-}
-
-#define PVR_TEXTURE_FLAG_TYPE_MASK	(0xff)
-
-static char gPVRTexIdentifier[4] = "PVR!";
-
-enum {
-	kPVRTextureFlagTypePVRTC_2 = 24,
-	kPVRTextureFlagTypePVRTC_4
-};
-
-typedef struct m_PVRTexHeader {
-	uint32_t headerLength;
-	uint32_t height;
-	uint32_t width;
-	uint32_t numMipmaps;
-	uint32_t flags;
-	uint32_t dataLength;
-	uint32_t bpp;
-	uint32_t bitmaskRed;
-	uint32_t bitmaskGreen;
-	uint32_t bitmaskBlue;
-	uint32_t bitmaskAlpha;
-	uint32_t pvrTag;
-	uint32_t numSurfs;
-} PVRTexHeader;
-
-- (BOOL)ingestPVRTextureFile:(NSData *)data {
-	
-	PVRTexHeader *header = (PVRTexHeader *)[data bytes];
-	
-	uint32_t pvrTag = CFSwapInt32LittleToHost(header->pvrTag);
-	if (gPVRTexIdentifier[0] != ((pvrTag >>  0) & 0xff) ||
-		gPVRTexIdentifier[1] != ((pvrTag >>  8) & 0xff) ||
-		gPVRTexIdentifier[2] != ((pvrTag >> 16) & 0xff) ||
-		gPVRTexIdentifier[3] != ((pvrTag >> 24) & 0xff)) {
-		
-		return FALSE;
-	}
-	
-	uint32_t flags			= CFSwapInt32LittleToHost(header->flags);
-	uint32_t formatFlags	= flags & PVR_TEXTURE_FLAG_TYPE_MASK;
-	
-	if (formatFlags != kPVRTextureFlagTypePVRTC_4 && formatFlags != kPVRTextureFlagTypePVRTC_2) {
-		return FALSE;
-	}
-	
-	[m_pvrTextureData removeAllObjects];
-	
-	GLenum internalFormat = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
-	if (     formatFlags == kPVRTextureFlagTypePVRTC_4) internalFormat = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
-	else if (formatFlags == kPVRTextureFlagTypePVRTC_2) internalFormat = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-	
-	uint32_t w = 0;
-	uint32_t h = 0;
-	m_width	= w = CFSwapInt32LittleToHost(header->width);
-	m_height	= h = CFSwapInt32LittleToHost(header->height);
-	
-	BOOL hasAlpha;
-	if (CFSwapInt32LittleToHost(header->bitmaskAlpha)) hasAlpha = TRUE;
-	else                                               hasAlpha = FALSE;
-	
-	uint32_t dataLength	= CFSwapInt32LittleToHost(header->dataLength);
-	uint32_t dataOffset = 0;
-	uint32_t dataSize	= 0;
-	
-	uint8_t *my_bytes		= ((uint8_t *)[data bytes]) + sizeof(PVRTexHeader);
-	
-	uint32_t blockSize		= 0;
-	uint32_t widthBlocks	= 0;
-	uint32_t heightBlocks	= 0;
-	uint32_t bits_per_pixel = 4;
-	
-	// Calculate the data size for each texture level and respect the minimum number of blocks
-	while (dataOffset < dataLength) {
-		
-		if (formatFlags == kPVRTextureFlagTypePVRTC_4) {
-			
-			blockSize = 4 * 4; // Pixel by pixel block size for 4bpp
-			widthBlocks = w / 4;
-			heightBlocks = h / 4;
-			bits_per_pixel = 4;
-		} else {
-			
-			blockSize = 8 * 4; // Pixel by pixel block size for 2bpp
-			widthBlocks = w / 8;
-			heightBlocks = h / 4;
-			bits_per_pixel = 2;
-		}
-		
-		// Clamp to minimum number of blocks
-		if (widthBlocks < 2) widthBlocks	= 2;
-		if (heightBlocks < 2) heightBlocks	= 2;
-		
-		dataSize = widthBlocks * heightBlocks * ((blockSize  * bits_per_pixel) / 8);
-		
-		[ m_pvrTextureData addObject:[ NSData dataWithBytes:my_bytes + dataOffset length:dataSize ] ];
-		
-		dataOffset += dataSize;
-		
-		w	= MAX( w >> 1, 1);
-		h	= MAX(h >> 1, 1);
-	}
-	
-	// Create OpenGL texture
-	
-	
-	if ([m_pvrTextureData count] <= 0) {
-		return FALSE;
-	}
-	
-	
-	if (m_name != 0) {
-		glDeleteTextures(1, &m_name);
-	}
-	
-	glGenTextures(1, &m_name);
-	glBindTexture(GL_TEXTURE_2D, m_name);
-		
-//	glTexEnvf(GL_TEXTURE_ENV, 
-//			  GL_TEXTURE_ENV_MODE, 
-//			  GL_REPLACE);	
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	
-	w = m_width;
-	h = m_height;
-	for (int i = 0; i < [m_pvrTextureData count]; i++) {
-		
-		NSData *data = [m_pvrTextureData objectAtIndex:i];
-		
-		GLsizei length = [data length];
-		glCompressedTexImage2D(GL_TEXTURE_2D, i, internalFormat, w, h, 0, length, [data bytes]);
-		
-		GLenum err = glGetError();
-		if (err != GL_NO_ERROR) {
-			
-			NSLog(@"Error uploading compressed texture level: %d. glError: 0x%04X", i, err);
-			return FALSE;
-		}
-		
-		w = MAX(w >> 1, 1);
-		h = MAX(h >> 1, 1);
-	}
-	
-	[m_pvrTextureData removeAllObjects];
-	
-	return TRUE;
 }
 
 -(void) makeCheckImage {
