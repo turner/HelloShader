@@ -167,10 +167,10 @@ enum {
     EITexture *t = nil;
 
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    t.location = glGetUniformLocation(m_program, "myTexture_0");
+    t.glslSampler = glGetUniformLocation(m_program, "myTexture_0");
 
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    t.location = glGetUniformLocation(m_program, "myTexture_1");
+    t.glslSampler = glGetUniformLocation(m_program, "myTexture_1");
 
 
     glEnable(GL_TEXTURE_2D);
@@ -194,9 +194,9 @@ enum {
     EISVector3D eye;
     EISVector3D target;
     EISVector3D up;
-    EISVector3DSet(eye,	0.0f, 0.0f,   2.0);
-    EISVector3DSet(target, 0.0f, 0.0f,  -1.0f);
-    EISVector3DSet(up,		0.0f, 1.0f,   0.0f);
+    EISVector3DSet(eye,	   0, 0,  2);
+    EISVector3DSet(target, 0, 0, -1);
+    EISVector3DSet(up,	   0, 1,  0);
 
     [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
 
@@ -204,15 +204,15 @@ enum {
     glActiveTexture( GL_TEXTURE0 );
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     glBindTexture(GL_TEXTURE_2D, t.name);
-    glUniform1i(t.location, 0);
-//    glBindTexture(GL_TEXTURE_2D, 0);
+    glUniform1i(t.glslSampler, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     // Texture unit 1
     glActiveTexture( GL_TEXTURE1 );
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     glBindTexture(GL_TEXTURE_2D, t.name);
-    glUniform1i(t.location, 1);
-//    glBindTexture(GL_TEXTURE_2D, 0);
+    glUniform1i(t.glslSampler, 1);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
 
 }
@@ -233,17 +233,27 @@ enum {
     EISMatrix4x4SetZRotationUsingDegrees(rotation, angle);
 	angle += 1.0;	
 	
-	static float t = 0.0f;
+	static float r = 0.0f;
     EISMatrix4x4 translation;
 //	JLMMatrix3DSetTranslation(translation, 0.0, 0.0, (1.0) * cosf(t/4.0));
-    EISMatrix4x4SetTranslation(translation, 0, 0, (1.0) * cosf(t/4.0));
-	t += 0.075f/3.0;
+    EISMatrix4x4SetTranslation(translation, 0, 0, (1.0) * cosf(r/4.0));
+	r += 0.075f/3.0;
 
     EISMatrix4x4 xform;
 //	JLMMatrix3DMultiply(translation, rotation, xform);
     EISMatrix4x4Multiply(translation, rotation, xform);
-	
+
     glUseProgram(m_program);
+
+    EITexture *t;
+    glActiveTexture( GL_TEXTURE0 );
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+
+    glActiveTexture( GL_TEXTURE1 );
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+
 
     // M - World space
 	[self.rendererHelper setModelTransform:xform];

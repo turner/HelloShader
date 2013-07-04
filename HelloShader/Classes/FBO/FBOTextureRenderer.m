@@ -96,7 +96,7 @@
     // Bind shader program
     glUseProgram((GLuint)[[self.shader objectForKey:@"program"] unsignedIntValue]);
 
-    int mat = [[[[self.shader objectForKey:@"uniforms"] objectForKey:@"projectionViewModelMatrix"] objectForKey:@"location"] intValue];
+    int mat = [[[[self.shader objectForKey:@"uniforms"] objectForKey:@"projectionViewModelMatrix"] objectForKey:@"glslSampler"] intValue];
     glUniformMatrix4fv(mat, 1, NO, [self.rendererHelper projectionViewModelTransform]);
 
     GLuint xyz = (GLuint)[[[self.shader objectForKey:@"vertexAttributes"] objectForKey:@"vertexXYZ"] intValue];

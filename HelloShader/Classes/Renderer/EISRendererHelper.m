@@ -223,7 +223,7 @@
 	//
 	EISVector3DCrossProduct(o, a, n);
 	
-	// The translation vector - location - is the eye location.
+	// The translation vector - glslSampler - is the eye glslSampler.
 	// It is the where the camera is positioned in world space.
 	// Copy it into the "p" vector
 	EISVector3DCopy(p, location);

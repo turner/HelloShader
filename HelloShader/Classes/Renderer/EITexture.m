@@ -14,14 +14,14 @@ static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 @implementation EITexture {
 
     GLuint _name;
-    GLuint _location;
+    GLuint _glslSampler;
     GLuint _width;
     GLuint _height;
 
 }
 
 @synthesize name = _name;
-@synthesize location = _location;
+@synthesize glslSampler = _glslSampler;
 @synthesize width = _width;
 @synthesize height = _height;
 
