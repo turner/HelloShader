@@ -64,45 +64,41 @@ enum {
 
 @implementation GLRenderer {
 
-    EISRendererHelper *m_rendererHelper;
+    EAGLContext *_context;
 
-    EAGLContext *m_context;
+    GLint _backingWidth;
+    GLint _backingHeight;
 
-    GLint m_backingWidth;
-    GLint m_backingHeight;
-
-    GLuint m_framebuffer;
-    GLuint m_colorbuffer;
-    GLuint m_depthbuffer;
+    GLuint _framebuffer;
+    GLuint _colorbuffer;
+    GLuint _depthbuffer;
 
     GLuint _program;
 
     NSMutableDictionary *_texturePackages;
 }
 
-@synthesize rendererHelper = m_rendererHelper;
+@synthesize rendererHelper;
 @synthesize texturePackages = _texturePackages;
 
 - (void) dealloc {
-	
-    [m_rendererHelper release], m_rendererHelper = nil;
-	
-	if (m_framebuffer) {
+
+	if (_framebuffer) {
 		
-		glDeleteFramebuffers(1, &m_framebuffer);
-		m_framebuffer = 0;
+		glDeleteFramebuffers(1, &_framebuffer);
+		_framebuffer = 0;
 	}
 	
-	if (m_colorbuffer) {
+	if (_colorbuffer) {
 		
-		glDeleteRenderbuffers(1, &m_colorbuffer);
-		m_colorbuffer = 0;
+		glDeleteRenderbuffers(1, &_colorbuffer);
+		_colorbuffer = 0;
 	}
 	
-	if (m_depthbuffer) {
+	if (_depthbuffer) {
 		
-		glDeleteRenderbuffers(1, &m_depthbuffer);
-		m_depthbuffer = 0;
+		glDeleteRenderbuffers(1, &_depthbuffer);
+		_depthbuffer = 0;
 	}
 	
 	if (_program) {
@@ -111,10 +107,11 @@ enum {
 		_program = 0;
 	}
 	
-	if ([EAGLContext currentContext] == m_context) [EAGLContext setCurrentContext:nil];
-	[m_context release]; m_context = nil;
+	if ([EAGLContext currentContext] == _context) [EAGLContext setCurrentContext:nil];
+	[_context release]; _context = nil;
 
     self.texturePackages = nil;
+    self.rendererHelper = nil;
 
     [super dealloc];
 }
@@ -123,16 +120,14 @@ enum {
 	
 	if (self = [super init]) {
 		
-		m_backingWidth = -1;
-		m_backingHeight = -1;
+		_backingWidth = -1;
+		_backingHeight = -1;
+
+        self.rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
 		
-		ALog(@"backing size %d x %d.", m_backingWidth, m_backingHeight);
-		
-		m_rendererHelper = [[EISRendererHelper alloc] init];
-		
-		m_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+		_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
         
-        if (!m_context || ![EAGLContext setCurrentContext:m_context] || ![self loadShaders]) {
+        if (!_context || ![EAGLContext setCurrentContext:_context] || ![self loadShaders]) {
 			
             [self release];
 			
@@ -152,12 +147,8 @@ enum {
 
 - (void) setupGLView:(CGSize)size {
 
-    ALog(@"");
-
-    // Associate textures with shaders
     glUseProgram(_program);
 
-    // Associate shader uniform variables with application space variables
     uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(_program, "myProjectionViewModelMatrix");
     uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(_program, "myViewModelMatrix");
     uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(_program, "myModelMatrix");
@@ -225,9 +216,9 @@ enum {
 
 - (void) render {
 
-    [EAGLContext setCurrentContext:m_context];
-    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
-    glViewport(0, 0, m_backingWidth, m_backingHeight);
+    [EAGLContext setCurrentContext:_context];
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    glViewport(0, 0, _backingWidth, _backingHeight);
     
 //    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -277,8 +268,7 @@ enum {
 //	JLMMatrix3DMultiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
     EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
     glUniformMatrix4fv(uniforms[ProjectionViewModelUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
-	
-	
+
 	glEnableVertexAttribArray(VertexXYZAttributeHandle);
 	glEnableVertexAttribArray(VertexSTAttributeHandle);
 	glEnableVertexAttribArray(VertexRGBAAttributeHandle);
@@ -289,60 +279,50 @@ enum {
 	
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-	glDisableVertexAttribArray(VertexXYZAttributeHandle);
-	glDisableVertexAttribArray(VertexSTAttributeHandle);
-	glDisableVertexAttribArray(VertexRGBAAttributeHandle);
-	
-	
-	
-	
-	
 	// This application only creates a single color renderbuffer which is already bound at this point.
 	// This call is redundant, but needed if dealing with multiple renderbuffers.
-    glBindRenderbuffer(GL_RENDERBUFFER, m_colorbuffer);
-    [m_context presentRenderbuffer:GL_RENDERBUFFER];
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorbuffer);
+    [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer {
 
-    ALog(@"");
-	
-	if (m_framebuffer) {
+	if (_framebuffer) {
 		
-		glDeleteFramebuffers(1, &m_framebuffer);
-		m_framebuffer = 0;
+		glDeleteFramebuffers(1, &_framebuffer);
+		_framebuffer = 0;
 	}
 	
-	if (m_colorbuffer) {
+	if (_colorbuffer) {
 		
-		glDeleteRenderbuffers(1, &m_colorbuffer);
-		m_colorbuffer = 0;
+		glDeleteRenderbuffers(1, &_colorbuffer);
+		_colorbuffer = 0;
 	}
 	
-	if (m_depthbuffer) {
+	if (_depthbuffer) {
 		
-		glDeleteRenderbuffers(1, &m_depthbuffer);
-		m_depthbuffer = 0;
+		glDeleteRenderbuffers(1, &_depthbuffer);
+		_depthbuffer = 0;
 	}
 	
 	
 	// framebuffer
-	glGenFramebuffers(1, &m_framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+	glGenFramebuffers(1, &_framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
 	
 	// rgb buffer
-	glGenRenderbuffers(1, &m_colorbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_colorbuffer);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_colorbuffer);
-    [m_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
-	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &m_backingWidth);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &m_backingHeight);
+	glGenRenderbuffers(1, &_colorbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, _colorbuffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorbuffer);
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
+	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_backingWidth);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_backingHeight);
 	
 	// z-buffer
-	glGenRenderbuffers(1, &m_depthbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_depthbuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, m_backingWidth, m_backingHeight);	
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthbuffer);
+	glGenRenderbuffers(1, &_depthbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, _depthbuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _backingWidth, _backingHeight);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthbuffer);
 	
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 
