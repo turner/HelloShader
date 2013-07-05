@@ -18,6 +18,6 @@
 @property (nonatomic, retain) NSMutableDictionary *texturePackages;
 - (void) render;
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
-- (void) setupGLView:(CGSize)size;
+- (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix;
 @end
 

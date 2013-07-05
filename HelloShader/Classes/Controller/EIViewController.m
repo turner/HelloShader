@@ -32,6 +32,12 @@
     self.renderer = [[[GLRenderer alloc] initWithContext:[[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease]
                                             renderHelper:[[[EISRendererHelper alloc] init] autorelease]] autorelease];
 
+
+    NSString *shaderPrefix = @"TEITexturePairShader";
+//    NSString *shaderPrefix = @"TEITextureShader";
+//    NSString *shaderPrefix = @"ShowST";
+    (void)[self.renderer loadShaderWithPrefix:shaderPrefix];
+
     GLView *glView = (GLView *)[self.view.subviews objectAtIndex:0];
     glView.renderer = self.renderer;
     

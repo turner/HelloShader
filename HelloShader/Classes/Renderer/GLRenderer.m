@@ -1,6 +1,6 @@
 //
 //  GLRenderer.m
-//  HelloiPhoneiPodTouchPanorama
+//  HelloShader
 //
 //  Created by turner on 2/25/10.
 //  Copyright Douglass Turner Consulting 2010. All rights reserved.
@@ -11,7 +11,6 @@
 #import "EISRendererHelper.h"
 #import "EITexture.h"
 #import "Logging.h"
-#include "EISVectorMatrix.h"
 
 static const GLfloat verticesST[] = {
 	
@@ -55,11 +54,11 @@ enum {
     AttributeCount
 };
 
-@interface GLRenderer (PrivateMethods)
-- (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix;
-- (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
-- (BOOL) linkProgram:(GLuint)prog;
-- (BOOL) validateProgram:(GLuint)prog;
+@interface GLRenderer ()
+- (void)setupGLWithFrameBufferSize:(CGSize)size;
+- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
+- (BOOL)linkProgram:(GLuint)prog;
+- (BOOL)validateProgram:(GLuint)prog;
 @end
 
 @implementation GLRenderer {
@@ -73,7 +72,7 @@ enum {
     GLuint _colorbuffer;
     GLuint _depthbuffer;
 
-    GLuint _program;
+    GLuint _shaderProgram;
 
     NSMutableDictionary *_texturePackages;
 }
@@ -84,27 +83,23 @@ enum {
 - (void) dealloc {
 
 	if (_framebuffer) {
-		
 		glDeleteFramebuffers(1, &_framebuffer);
 		_framebuffer = 0;
 	}
 	
 	if (_colorbuffer) {
-		
 		glDeleteRenderbuffers(1, &_colorbuffer);
 		_colorbuffer = 0;
 	}
 	
 	if (_depthbuffer) {
-		
 		glDeleteRenderbuffers(1, &_depthbuffer);
 		_depthbuffer = 0;
 	}
 	
-	if (_program) {
-		
-		glDeleteProgram(_program);
-		_program = 0;
+	if (_shaderProgram) {
+		glDeleteProgram(_shaderProgram);
+		_shaderProgram = 0;
 	}
 	
 	if ([EAGLContext currentContext] == _context) [EAGLContext setCurrentContext:nil];
@@ -129,17 +124,7 @@ enum {
             return nil;
         }
 
-        if (![EAGLContext setCurrentContext:_context]) {
-
-            return nil;
-        }
-
-        NSString *shaderPrefix = @"TEITexturePairShader";
-//    NSString *shaderPrefix = @"TEITextureShader";
-//    NSString *shaderPrefix = @"ShowST";
-
-        if (![self loadShaderWithPrefix:shaderPrefix]) {
-
+        if (NO == [EAGLContext setCurrentContext:_context]) {
             return nil;
         }
 
@@ -147,28 +132,28 @@ enum {
         _backingHeight = -1;
 
         self.rendererHelper = aRenderHelper;
-
     }
 
     return self;
-
 }
 
 -(NSMutableDictionary *)texturePackages {
 
-    if (nil == _texturePackages) self.texturePackages = [NSMutableDictionary dictionary];
+    if (nil == _texturePackages) {
+        self.texturePackages = [NSMutableDictionary dictionary];
+    }
 
     return _texturePackages;
 }
 
-- (void) setupGLView:(CGSize)size {
+- (void)setupGLWithFrameBufferSize:(CGSize)size {
 
-    glUseProgram(_program);
+    glUseProgram(_shaderProgram);
 
-    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(_program, "myProjectionViewModelMatrix");
-    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(_program, "myViewModelMatrix");
-    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(_program, "myModelMatrix");
-    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(_program, "mySurfaceNormalMatrix");
+    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(_shaderProgram, "myProjectionViewModelMatrix");
+    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(_shaderProgram, "myViewModelMatrix");
+    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(_shaderProgram, "myModelMatrix");
+    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(_shaderProgram, "mySurfaceNormalMatrix");
 
 
     glEnable(GL_TEXTURE_2D);
@@ -207,7 +192,7 @@ enum {
 
     // Texture unit 0
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    t.glslSampler = (GLuint)glGetUniformLocation(_program, "myTexture_0");
+    t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
 
     glActiveTexture(GL_TEXTURE0 + 0);
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
@@ -218,7 +203,7 @@ enum {
 
     // Texture unit 1
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    t.glslSampler = (GLuint)glGetUniformLocation(_program, "myTexture_1");
+    t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
 
     glActiveTexture(GL_TEXTURE0 + 1);
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
@@ -236,8 +221,8 @@ enum {
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     glViewport(0, 0, _backingWidth, _backingHeight);
     
-//    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+//    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	static float angle = 0.0;
@@ -256,7 +241,7 @@ enum {
 //	JLMMatrix3DMultiply(translation, rotation, xform);
     EISMatrix4x4Multiply(translation, rotation, xform);
 
-    glUseProgram(_program);
+    glUseProgram(_shaderProgram);
 
     EITexture *t;
     glActiveTexture(GL_TEXTURE0 + 0);
@@ -345,8 +330,8 @@ enum {
         ALog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
         return NO;
     }
-    
-	[self setupGLView:layer.bounds.size];
+
+    [self setupGLWithFrameBufferSize:layer.bounds.size];
 	
     return YES;
 }
@@ -355,7 +340,7 @@ enum {
 
     ALog(@"");
 
-    _program = glCreateProgram();
+    _shaderProgram = glCreateProgram();
 
 	// Compile vertex and fragment shaders
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];
@@ -374,16 +359,16 @@ enum {
 		return FALSE;
 	}
 
-    glAttachShader(_program, vertShader);
-    glAttachShader(_program, fragShader);
+    glAttachShader(_shaderProgram, vertShader);
+    glAttachShader(_shaderProgram, fragShader);
 
-    glBindAttribLocation(_program, VertexXYZAttributeHandle,	"myVertexXYZ");
-	glBindAttribLocation(_program, VertexSTAttributeHandle,	"myVertexST");
-    glBindAttribLocation(_program, VertexRGBAAttributeHandle,	"myVertexRGBA");
+    glBindAttribLocation(_shaderProgram, VertexXYZAttributeHandle,	"myVertexXYZ");
+	glBindAttribLocation(_shaderProgram, VertexSTAttributeHandle,	"myVertexST");
+    glBindAttribLocation(_shaderProgram, VertexRGBAAttributeHandle,	"myVertexRGBA");
 
-	if (![self linkProgram:_program]) {
+	if (![self linkProgram:_shaderProgram]) {
 
-        ALog(@"Failed to link program: %d", _program);
+        ALog(@"Failed to link program: %d", _shaderProgram);
 		return FALSE;
 	}
 
