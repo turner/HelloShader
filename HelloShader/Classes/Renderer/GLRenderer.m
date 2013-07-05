@@ -56,7 +56,7 @@ enum {
 };
 
 @interface GLRenderer (PrivateMethods)
-- (BOOL) loadShaders;
+- (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix;
 - (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL) linkProgram:(GLuint)prog;
 - (BOOL) validateProgram:(GLuint)prog;
@@ -134,7 +134,11 @@ enum {
             return nil;
         }
 
-        if (![self loadShaders]) {
+        NSString *shaderPrefix = @"TEITexturePairShader";
+//    NSString *shaderPrefix = @"TEITextureShader";
+//    NSString *shaderPrefix = @"ShowST";
+
+        if (![self loadShaderWithPrefix:shaderPrefix]) {
 
             return nil;
         }
@@ -347,15 +351,11 @@ enum {
     return YES;
 }
 
-- (BOOL) loadShaders {
+- (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix {
 
     ALog(@"");
 
     _program = glCreateProgram();
-
-    NSString *shaderPrefix = @"TEITexturePairShader";
-//    NSString *shaderPrefix = @"TEITextureShader";
-//    NSString *shaderPrefix = @"ShowST";
 
 	// Compile vertex and fragment shaders
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];
