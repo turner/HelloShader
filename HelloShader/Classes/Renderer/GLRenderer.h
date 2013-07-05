@@ -13,13 +13,11 @@
 @class CAEAGLLayer;
 
 @interface GLRenderer : NSObject
-
+- (id)initWithContext:(EAGLContext *)context renderHelper:(EISRendererHelper *)aRenderHelper;
 @property (nonatomic, retain) EISRendererHelper *rendererHelper;
 @property (nonatomic, retain) NSMutableDictionary *texturePackages;
-
 - (void) render;
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
 - (void) setupGLView:(CGSize)size;
-
 @end
 

@@ -116,26 +116,38 @@ enum {
     [super dealloc];
 }
 
-- (id) init {
-	
-	if (self = [super init]) {
-		
-		_backingWidth = -1;
-		_backingHeight = -1;
+-(id)initWithContext:(EAGLContext *)context renderHelper:(EISRendererHelper *)aRenderHelper {
 
-        self.rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
-		
-		_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-        
-        if (!_context || ![EAGLContext setCurrentContext:_context] || ![self loadShaders]) {
-			
-            [self release];
-			
+    self = [super init];
+
+    if (nil != self) {
+
+        _context = context;
+
+        if (!_context) {
+
             return nil;
         }
-	}
-	
-	return self;
+
+        if (![EAGLContext setCurrentContext:_context]) {
+
+            return nil;
+        }
+
+        if (![self loadShaders]) {
+
+            return nil;
+        }
+
+        _backingWidth = -1;
+        _backingHeight = -1;
+
+        self.rendererHelper = aRenderHelper;
+
+    }
+
+    return self;
+
 }
 
 -(NSMutableDictionary *)texturePackages {

@@ -9,6 +9,7 @@
 #import "GLView.h"
 #import "GLRenderer.h"
 #import "Logging.h"
+#import "EISRendererHelper.h"
 
 @interface GLView (PrivateMethods)
 -(id)initializeEAGL;
@@ -63,13 +64,16 @@
 									[NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, 
 									kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, 
 									nil];
-	
-	self.renderer = [[[GLRenderer alloc] init] autorelease];
-	
-	if (nil == self.renderer) {
+
+    self.renderer = [[[GLRenderer alloc] initWithContext:[[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease]
+                                            renderHelper:[[[EISRendererHelper alloc] init] autorelease]] autorelease];
+
+    if (nil == self.renderer) {
 		
-		[self release];
-		return self.renderer;
+//		[self release];
+//		return self.renderer;
+
+        return nil;
 	}
 	
 	m_animating				= FALSE;
