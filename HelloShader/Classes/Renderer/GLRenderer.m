@@ -75,7 +75,7 @@ enum {
     GLuint m_colorbuffer;
     GLuint m_depthbuffer;
 
-    GLuint m_program;
+    GLuint _program;
 
     NSMutableDictionary *_texturePackages;
 }
@@ -105,10 +105,10 @@ enum {
 		m_depthbuffer = 0;
 	}
 	
-	if (m_program) {
+	if (_program) {
 		
-		glDeleteProgram(m_program);
-		m_program = 0;
+		glDeleteProgram(_program);
+		_program = 0;
 	}
 	
 	if ([EAGLContext currentContext] == m_context) [EAGLContext setCurrentContext:nil];
@@ -155,22 +155,13 @@ enum {
     ALog(@"");
 
     // Associate textures with shaders
-    glUseProgram(m_program);
+    glUseProgram(_program);
 
     // Associate shader uniform variables with application space variables
-    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(m_program, "myProjectionViewModelMatrix");
-    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(m_program, "myViewModelMatrix");
-    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(m_program, "myModelMatrix");
-    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(m_program, "mySurfaceNormalMatrix");
-
-
-    EITexture *t = nil;
-
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    t.glslSampler = glGetUniformLocation(m_program, "myTexture_0");
-
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    t.glslSampler = glGetUniformLocation(m_program, "myTexture_1");
+    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(_program, "myProjectionViewModelMatrix");
+    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(_program, "myViewModelMatrix");
+    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(_program, "myModelMatrix");
+    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(_program, "mySurfaceNormalMatrix");
 
 
     glEnable(GL_TEXTURE_2D);
@@ -200,18 +191,33 @@ enum {
 
     [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
 
+
+
+
+
+
+    EITexture *t = nil;
+
     // Texture unit 0
-    glActiveTexture( GL_TEXTURE0 );
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    t.glslSampler = (GLuint)glGetUniformLocation(_program, "myTexture_0");
+
+    glActiveTexture(GL_TEXTURE0 + 0);
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     glBindTexture(GL_TEXTURE_2D, t.name);
     glUniform1i(t.glslSampler, 0);
+
     glBindTexture(GL_TEXTURE_2D, 0);
 
     // Texture unit 1
-    glActiveTexture( GL_TEXTURE1 );
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    t.glslSampler = (GLuint)glGetUniformLocation(_program, "myTexture_1");
+
+    glActiveTexture(GL_TEXTURE0 + 1);
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     glBindTexture(GL_TEXTURE_2D, t.name);
     glUniform1i(t.glslSampler, 1);
+
     glBindTexture(GL_TEXTURE_2D, 0);
 
 
@@ -243,14 +249,14 @@ enum {
 //	JLMMatrix3DMultiply(translation, rotation, xform);
     EISMatrix4x4Multiply(translation, rotation, xform);
 
-    glUseProgram(m_program);
+    glUseProgram(_program);
 
     EITexture *t;
-    glActiveTexture( GL_TEXTURE0 );
+    glActiveTexture(GL_TEXTURE0 + 0);
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     glBindTexture(GL_TEXTURE_2D, t.name);
 
-    glActiveTexture( GL_TEXTURE1 );
+    glActiveTexture(GL_TEXTURE0 + 1);
     t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     glBindTexture(GL_TEXTURE_2D, t.name);
 
@@ -353,7 +359,7 @@ enum {
 
     ALog(@"");
 
-    m_program = glCreateProgram();
+    _program = glCreateProgram();
 
     NSString *shaderPrefix = @"TEITexturePairShader";
 //    NSString *shaderPrefix = @"TEITextureShader";
@@ -376,16 +382,16 @@ enum {
 		return FALSE;
 	}
 
-    glAttachShader(m_program, vertShader);
-    glAttachShader(m_program, fragShader);
+    glAttachShader(_program, vertShader);
+    glAttachShader(_program, fragShader);
 
-    glBindAttribLocation(m_program, VertexXYZAttributeHandle,	"myVertexXYZ");
-	glBindAttribLocation(m_program, VertexSTAttributeHandle,	"myVertexST");
-    glBindAttribLocation(m_program, VertexRGBAAttributeHandle,	"myVertexRGBA");
+    glBindAttribLocation(_program, VertexXYZAttributeHandle,	"myVertexXYZ");
+	glBindAttribLocation(_program, VertexSTAttributeHandle,	"myVertexST");
+    glBindAttribLocation(_program, VertexRGBAAttributeHandle,	"myVertexRGBA");
 
-	if (![self linkProgram:m_program]) {
+	if (![self linkProgram:_program]) {
 
-        ALog(@"Failed to link program: %d", m_program);
+        ALog(@"Failed to link program: %d", _program);
 		return FALSE;
 	}
 
