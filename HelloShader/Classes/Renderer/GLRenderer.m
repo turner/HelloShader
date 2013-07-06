@@ -214,10 +214,10 @@ enum {
     glUseProgram(_shaderProgram);
 
     // Get shader uniform pointers
-    uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(_shaderProgram, "myProjectionViewModelMatrix");
-    uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(_shaderProgram, "myViewModelMatrix");
-    uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(_shaderProgram, "myModelMatrix");
-    uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "mySurfaceNormalMatrix");
+    uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(_shaderProgram, "projectionViewModelMatrix");
+    uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(_shaderProgram, "viewModelMatrix");
+    uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(_shaderProgram, "modelMatrix");
+    uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "normalMatrix");
 
     // Attach texture(s) to shader
     EITexture *t = nil;
@@ -342,8 +342,8 @@ enum {
     glAttachShader(_shaderProgram, vertShader);
     glAttachShader(_shaderProgram, fragShader);
 
-    glBindAttribLocation(_shaderProgram, Attribute_VertexXYZ,	"myVertexXYZ");
-	glBindAttribLocation(_shaderProgram, Attribute_VertexST,	"myVertexST");
+    glBindAttribLocation(_shaderProgram, Attribute_VertexXYZ,	"vertexXYZ");
+	glBindAttribLocation(_shaderProgram, Attribute_VertexST,	"vertexST");
 
 	if (![self linkProgram:_shaderProgram]) {
 

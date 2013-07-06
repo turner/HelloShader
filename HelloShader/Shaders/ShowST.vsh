@@ -6,29 +6,30 @@
 //  Copyright Douglass Turner Consulting 2010. All rights reserved.
 //
 
-attribute highp vec4	myVertexXYZ;
-attribute highp vec2	myVertexST;
+attribute mediump	vec2	vertexST;
+attribute highp		vec4	vertexXYZ;
 
-// M - World space
-uniform mediump mat4	myModelMatrix;
+// M - World space modeling matrix
+uniform mediump mat4	modelMatrix;
 
-// The surface normal transform is the inverse of M
-uniform mediump mat4	mySurfaceNormalMatrix;
+// Surface normal transform is the inverse of M
+uniform mediump mat4	normalMatrix;
 
 // V * M - Eye space
-uniform mediump mat4	myViewModelMatrix;
+uniform mediump mat4	viewModelMatrix;
 
 // P * V * M - Projection space
-uniform mediump mat4	myProjectionViewModelMatrix;
+uniform mediump mat4	projectionViewModelMatrix;
 
-//varying lowp	vec4 v_rgba;
-varying			vec2 v_st;
+//
+varying	mediump vec2 v_st;
+
 void main() {
 
-	gl_Position = myProjectionViewModelMatrix * myVertexXYZ;
+	gl_Position = projectionViewModelMatrix * vertexXYZ;
 	
-	vec4 worldSpaceVertex = myModelMatrix * myVertexXYZ;
+	vec4 worldSpaceVertex = modelMatrix * vertexXYZ;
 
-	v_st = myVertexST;
+	v_st = vertexST;
 
 }
