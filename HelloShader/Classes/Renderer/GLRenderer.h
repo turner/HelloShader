@@ -18,8 +18,8 @@
 @property (nonatomic, retain) EISRendererHelper *rendererHelper;
 @property (nonatomic, retain) NSMutableDictionary *texturePackages;
 
-- (void) render;
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
+- (void) render;
 - (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix;
 @end
 

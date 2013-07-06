@@ -15,10 +15,10 @@
 
 // uniform index
 enum {
-	ProjectionViewModelUniformHandle,
-	ViewModelMatrixUniformHandle,
-	ModelMatrixUniformHandle,
-	SurfaceNormalMatrixUniformHandle,
+    Uniform_ProjectionViewModel,
+    Uniform_ViewModelMatrix,
+    Uniform_ModelMatrix,
+    Uniform_SurfaceNormalMatrix,
     UniformCount
 };
 
@@ -26,9 +26,8 @@ GLint uniforms[UniformCount];
 
 // attribute index
 enum {
-    VertexXYZAttributeHandle,
-    VertexSTAttributeHandle,
-    AttributeCount
+    Attribute_VertexXYZ,
+    Attribute_VertexST
 };
 
 @interface GLRenderer ()
@@ -126,15 +125,57 @@ enum {
     return _texturePackages;
 }
 
+- (BOOL) resizeFromLayer:(CAEAGLLayer *)layer {
+
+    if (_framebuffer) {
+
+        glDeleteFramebuffers(1, &_framebuffer);
+        _framebuffer = 0;
+    }
+
+    if (_colorbuffer) {
+
+        glDeleteRenderbuffers(1, &_colorbuffer);
+        _colorbuffer = 0;
+    }
+
+    if (_depthbuffer) {
+
+        glDeleteRenderbuffers(1, &_depthbuffer);
+        _depthbuffer = 0;
+    }
+
+
+    // framebuffer
+    glGenFramebuffers(1, &_framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+
+    // rgb buffer
+    glGenRenderbuffers(1, &_colorbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorbuffer);
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_backingWidth);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_backingHeight);
+
+    // z-buffer
+    glGenRenderbuffers(1, &_depthbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _backingWidth, _backingHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthbuffer);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+
+        ALog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        return NO;
+    }
+
+    [self setupGLWithFrameBufferSize:layer.bounds.size];
+
+    return YES;
+}
+
 - (void)setupGLWithFrameBufferSize:(CGSize)size {
-
-    glUseProgram(_shaderProgram);
-
-    // Get shader uniform pointers
-    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(_shaderProgram, "myProjectionViewModelMatrix");
-    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(_shaderProgram, "myViewModelMatrix");
-    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(_shaderProgram, "myModelMatrix");
-    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(_shaderProgram, "mySurfaceNormalMatrix");
 
     // GL futzing
     glEnable(GL_TEXTURE_2D);
@@ -147,9 +188,9 @@ enum {
     GLfloat near					=   0.1;
     GLfloat far						= 100.0;
     GLfloat fieldOfViewInDegreesY	=  90.0;
-
+    CGFloat aspectRatioWidthOverHeight = size.width/size.height;
     [self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY
-                                             aspectRatioWidthOverHeight:size.width/size.height
+                                             aspectRatioWidthOverHeight:aspectRatioWidthOverHeight
                                                                    near:near
                                                                     far:far];
 
@@ -166,7 +207,16 @@ enum {
     [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
 
     // Rendering surface
-    self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(.5, .5)] autorelease];
+    self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease];
+
+
+    glUseProgram(_shaderProgram);
+
+    // Get shader uniform pointers
+    uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(_shaderProgram, "myProjectionViewModelMatrix");
+    uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(_shaderProgram, "myViewModelMatrix");
+    uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(_shaderProgram, "myModelMatrix");
+    uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "mySurfaceNormalMatrix");
 
     // Attach texture(s) to shader
     EITexture *t = nil;
@@ -231,24 +281,24 @@ enum {
 
     // M - World space
 	[self.rendererHelper setModelTransform:xform];
-	glUniformMatrix4fv(uniforms[ModelMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
+	glUniformMatrix4fv(uniforms[Uniform_ModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
 	
 	// The surface normal transform is the inverse of M
-	glUniformMatrix4fv(uniforms[SurfaceNormalMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
+	glUniformMatrix4fv(uniforms[Uniform_SurfaceNormalMatrix], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
 
 	// V * M - Eye space
     EISMatrix4x4Multiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
-	glUniformMatrix4fv(uniforms[ViewModelMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
+	glUniformMatrix4fv(uniforms[Uniform_ViewModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
 	
 	// P * V * M - Projection space
     EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
-    glUniformMatrix4fv(uniforms[ProjectionViewModelUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
+    glUniformMatrix4fv(uniforms[Uniform_ProjectionViewModel], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
 
-	glEnableVertexAttribArray(VertexXYZAttributeHandle);
-	glEnableVertexAttribArray(VertexSTAttributeHandle);
+	glEnableVertexAttribArray(Attribute_VertexXYZ);
+	glEnableVertexAttribArray(Attribute_VertexST);
 
-    glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, self.quad.vertices);
-    glVertexAttribPointer(VertexSTAttributeHandle,		2, GL_FLOAT,			0, 0, [EISRendererHelper verticesST]);
+    glVertexAttribPointer(Attribute_VertexXYZ,		3, GL_FLOAT,			0, 0, self.quad.vertices);
+    glVertexAttribPointer(Attribute_VertexST,		2, GL_FLOAT,			0, 0, [EISRendererHelper verticesST]);
 
 
 
@@ -263,56 +313,6 @@ enum {
 	// This call is redundant, but needed if dealing with multiple renderbuffers.
     glBindRenderbuffer(GL_RENDERBUFFER, _colorbuffer);
     [_context presentRenderbuffer:GL_RENDERBUFFER];
-}
-
-- (BOOL) resizeFromLayer:(CAEAGLLayer *)layer {
-
-	if (_framebuffer) {
-		
-		glDeleteFramebuffers(1, &_framebuffer);
-		_framebuffer = 0;
-	}
-	
-	if (_colorbuffer) {
-		
-		glDeleteRenderbuffers(1, &_colorbuffer);
-		_colorbuffer = 0;
-	}
-	
-	if (_depthbuffer) {
-		
-		glDeleteRenderbuffers(1, &_depthbuffer);
-		_depthbuffer = 0;
-	}
-	
-	
-	// framebuffer
-	glGenFramebuffers(1, &_framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
-	
-	// rgb buffer
-	glGenRenderbuffers(1, &_colorbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, _colorbuffer);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorbuffer);
-    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
-	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_backingWidth);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_backingHeight);
-	
-	// z-buffer
-	glGenRenderbuffers(1, &_depthbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, _depthbuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _backingWidth, _backingHeight);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthbuffer);
-	
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-
-        ALog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
-        return NO;
-    }
-
-    [self setupGLWithFrameBufferSize:layer.bounds.size];
-	
-    return YES;
 }
 
 - (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix {
@@ -341,8 +341,8 @@ enum {
     glAttachShader(_shaderProgram, vertShader);
     glAttachShader(_shaderProgram, fragShader);
 
-    glBindAttribLocation(_shaderProgram, VertexXYZAttributeHandle,	"myVertexXYZ");
-	glBindAttribLocation(_shaderProgram, VertexSTAttributeHandle,	"myVertexST");
+    glBindAttribLocation(_shaderProgram, Attribute_VertexXYZ,	"myVertexXYZ");
+	glBindAttribLocation(_shaderProgram, Attribute_VertexST,	"myVertexST");
 
 	if (![self linkProgram:_shaderProgram]) {
 
