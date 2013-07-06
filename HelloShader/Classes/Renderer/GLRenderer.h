@@ -9,30 +9,15 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-@class EIRenderHelper;
+@class EISRendererHelper;
 @class CAEAGLLayer;
 
-@interface GLRenderer : NSObject {
-
-	EIRenderHelper *m_rendererHelper;
-
-	EAGLContext *m_context;
-	
-	GLint m_backingWidth;
-	GLint m_backingHeight;
-	
-	GLuint m_framebuffer;
-	GLuint m_colorbuffer;
-	GLuint m_depthbuffer;
-	
-	GLuint m_program;
-}
-
-@property (nonatomic, retain) EIRenderHelper *rendererHelper;
-
+@interface GLRenderer : NSObject
+- (id)initWithContext:(EAGLContext *)context renderHelper:(EISRendererHelper *)aRenderHelper;
+@property (nonatomic, retain) EISRendererHelper *rendererHelper;
+@property (nonatomic, retain) NSMutableDictionary *texturePackages;
 - (void) render;
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
-- (void) setupGLView:(CGSize)size;
-
+- (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix;
 @end
 

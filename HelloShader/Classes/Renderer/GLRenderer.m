@@ -1,6 +1,6 @@
 //
 //  GLRenderer.m
-//  HelloiPhoneiPodTouchPanorama
+//  HelloShader
 //
 //  Created by turner on 2/25/10.
 //  Copyright Douglass Turner Consulting 2010. All rights reserved.
@@ -8,8 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "GLRenderer.h"
-#import "EIRenderHelper.h"
-#import "JLMMatrixLibrary.h"
+#import "EISRendererHelper.h"
 #import "EITexture.h"
 #import "Logging.h"
 
@@ -55,104 +54,206 @@ enum {
     AttributeCount
 };
 
-@interface GLRenderer (PrivateMethods)
-- (BOOL) loadShaders;
-- (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
-- (BOOL) linkProgram:(GLuint)prog;
-- (BOOL) validateProgram:(GLuint)prog;
+@interface GLRenderer ()
+- (void)setupGLWithFrameBufferSize:(CGSize)size;
+- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
+- (BOOL)linkProgram:(GLuint)prog;
+- (BOOL)validateProgram:(GLuint)prog;
 @end
 
-@implementation GLRenderer
+@implementation GLRenderer {
 
-@synthesize rendererHelper = m_rendererHelper;
+    EAGLContext *_context;
 
-- (void) dealloc {
-	
-    [m_rendererHelper release], m_rendererHelper = nil;
-	
-	if (m_framebuffer) {
-		
-		glDeleteFramebuffers(1, &m_framebuffer);
-		m_framebuffer = 0;
-	}
-	
-	if (m_colorbuffer) {
-		
-		glDeleteRenderbuffers(1, &m_colorbuffer);
-		m_colorbuffer = 0;
-	}
-	
-	if (m_depthbuffer) {
-		
-		glDeleteRenderbuffers(1, &m_depthbuffer);
-		m_depthbuffer = 0;
-	}
-	
-	if (m_program) {
-		
-		glDeleteProgram(m_program);
-		m_program = 0;
-	}
-	
-	if ([EAGLContext currentContext] == m_context) [EAGLContext setCurrentContext:nil];
-	
-	[m_context release];
-	m_context = nil;
-	
-	[super dealloc];
+    GLint _backingWidth;
+    GLint _backingHeight;
+
+    GLuint _framebuffer;
+    GLuint _colorbuffer;
+    GLuint _depthbuffer;
+
+    GLuint _shaderProgram;
+
+    NSMutableDictionary *_texturePackages;
 }
 
-- (id) init {
-	
-	if (self = [super init]) {
-		
-		m_backingWidth = -1;
-		m_backingHeight = -1;
-		
-		ALog(@"backing size %d x %d.", m_backingWidth, m_backingHeight);
-		
-		m_rendererHelper = [[EIRenderHelper alloc] init];
-		
-		m_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-        
-        if (!m_context || ![EAGLContext setCurrentContext:m_context] || ![self loadShaders]) {
-			
-            [self release];
-			
-            return nil;
-        }
+@synthesize rendererHelper;
+@synthesize texturePackages = _texturePackages;
+
+- (void) dealloc {
+
+	if (_framebuffer) {
+		glDeleteFramebuffers(1, &_framebuffer);
+		_framebuffer = 0;
 	}
 	
-	return self;
+	if (_colorbuffer) {
+		glDeleteRenderbuffers(1, &_colorbuffer);
+		_colorbuffer = 0;
+	}
+	
+	if (_depthbuffer) {
+		glDeleteRenderbuffers(1, &_depthbuffer);
+		_depthbuffer = 0;
+	}
+	
+	if (_shaderProgram) {
+		glDeleteProgram(_shaderProgram);
+		_shaderProgram = 0;
+	}
+	
+	if ([EAGLContext currentContext] == _context) [EAGLContext setCurrentContext:nil];
+	[_context release]; _context = nil;
+
+    self.texturePackages = nil;
+    self.rendererHelper = nil;
+
+    [super dealloc];
+}
+
+-(id)initWithContext:(EAGLContext *)context renderHelper:(EISRendererHelper *)aRenderHelper {
+
+    self = [super init];
+
+    if (nil != self) {
+
+        _context = context;
+
+        if (!_context) {
+
+            return nil;
+        }
+
+        if (NO == [EAGLContext setCurrentContext:_context]) {
+            return nil;
+        }
+
+        _backingWidth = -1;
+        _backingHeight = -1;
+
+        self.rendererHelper = aRenderHelper;
+    }
+
+    return self;
+}
+
+-(NSMutableDictionary *)texturePackages {
+
+    if (nil == _texturePackages) {
+        self.texturePackages = [NSMutableDictionary dictionary];
+    }
+
+    return _texturePackages;
+}
+
+- (void)setupGLWithFrameBufferSize:(CGSize)size {
+
+    glUseProgram(_shaderProgram);
+
+    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(_shaderProgram, "myProjectionViewModelMatrix");
+    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(_shaderProgram, "myViewModelMatrix");
+    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(_shaderProgram, "myModelMatrix");
+    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(_shaderProgram, "mySurfaceNormalMatrix");
+
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
+    glFrontFace(GL_CCW);
+    glEnable (GL_BLEND);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    GLfloat near					=   0.1;
+    GLfloat far						= 100.0;
+    GLfloat fieldOfViewInDegreesY	=  90.0;
+
+    [self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY
+                                             aspectRatioWidthOverHeight:size.width/size.height
+                                                                   near:near
+                                                                    far:far];
+
+
+    // Aim the camera
+    EISVector3D eye;
+    EISVector3D target;
+    EISVector3D up;
+    EISVector3DSet(eye,	   0, 0,  2);
+    EISVector3DSet(target, 0, 0, -1);
+    EISVector3DSet(up,	   0, 1,  0);
+
+    [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
+
+
+
+
+
+
+    EITexture *t = nil;
+
+    // Texture unit 0
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
+
+    glActiveTexture(GL_TEXTURE0 + 0);
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+    glUniform1i(t.glslSampler, 0);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // Texture unit 1
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
+
+    glActiveTexture(GL_TEXTURE0 + 1);
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+    glUniform1i(t.glslSampler, 1);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+
 }
 
 - (void) render {
 
-    [EAGLContext setCurrentContext:m_context];
-    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
-    glViewport(0, 0, m_backingWidth, m_backingHeight);
+    [EAGLContext setCurrentContext:_context];
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    glViewport(0, 0, _backingWidth, _backingHeight);
     
-//    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+//    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	static float angle = 0.0;
-	M3DMatrix44f rotation;
-	JLMMatrix3DSetRotationByDegrees(rotation, angle, 0.0, 0.0, 1.0);
+    EISMatrix4x4 rotation;
+//	JLMMatrix3DSetRotationByDegrees(rotation, angle, 0.0, 0.0, 1.0);
+    EISMatrix4x4SetZRotationUsingDegrees(rotation, angle);
 	angle += 1.0;	
 	
-	static float t = 0.0f;
-	M3DMatrix44f translation;
-	JLMMatrix3DSetTranslation(translation, 0.0, 0.0, (1.0) * cosf(t/4.0));
-	t += 0.075f/3.0;	
-    
-	M3DMatrix44f xform;
-	JLMMatrix3DMultiply(translation, rotation, xform);
+	static float r = 0.0f;
+    EISMatrix4x4 translation;
+//	JLMMatrix3DSetTranslation(translation, 0.0, 0.0, (1.0) * cosf(t/4.0));
+    EISMatrix4x4SetTranslation(translation, 0, 0, (1.0) * cosf(r/4.0));
+	r += 0.075f/3.0;
 
-	
-    glUseProgram(m_program);
-		
-	// M - World space
+    EISMatrix4x4 xform;
+//	JLMMatrix3DMultiply(translation, rotation, xform);
+    EISMatrix4x4Multiply(translation, rotation, xform);
+
+    glUseProgram(_shaderProgram);
+
+    EITexture *t;
+    glActiveTexture(GL_TEXTURE0 + 0);
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+
+    glActiveTexture(GL_TEXTURE0 + 1);
+    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    glBindTexture(GL_TEXTURE_2D, t.name);
+
+
+    // M - World space
 	[self.rendererHelper setModelTransform:xform];
 	glUniformMatrix4fv(uniforms[ModelMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
 	
@@ -160,14 +261,15 @@ enum {
 	glUniformMatrix4fv(uniforms[SurfaceNormalMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
 
 	// V * M - Eye space
-	JLMMatrix3DMultiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
+//	JLMMatrix3DMultiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
+    EISMatrix4x4Multiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
 	glUniformMatrix4fv(uniforms[ViewModelMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
 	
 	// P * V * M - Projection space
-	JLMMatrix3DMultiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
-	glUniformMatrix4fv(uniforms[ProjectionViewModelUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
-	
-	
+//	JLMMatrix3DMultiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
+    EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
+    glUniformMatrix4fv(uniforms[ProjectionViewModelUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
+
 	glEnableVertexAttribArray(VertexXYZAttributeHandle);
 	glEnableVertexAttribArray(VertexSTAttributeHandle);
 	glEnableVertexAttribArray(VertexRGBAAttributeHandle);
@@ -178,145 +280,67 @@ enum {
 	
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-	glDisableVertexAttribArray(VertexXYZAttributeHandle);
-	glDisableVertexAttribArray(VertexSTAttributeHandle);
-	glDisableVertexAttribArray(VertexRGBAAttributeHandle);
-	
-	
-	
-	
-	
 	// This application only creates a single color renderbuffer which is already bound at this point.
 	// This call is redundant, but needed if dealing with multiple renderbuffers.
-    glBindRenderbuffer(GL_RENDERBUFFER, m_colorbuffer);
-    [m_context presentRenderbuffer:GL_RENDERBUFFER];
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorbuffer);
+    [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer {
 
-    ALog(@"");
-	
-	if (m_framebuffer) {
+	if (_framebuffer) {
 		
-		glDeleteFramebuffers(1, &m_framebuffer);
-		m_framebuffer = 0;
+		glDeleteFramebuffers(1, &_framebuffer);
+		_framebuffer = 0;
 	}
 	
-	if (m_colorbuffer) {
+	if (_colorbuffer) {
 		
-		glDeleteRenderbuffers(1, &m_colorbuffer);
-		m_colorbuffer = 0;
+		glDeleteRenderbuffers(1, &_colorbuffer);
+		_colorbuffer = 0;
 	}
 	
-	if (m_depthbuffer) {
+	if (_depthbuffer) {
 		
-		glDeleteRenderbuffers(1, &m_depthbuffer);
-		m_depthbuffer = 0;
+		glDeleteRenderbuffers(1, &_depthbuffer);
+		_depthbuffer = 0;
 	}
 	
 	
 	// framebuffer
-	glGenFramebuffers(1, &m_framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+	glGenFramebuffers(1, &_framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
 	
 	// rgb buffer
-	glGenRenderbuffers(1, &m_colorbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_colorbuffer);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_colorbuffer);
-    [m_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
-	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &m_backingWidth);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &m_backingHeight);
+	glGenRenderbuffers(1, &_colorbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, _colorbuffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorbuffer);
+    [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
+	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_backingWidth);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_backingHeight);
 	
 	// z-buffer
-	glGenRenderbuffers(1, &m_depthbuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_depthbuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, m_backingWidth, m_backingHeight);	
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthbuffer);
+	glGenRenderbuffers(1, &_depthbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, _depthbuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _backingWidth, _backingHeight);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthbuffer);
 	
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 
         ALog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
         return NO;
     }
-    
-	[self setupGLView:layer.bounds.size];
+
+    [self setupGLWithFrameBufferSize:layer.bounds.size];
 	
     return YES;
 }
 
-- (void) setupGLView:(CGSize)size {
-
-    ALog(@"");
-	
-	// Associate textures with shaders
-	glUseProgram(m_program);
-	
-	// Associate shader uniform variables with application space variables
-    uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(m_program, "myProjectionViewModelMatrix");
-    uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(m_program, "myViewModelMatrix");
-    uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(m_program, "myModelMatrix");
-    uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(m_program, "mySurfaceNormalMatrix");
-    
-	
-	EITexture *t = nil;
-	
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-	t.location = glGetUniformLocation(m_program, "myTexture_0");
-	
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-	t.location = glGetUniformLocation(m_program, "myTexture_1");
-	
-	
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_DEPTH_TEST);
-	glFrontFace(GL_CCW);	
-	glEnable (GL_BLEND);
-	
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	GLfloat near					=   0.1; 
-	GLfloat far						= 100.0; 
-	GLfloat fieldOfViewInDegreesY	=  90.0; 
-	
-	[self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY 
-											 aspectRatioWidthOverHeight:size.width/size.height 
-																   near:near 
-																	far:far];
-	
-	
-	// Aim the camera
-	M3DVector3f eye;
-	M3DVector3f target;
-	M3DVector3f up;
-	m3dLoadVector3f(eye,	0.0f, 0.0f,   2.0);
-	m3dLoadVector3f(target, 0.0f, 0.0f,  -1.0f);
-	m3dLoadVector3f(up,		0.0f, 1.0f,   0.0f);
-	
-	[self.rendererHelper placeCameraAtLocation:eye target:target up:up];
-	
-	// Texture unit 0
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-	glActiveTexture( GL_TEXTURE0 );
-	glBindTexture(GL_TEXTURE_2D, t.name);
-	glUniform1i(t.location, 0);
-	
-	// Texture unit 1
-	t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-	glActiveTexture( GL_TEXTURE1 );
-	glBindTexture(GL_TEXTURE_2D, t.name);
-	glUniform1i(t.location, 1);
-	
-}
-
-- (BOOL) loadShaders {
+- (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix {
 
     ALog(@"");
 
-    m_program = glCreateProgram();
-
-    NSString *shaderPrefix = @"TEITexturePairShader";
-//    NSString *shaderPrefix = @"TEITextureShader";
-//    NSString *shaderPrefix = @"ShowST";
+    _shaderProgram = glCreateProgram();
 
 	// Compile vertex and fragment shaders
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];
@@ -335,16 +359,16 @@ enum {
 		return FALSE;
 	}
 
-    glAttachShader(m_program, vertShader);
-    glAttachShader(m_program, fragShader);
+    glAttachShader(_shaderProgram, vertShader);
+    glAttachShader(_shaderProgram, fragShader);
 
-    glBindAttribLocation(m_program, VertexXYZAttributeHandle,	"myVertexXYZ");
-	glBindAttribLocation(m_program, VertexSTAttributeHandle,	"myVertexST");
-    glBindAttribLocation(m_program, VertexRGBAAttributeHandle,	"myVertexRGBA");
+    glBindAttribLocation(_shaderProgram, VertexXYZAttributeHandle,	"myVertexXYZ");
+	glBindAttribLocation(_shaderProgram, VertexSTAttributeHandle,	"myVertexST");
+    glBindAttribLocation(_shaderProgram, VertexRGBAAttributeHandle,	"myVertexRGBA");
 
-	if (![self linkProgram:m_program]) {
+	if (![self linkProgram:_shaderProgram]) {
 
-        ALog(@"Failed to link program: %d", m_program);
+        ALog(@"Failed to link program: %d", _shaderProgram);
 		return FALSE;
 	}
 

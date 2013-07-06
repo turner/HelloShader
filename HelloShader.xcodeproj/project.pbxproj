@@ -21,10 +21,7 @@
 		3107EA031733DEFE007E8781 /* EIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107E9FE1733DEFE007E8781 /* EIViewController.m */; };
 		3107EA091733E01B007E8781 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA081733E01B007E8781 /* GLView.m */; };
 		3107EA161733E036007E8781 /* GLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0C1733E036007E8781 /* GLRenderer.m */; };
-		3107EA171733E036007E8781 /* JLMMatrixLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0E1733E036007E8781 /* JLMMatrixLibrary.cpp */; };
-		3107EA181733E036007E8781 /* EIRenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA111733E036007E8781 /* EIRenderHelper.m */; };
 		3107EA191733E036007E8781 /* EITexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA131733E036007E8781 /* EITexture.m */; };
-		3107EA1A1733E036007E8781 /* VectorMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA141733E036007E8781 /* VectorMatrix.cpp */; };
 		3107EA601733E051007E8781 /* ShowST.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA281733E051007E8781 /* ShowST.fsh */; };
 		3107EA611733E051007E8781 /* ShowST.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA291733E051007E8781 /* ShowST.vsh */; };
 		3107EA641733E051007E8781 /* TEITexturePairShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */; };
@@ -43,6 +40,12 @@
 		3114349D1785FD7A00CCA0EC /* mandrill.png in Resources */ = {isa = PBXBuildFile; fileRef = 311434991785FD7A00CCA0EC /* mandrill.png */; };
 		3114349E1785FD7A00CCA0EC /* orientation.png in Resources */ = {isa = PBXBuildFile; fileRef = 3114349A1785FD7A00CCA0EC /* orientation.png */; };
 		3114349F1785FD7A00CCA0EC /* swirl.png in Resources */ = {isa = PBXBuildFile; fileRef = 3114349B1785FD7A00CCA0EC /* swirl.png */; };
+		318CA484178605D3000C0253 /* FBOTextureRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA481178605D3000C0253 /* FBOTextureRenderer.m */; };
+		318CA485178605D3000C0253 /* FBOTextureRenderTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA483178605D3000C0253 /* FBOTextureRenderTarget.m */; };
+		318CA4881786066E000C0253 /* EIQuad.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA4871786066E000C0253 /* EIQuad.m */; };
+		318CA48E17860952000C0253 /* EISGLHelpful.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA48C17860952000C0253 /* EISGLHelpful.m */; };
+		318CA49917860F82000C0253 /* EISRendererHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA49517860F82000C0253 /* EISRendererHelper.m */; };
+		318CA49A17860F82000C0253 /* EISVectorMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 318CA49717860F82000C0253 /* EISVectorMatrix.cpp */; };
 		3199A8501734525400873A93 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A8481734525400873A93 /* Icon-72.png */; };
 		3199A8511734525400873A93 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A8491734525400873A93 /* Icon-Small-50.png */; };
 		3199A8521734525400873A93 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A84A1734525400873A93 /* Icon-Small.png */; };
@@ -75,14 +78,8 @@
 		3107EA0A1733E028007E8781 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
 		3107EA0B1733E036007E8781 /* GLRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderer.h; sourceTree = "<group>"; };
 		3107EA0C1733E036007E8781 /* GLRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLRenderer.m; sourceTree = "<group>"; };
-		3107EA0E1733E036007E8781 /* JLMMatrixLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JLMMatrixLibrary.cpp; sourceTree = "<group>"; };
-		3107EA0F1733E036007E8781 /* JLMMatrixLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLMMatrixLibrary.h; sourceTree = "<group>"; };
-		3107EA101733E036007E8781 /* EIRenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIRenderHelper.h; sourceTree = "<group>"; };
-		3107EA111733E036007E8781 /* EIRenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIRenderHelper.m; sourceTree = "<group>"; };
 		3107EA121733E036007E8781 /* EITexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EITexture.h; sourceTree = "<group>"; };
 		3107EA131733E036007E8781 /* EITexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EITexture.m; sourceTree = "<group>"; };
-		3107EA141733E036007E8781 /* VectorMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VectorMatrix.cpp; sourceTree = "<group>"; };
-		3107EA151733E036007E8781 /* VectorMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VectorMatrix.h; sourceTree = "<group>"; };
 		3107EA281733E051007E8781 /* ShowST.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.fsh; sourceTree = "<group>"; };
 		3107EA291733E051007E8781 /* ShowST.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.vsh; sourceTree = "<group>"; };
 		3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITexturePairShader.fsh; sourceTree = "<group>"; };
@@ -101,6 +98,18 @@
 		311434991785FD7A00CCA0EC /* mandrill.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mandrill.png; sourceTree = "<group>"; };
 		3114349A1785FD7A00CCA0EC /* orientation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orientation.png; sourceTree = "<group>"; };
 		3114349B1785FD7A00CCA0EC /* swirl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swirl.png; sourceTree = "<group>"; };
+		318CA480178605D3000C0253 /* FBOTextureRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBOTextureRenderer.h; sourceTree = "<group>"; };
+		318CA481178605D3000C0253 /* FBOTextureRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBOTextureRenderer.m; sourceTree = "<group>"; };
+		318CA482178605D3000C0253 /* FBOTextureRenderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBOTextureRenderTarget.h; sourceTree = "<group>"; };
+		318CA483178605D3000C0253 /* FBOTextureRenderTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBOTextureRenderTarget.m; sourceTree = "<group>"; };
+		318CA4861786066E000C0253 /* EIQuad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIQuad.h; sourceTree = "<group>"; };
+		318CA4871786066E000C0253 /* EIQuad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIQuad.m; sourceTree = "<group>"; };
+		318CA48C17860952000C0253 /* EISGLHelpful.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISGLHelpful.m; sourceTree = "<group>"; };
+		318CA48D17860952000C0253 /* EISGLHelpful.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISGLHelpful.h; sourceTree = "<group>"; };
+		318CA49517860F82000C0253 /* EISRendererHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISRendererHelper.m; sourceTree = "<group>"; };
+		318CA49617860F82000C0253 /* EISRendererHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISRendererHelper.h; sourceTree = "<group>"; };
+		318CA49717860F82000C0253 /* EISVectorMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EISVectorMatrix.cpp; sourceTree = "<group>"; };
+		318CA49817860F82000C0253 /* EISVectorMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISVectorMatrix.h; sourceTree = "<group>"; };
 		3199A8481734525400873A93 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		3199A8491734525400873A93 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		3199A84A1734525400873A93 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -187,6 +196,9 @@
 		3107E9F81733DEFE007E8781 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				318CA4861786066E000C0253 /* EIQuad.h */,
+				318CA4871786066E000C0253 /* EIQuad.m */,
+				318CA47F178605D3000C0253 /* FBO */,
 				3107E9F91733DEFE007E8781 /* AppDelegate */,
 				3107E9FC1733DEFE007E8781 /* Controller */,
 				3107E9FF1733DEFE007E8781 /* Helpful */,
@@ -217,6 +229,8 @@
 		3107E9FF1733DEFE007E8781 /* Helpful */ = {
 			isa = PBXGroup;
 			children = (
+				318CA48C17860952000C0253 /* EISGLHelpful.m */,
+				318CA48D17860952000C0253 /* EISGLHelpful.h */,
 				31EA2CE617343C6A00B01CF6 /* Logging.h */,
 				3107EA0A1733E028007E8781 /* ConstantsAndMacros.h */,
 			);
@@ -226,16 +240,14 @@
 		3107EA001733DEFE007E8781 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				318CA49517860F82000C0253 /* EISRendererHelper.m */,
+				318CA49617860F82000C0253 /* EISRendererHelper.h */,
+				318CA49717860F82000C0253 /* EISVectorMatrix.cpp */,
+				318CA49817860F82000C0253 /* EISVectorMatrix.h */,
 				3107EA0B1733E036007E8781 /* GLRenderer.h */,
 				3107EA0C1733E036007E8781 /* GLRenderer.m */,
-				3107EA0E1733E036007E8781 /* JLMMatrixLibrary.cpp */,
-				3107EA0F1733E036007E8781 /* JLMMatrixLibrary.h */,
-				3107EA101733E036007E8781 /* EIRenderHelper.h */,
-				3107EA111733E036007E8781 /* EIRenderHelper.m */,
 				3107EA121733E036007E8781 /* EITexture.h */,
 				3107EA131733E036007E8781 /* EITexture.m */,
-				3107EA141733E036007E8781 /* VectorMatrix.cpp */,
-				3107EA151733E036007E8781 /* VectorMatrix.h */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -277,6 +289,17 @@
 				3107EA531733E051007E8781 /* twitter_fail_whale_red_channnel_knockout.png */,
 			);
 			path = Textures;
+			sourceTree = "<group>";
+		};
+		318CA47F178605D3000C0253 /* FBO */ = {
+			isa = PBXGroup;
+			children = (
+				318CA480178605D3000C0253 /* FBOTextureRenderer.h */,
+				318CA481178605D3000C0253 /* FBOTextureRenderer.m */,
+				318CA482178605D3000C0253 /* FBOTextureRenderTarget.h */,
+				318CA483178605D3000C0253 /* FBOTextureRenderTarget.m */,
+			);
+			path = FBO;
 			sourceTree = "<group>";
 		};
 		3199A8471734525400873A93 /* Icons */ = {
@@ -389,10 +412,13 @@
 				3107EA031733DEFE007E8781 /* EIViewController.m in Sources */,
 				3107EA091733E01B007E8781 /* GLView.m in Sources */,
 				3107EA161733E036007E8781 /* GLRenderer.m in Sources */,
-				3107EA171733E036007E8781 /* JLMMatrixLibrary.cpp in Sources */,
-				3107EA181733E036007E8781 /* EIRenderHelper.m in Sources */,
 				3107EA191733E036007E8781 /* EITexture.m in Sources */,
-				3107EA1A1733E036007E8781 /* VectorMatrix.cpp in Sources */,
+				318CA484178605D3000C0253 /* FBOTextureRenderer.m in Sources */,
+				318CA485178605D3000C0253 /* FBOTextureRenderTarget.m in Sources */,
+				318CA4881786066E000C0253 /* EIQuad.m in Sources */,
+				318CA48E17860952000C0253 /* EISGLHelpful.m in Sources */,
+				318CA49917860F82000C0253 /* EISRendererHelper.m in Sources */,
+				318CA49A17860F82000C0253 /* EISVectorMatrix.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

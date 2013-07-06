@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class GLRenderer;
+
 @interface EIViewController : UIViewController
 
 @end

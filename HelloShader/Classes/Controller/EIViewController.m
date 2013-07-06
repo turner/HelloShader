@@ -7,119 +7,49 @@
 //
 
 #import "EIViewController.h"
-#import "Logging.h"
 #import "GLView.h"
 #import "EITexture.h"
 #import "GLRenderer.h"
-#import "EIRenderHelper.h"
+#import "EISRendererHelper.h"
 
 @interface EIViewController ()
-- (NSString *)interfaceOrientationName:(UIInterfaceOrientation)interfaceOrientation;
-- (NSString *)deviceOrientationName:(UIDeviceOrientation)deviceOrientation;
+@property(nonatomic, retain) GLRenderer *renderer;
 @end
 
 @implementation EIViewController
 
+@synthesize renderer;
+
+- (void)dealloc {
+
+    self.renderer = nil;
+
+    [super dealloc];
+}
+
 - (void)viewDidLoad {
 
-    id thang = [self.view.subviews objectAtIndex:0];
+    self.renderer = [[[GLRenderer alloc] initWithContext:[[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease]
+                                            renderHelper:[[[EISRendererHelper alloc] init] autorelease]] autorelease];
 
-    ALog(@"%@", [thang class]);
 
-	GLView *glView = (GLView *)thang;
+    NSString *shaderPrefix = @"TEITexturePairShader";
+//    NSString *shaderPrefix = @"TEITextureShader";
+//    NSString *shaderPrefix = @"ShowST";
+    (void)[self.renderer loadShaderWithPrefix:shaderPrefix];
+
+    GLView *glView = (GLView *)[self.view.subviews objectAtIndex:0];
+    glView.renderer = self.renderer;
     
 	EITexture *texture_0 = [[ [EITexture alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
-	[glView.renderer.rendererHelper.renderables setObject:texture_0 forKey:@"texture_0"];
+	[self.renderer.rendererHelper.renderables setObject:texture_0 forKey:@"texture_0"];
 	
 	EITexture *texture_1 = [[ [EITexture alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
-	[glView.renderer.rendererHelper.renderables setObject:texture_1 forKey:@"texture_1"];
+	[self.renderer.rendererHelper.renderables setObject:texture_1 forKey:@"texture_1"];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
-
-//- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-//
-//	UIDeviceOrientation currentDeviceOrientation = [UIDevice currentDevice].orientation;
-//	UIInterfaceOrientation currentInterfaceOrientation	= self.interfaceOrientation;
-//
-//	ALog(@"Will Rotate To Interface: %@. Current Interface: %@. Current Device: %@",
-//		  [self interfaceOrientationName:toInterfaceOrientation],
-//		  [self interfaceOrientationName:currentInterfaceOrientation],
-//		  [self deviceOrientationName:currentDeviceOrientation]);
-//
-//}
-//
-//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-//
-//	UIDeviceOrientation currentDeviceOrientation = [UIDevice currentDevice].orientation;
-//	UIInterfaceOrientation currentInterfaceOrientation	= self.interfaceOrientation;
-//
-//    ALog(@"Did Rotate From Interface: %@. Current Interface: %@. Current Device: %@",
-//		  [self interfaceOrientationName:fromInterfaceOrientation],
-//		  [self interfaceOrientationName:currentInterfaceOrientation],
-//		  [self deviceOrientationName:currentDeviceOrientation]);
-//
-//}
-
-- (NSString*)interfaceOrientationName:(UIInterfaceOrientation) interfaceOrientation {
-	
-	NSString* result = nil;
-	
-	switch (interfaceOrientation) {
-			
-		case UIInterfaceOrientationPortrait:
-			result = @"Portrait";
-			break;
-		case UIInterfaceOrientationPortraitUpsideDown:
-			result = @"Portrait UpsideDown";
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			result = @"LandscapeLeft";
-			break;
-		case UIInterfaceOrientationLandscapeRight:
-			result = @"LandscapeRight";
-			break;
-		default:
-			result = @"Unknown Interface Orientation";
-	}
-	
-	return result;
-};
-
-- (NSString*)deviceOrientationName:(UIDeviceOrientation) deviceOrientation {
-	
-	NSString* result = nil;
-	
-	switch (deviceOrientation) {
-			
-		case UIDeviceOrientationUnknown:
-			result = @"Unknown";
-			break;
-		case UIDeviceOrientationPortrait:
-			result = @"Portrait";
-			break;
-		case UIDeviceOrientationPortraitUpsideDown:
-			result = @"Portrait UpsideDown";
-			break;
-		case UIDeviceOrientationLandscapeLeft:
-			result = @"LandscapeLeft";
-			break;
-		case UIDeviceOrientationLandscapeRight:
-			result = @"LandscapeRight";
-			break;
-		case UIDeviceOrientationFaceUp:
-			result = @"FaceUp";
-			break;
-		case UIDeviceOrientationFaceDown:
-			result = @"FaceDown";
-			break;
-		default:
-			result = @"Unknown Device Orientation";
-	}
-	
-	return result;
-};
 
 @end

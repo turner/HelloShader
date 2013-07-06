@@ -11,23 +11,6 @@
 
 @class GLRenderer;
 
-@interface GLView : UIView {    
-	
-@private
-    id				m_displayLink;
-	GLRenderer *m_renderer;
-    BOOL			m_animating;
-	NSInteger		animationFrameInterval;
-	
-}
-
-@property(nonatomic,retain)id						displayLink;
-@property(nonatomic,retain) GLRenderer *renderer;
-@property(nonatomic,assign,getter=isAnimating)BOOL	animating;
-@property (nonatomic) NSInteger						animationFrameInterval;
-
-- (void)startAnimation;
-- (void)stopAnimation;
-- (void)drawView:(id)sender;
-
+@interface GLView : UIView
+@property(nonatomic, retain) GLRenderer *renderer;
 @end
