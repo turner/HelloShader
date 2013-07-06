@@ -12,6 +12,8 @@
 #import "EITexture.h"
 #import "Logging.h"
 #import "EIQuad.h"
+#import "FBOTextureRenderTarget.h"
+#import "FBOTextureRenderer.h"
 
 // uniform index
 enum {
@@ -31,7 +33,7 @@ enum {
 };
 
 @interface GLRenderer ()
-@property(nonatomic, retain) EIQuad *quad;
+@property(nonatomic, retain) EIQuad *renderSurface;
 - (void)setupGLWithFrameBufferSize:(CGSize)size;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
@@ -41,22 +43,18 @@ enum {
 @implementation GLRenderer {
 
     EAGLContext *_context;
-
     GLint _backingWidth;
     GLint _backingHeight;
-
     GLuint _framebuffer;
     GLuint _colorbuffer;
     GLuint _depthbuffer;
-
-    GLuint _shaderProgram;
-
-    NSMutableDictionary *_texturePackages;
 }
 
-@synthesize rendererHelper;
 @synthesize texturePackages = _texturePackages;
-@synthesize quad;
+@synthesize shaderProgram = _shaderProgram;
+@synthesize rendererHelper = _rendererHelper;
+@synthesize fboTextureRenderer;
+@synthesize renderSurface;
 
 - (void) dealloc {
 
@@ -85,7 +83,8 @@ enum {
 
     self.texturePackages = nil;
     self.rendererHelper = nil;
-    self.quad = nil;
+    self.renderSurface = nil;
+    self.fboTextureRenderer = nil;
 
     [super dealloc];
 }
@@ -208,18 +207,40 @@ enum {
 
     // Rendering surface
     CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
-    self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
+    self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
+
+
+
+
+    // Construct two FBO. One for ease-west blurring and one for north-south blurring
+    EITexture *fboRenderTexture = [[[EITexture alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
+    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
+
+    EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
+    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:self.renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
+    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithPrefix:@"TEITexturePairShader"];
+
+
+
+
+
+
+
+
+
+
+
 
 
     glUseProgram(_shaderProgram);
 
-    // Get shader uniform pointers
+    // Get shaderProgram uniform pointers
     uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(_shaderProgram, "projectionViewModelMatrix");
     uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(_shaderProgram, "viewModelMatrix");
     uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(_shaderProgram, "modelMatrix");
     uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "normalMatrix");
 
-    // Attach texture(s) to shader
+    // Attach textureTarget(s) to shaderProgram
     EITexture *t = nil;
 
     // Texture unit 0
@@ -298,7 +319,7 @@ enum {
 	glEnableVertexAttribArray(Attribute_VertexXYZ);
 	glEnableVertexAttribArray(Attribute_VertexST);
 
-    glVertexAttribPointer(Attribute_VertexXYZ,		3, GL_FLOAT,			0, 0, self.quad.vertices);
+    glVertexAttribPointer(Attribute_VertexXYZ,		3, GL_FLOAT,			0, 0, self.renderSurface.vertices);
     glVertexAttribPointer(Attribute_VertexST,		2, GL_FLOAT,			0, 0, [EISRendererHelper verticesST]);
 
 
@@ -316,18 +337,18 @@ enum {
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
-- (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix {
+- (GLuint)shaderProgramWithPrefix:(NSString *)shaderPrefix {
 
     ALog(@"");
 
-    _shaderProgram = glCreateProgram();
+    GLuint shaderProgram = glCreateProgram();
 
 	// Compile vertex and fragment shaders
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];
 	GLuint vertShader;
 	if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
 
-        ALog(@"Failed to compile vertex shader");
+        ALog(@"Failed to compile vertex shaderProgram");
 		return FALSE;
 	}
 	
@@ -335,26 +356,26 @@ enum {
 	GLuint fragShader;
 	if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
 
-        ALog(@"Failed to compile fragment shader");
+        ALog(@"Failed to compile fragment shaderProgram");
 		return FALSE;
 	}
 
-    glAttachShader(_shaderProgram, vertShader);
-    glAttachShader(_shaderProgram, fragShader);
+    glAttachShader(shaderProgram, vertShader);
+    glAttachShader(shaderProgram, fragShader);
 
-    glBindAttribLocation(_shaderProgram, Attribute_VertexXYZ,	"vertexXYZ");
-	glBindAttribLocation(_shaderProgram, Attribute_VertexST,	"vertexST");
+    glBindAttribLocation(shaderProgram, Attribute_VertexXYZ, "vertexXYZ");
+	glBindAttribLocation(shaderProgram, Attribute_VertexST,	 "vertexST");
 
-	if (![self linkProgram:_shaderProgram]) {
+	if (![self linkProgram:shaderProgram]) {
 
-        ALog(@"Failed to link program: %d", _shaderProgram);
+        ALog(@"Failed to link program: %d", shaderProgram);
 		return FALSE;
 	}
 
     if (vertShader) glDeleteShader(vertShader);
     if (fragShader) glDeleteShader(fragShader);
 	
-	return TRUE;
+	return shaderProgram;
 }
 
 - (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file {
@@ -364,7 +385,7 @@ enum {
 	source = (GLchar *)[[NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil] UTF8String];
 	if (!source)
 	{
-		NSLog(@"Failed to load vertex shader");
+		NSLog(@"Failed to load vertex shaderProgram");
 		return FALSE;
 	}
 	

@@ -10,55 +10,50 @@
 #import "FBOTextureRenderTarget.h"
 #import "EIQuad.h"
 #import "GLRenderer.h"
+#import "EISRendererHelper.h"
 
 @interface FBOTextureRenderer ()
-@property(nonatomic, retain) EIQuad *quad;
+@property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic, retain) EISRendererHelper *rendererHelper;
-@property(nonatomic, retain) GLRenderer *renderer;
-@property(nonatomic, assign) CGSize renderSurfaceSize;
-
 @end
 
 @implementation FBOTextureRenderer
 
-@synthesize rendererHelper;
-@synthesize shader;
-@synthesize fboTextureRenderTarget;
-@synthesize renderer;
-@synthesize quad;
-@synthesize renderSurfaceSize = _renderSurfaceSize;
+@synthesize shaderProgram = _shaderProgram;
+@synthesize fboTextureRenderTarget = _fboTextureRenderTarget;
+@synthesize renderSurface = _renderSurface;
+@synthesize rendererHelper = _rendererHelper;
 
 - (void)dealloc {
 
-    self.quad = nil;
-    self.rendererHelper = nil;
-    self.renderer = nil;
-    self.shader = nil;
+    self.renderSurface = nil;
     self.fboTextureRenderTarget = nil;
+    self.rendererHelper = nil;
+
+    if (_shaderProgram) {
+        glDeleteProgram(_shaderProgram);
+        _shaderProgram = 0;
+    }
 
     [super dealloc];
 }
 
-- (id)initWithRenderer:(GLRenderer *)aRenderer renderSurfaceSize:(CGSize)aRenderSurfaceSize fboTextureTargetName:(NSString *)aFBOTextureTargetName {
+- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureRenderTarget:(FBOTextureRenderTarget *)fboTextureRenderTarget rendererHelper:(EISRendererHelper *)rendererHelper {
 
     self = [super init];
 
     if (nil != self) {
 
-        self.renderer = aRenderer;
-        self.fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithRenderer:self.renderer renderSurfaceSize:aRenderSurfaceSize fboTextureTargetName:aFBOTextureTargetName] autorelease];
+        self.fboTextureRenderTarget = fboTextureRenderTarget;
 
-        self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(aRenderSurfaceSize.width / 2.0, aRenderSurfaceSize.height / 2.0)] autorelease];
+        // Create viewport and orthographic camera aligned to renderSurface
+        self.rendererHelper = rendererHelper;
 
-        // Create viewport and orthographic camera aligned to quad
-        self.rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
-
-        self.renderSurfaceSize = CGSizeMake(aRenderSurfaceSize.width, aRenderSurfaceSize.height);
-
-        [self.rendererHelper orthographicProjectionLeft:-(self.renderSurfaceSize.width /2.0)
-                                                  right: (self.renderSurfaceSize.width /2.0)
-                                                    top: (self.renderSurfaceSize.height/2.0)
-                                                 bottom:-(self.renderSurfaceSize.height/2.0)
+        self.renderSurface = renderSurface;
+        [self.rendererHelper orthographicProjectionLeft:-(self.renderSurface.halfSize.width)
+                                                  right: (self.renderSurface.halfSize.width)
+                                                    top: (self.renderSurface.halfSize.height)
+                                                 bottom:-(self.renderSurface.halfSize.height)
                                                    near:0.100
                                                     far:100.0];
 
@@ -67,6 +62,7 @@
 
         // PV * M -> PVM
         EISMatrix4x4Multiply([self.rendererHelper projectionViewTransform], [self.rendererHelper modelTransform], [self.rendererHelper projectionViewModelTransform]);
+
     }
 
     return self;
@@ -87,23 +83,23 @@
    	glEnable (GL_BLEND);
    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glViewport(0, 0, (GLsizei)self.renderSurfaceSize.width, (GLsizei)self.renderSurfaceSize.height);
+    glViewport(0, 0, (GLsizei)(2 * self.renderSurface.halfSize.width), (GLsizei)(2 * self.renderSurface.halfSize.height));
 
     glClearColor(0.0f, 0.0f, .0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 
-    // Bind shader program
-    glUseProgram((GLuint)[[self.shader objectForKey:@"program"] unsignedIntValue]);
+    // Bind shaderProgram program
+    glUseProgram(_shaderProgram);
 
-    int mat = [[[[self.shader objectForKey:@"uniforms"] objectForKey:@"projectionViewModelMatrix"] objectForKey:@"glslSampler"] intValue];
+    int mat = [[[[self.shaderProgram objectForKey:@"uniforms"] objectForKey:@"projectionViewModelMatrix"] objectForKey:@"glslSampler"] intValue];
     glUniformMatrix4fv(mat, 1, NO, [self.rendererHelper projectionViewModelTransform]);
 
-    GLuint xyz = (GLuint)[[[self.shader objectForKey:@"vertexAttributes"] objectForKey:@"vertexXYZ"] intValue];
-    glVertexAttribPointer(xyz, 3, GL_FLOAT, 0, 0, self.quad.vertices);
+    GLuint xyz = (GLuint)[[[self.shaderProgram objectForKey:@"vertexAttributes"] objectForKey:@"vertexXYZ"] intValue];
+    glVertexAttribPointer(xyz, 3, GL_FLOAT, 0, 0, self.renderSurface.vertices);
     glEnableVertexAttribArray(xyz);
 
-    GLuint st = (GLuint)[[[self.shader objectForKey:@"vertexAttributes"] objectForKey:@"vertexST"] intValue];
+    GLuint st = (GLuint)[[[self.shaderProgram objectForKey:@"vertexAttributes"] objectForKey:@"vertexST"] intValue];
     glVertexAttribPointer(st, 2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
     glEnableVertexAttribArray(st);
 

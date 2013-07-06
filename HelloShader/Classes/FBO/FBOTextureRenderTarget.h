@@ -12,12 +12,7 @@
 @class EITexture;
 
 @interface FBOTextureRenderTarget : NSObject
-
-- (id)initWithRenderer:(GLRenderer *)aRender renderSurfaceSize:(CGSize)aRenderSurfaceSize fboTextureTargetName:(NSString *)aFBOTextureTargetName;
-
-@property (nonatomic, retain) EITexture *texture;
-@property (nonatomic, retain) GLRenderer *renderer;
-@property (nonatomic,   copy) NSString *fboTextureTargetName;
-@property (nonatomic        ) GLuint fbo;
-@property(nonatomic, retain) NSMutableDictionary *textureTarget;
+- (id)initWithTextureTarget:(EITexture *)textureTarget;
+@property (nonatomic, retain) EITexture *textureTarget;
+@property(nonatomic) GLuint fbo;
 @end

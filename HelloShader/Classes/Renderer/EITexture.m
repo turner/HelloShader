@@ -9,16 +9,7 @@
 #import "EITexture.h"
 #import "EISGLHelpful.h"
 
-static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-
-@implementation EITexture {
-
-    GLuint _name;
-    GLuint _glslSampler;
-    GLuint _width;
-    GLuint _height;
-
-}
+@implementation EITexture
 
 @synthesize name = _name;
 @synthesize glslSampler = _glslSampler;
@@ -251,41 +242,6 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 	return data;
 }
 
-- (id)init {
-	
-	self = [super init];
-	
-	if(nil != self) {
-		
-		_width = checkImageWidth;
-		_height = checkImageHeight;
-		
-		[self makeCheckImage];
-		
-		glGenTextures(1, &_name);
-		glBindTexture(GL_TEXTURE_2D, _name);
-		
-		// Wrap at texture boundaries
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-
-		GLenum err = glGetError();
-		if (err != GL_NO_ERROR) {
-			NSLog(@"Error Uploading Texture to GPU. glError: 0x%04X", err);
-		}
-
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-	}
-	
-	return self;
-}
-
 - (id)initWithTextureFile:(NSString *)name mipmap:(BOOL)mipmap {
 	
 	self = [super init];
@@ -309,7 +265,7 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 			glGenTextures(1, &_name);
 			glBindTexture(GL_TEXTURE_2D, _name);
 
-			// Wrap at texture boundaries
+			// Wrap at textureTarget boundaries
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			
@@ -387,24 +343,6 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 
     return self;
 
-}
-
--(void) makeCheckImage {
-	
-	for (int i = 0; i < _height; i++) {
-		
-		for (int j = 0; j < _width; j++) {
-			
-			int c = ( ( ( (i & 0x8) == 0) ^ ( (j & 0x8) ) == 0) ) * 255;
-			
-			checkImage[i][j][0] = (GLubyte) c;
-			checkImage[i][j][1] = (GLubyte) c;
-			checkImage[i][j][2] = (GLubyte) c;
-			checkImage[i][j][3] = (GLubyte) 255;
-//			checkImage[i][j][3] = (GLubyte) 128;
-
-		}
-	}
 }
 
 @end

@@ -10,10 +10,13 @@
 
 @class FBOTextureRenderTarget;
 @class GLRenderer;
+@class EIQuad;
+@class EISRendererHelper;
 
 @interface FBOTextureRenderer : NSObject
-- (id)initWithRenderer:(GLRenderer *)aRenderer renderSurfaceSize:(CGSize)aRenderSurfaceSize fboTextureTargetName:(NSString *)aFBOTextureTargetName;
+- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureRenderTarget:(FBOTextureRenderTarget *)fboTextureRenderTarget rendererHelper:(EISRendererHelper *)rendererHelper;
+
 @property(nonatomic, retain) FBOTextureRenderTarget *fboTextureRenderTarget;
-@property(nonatomic, retain) NSMutableDictionary *shader;
+@property(nonatomic) GLuint shaderProgram;
 - (void)render;
 @end

@@ -43,7 +43,7 @@
     GLfloat *template = [EISRendererHelper verticesXYZ_Template];
     for(NSInteger i = 0; i < 12; i++) self.vertices[i] = template[i];
 
-   	// setup vertices of texture surface
+   	// setup vertices of textureTarget surface
    	NSUInteger stride = 3;
    	NSUInteger xOffset = 0;
    	NSUInteger yOffset = 1;

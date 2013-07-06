@@ -577,7 +577,7 @@
         
     } // for (12)
 
-   	// setup vertices of texture surface
+   	// setup vertices of textureTarget surface
    	NSUInteger stride = 3;
    	NSUInteger xOffset = 0;
    	NSUInteger yOffset = 1;

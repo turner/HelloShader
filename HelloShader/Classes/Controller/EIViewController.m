@@ -11,6 +11,8 @@
 #import "EITexture.h"
 #import "GLRenderer.h"
 #import "EISRendererHelper.h"
+#import "FBOTextureRenderTarget.h"
+#import "FBOTextureRenderer.h"
 
 @interface EIViewController ()
 @property(nonatomic, retain) GLRenderer *renderer;
@@ -32,11 +34,11 @@
     self.renderer = [[[GLRenderer alloc] initWithContext:[[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease]
                                             renderHelper:[[[EISRendererHelper alloc] init] autorelease]] autorelease];
 
-
-    NSString *shaderPrefix = @"TEITexturePairShader";
-//    NSString *shaderPrefix = @"TEITextureShader";
+//    NSString *shaderPrefix = @"TEITexturePairShader";
+    NSString *shaderPrefix = @"TEITextureShader";
 //    NSString *shaderPrefix = @"ShowST";
-    (void)[self.renderer loadShaderWithPrefix:shaderPrefix];
+    self.renderer.shaderProgram = [self.renderer shaderProgramWithPrefix:shaderPrefix];
+
 
     GLView *glView = (GLView *)self.view;
     glView.renderer = self.renderer;
