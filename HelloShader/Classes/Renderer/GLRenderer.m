@@ -42,8 +42,6 @@ GLint uniforms[UniformCount];
 enum {
     VertexXYZAttributeHandle,
     VertexSTAttributeHandle,
-    VertexRGBAAttributeHandle,
-    VertexSurfaceNormalAttributeHandle,
     AttributeCount
 };
 
@@ -265,10 +263,16 @@ enum {
 
 	glEnableVertexAttribArray(VertexXYZAttributeHandle);
 	glEnableVertexAttribArray(VertexSTAttributeHandle);
-	glEnableVertexAttribArray(VertexRGBAAttributeHandle);
-		
+
 	glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, verticesXYZ);
 	glVertexAttribPointer(VertexSTAttributeHandle,		2, GL_FLOAT,			0, 0, verticesST);
+
+
+
+
+
+
+
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
