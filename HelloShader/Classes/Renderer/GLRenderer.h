@@ -11,11 +11,13 @@
 
 @class EISRendererHelper;
 @class CAEAGLLayer;
+@class EIQuad;
 
 @interface GLRenderer : NSObject
 - (id)initWithContext:(EAGLContext *)context renderHelper:(EISRendererHelper *)aRenderHelper;
 @property (nonatomic, retain) EISRendererHelper *rendererHelper;
 @property (nonatomic, retain) NSMutableDictionary *texturePackages;
+
 - (void) render;
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
 - (BOOL)loadShaderWithPrefix:(NSString *)shaderPrefix;

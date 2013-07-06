@@ -11,6 +11,7 @@
 #import "EISRendererHelper.h"
 #import "EITexture.h"
 #import "Logging.h"
+#import "EIQuad.h"
 
 static const GLfloat verticesST[] = {
 	
@@ -46,6 +47,8 @@ enum {
 };
 
 @interface GLRenderer ()
+@property(nonatomic, retain) EIQuad *quad;
+
 - (void)setupGLWithFrameBufferSize:(CGSize)size;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
@@ -70,6 +73,7 @@ enum {
 
 @synthesize rendererHelper;
 @synthesize texturePackages = _texturePackages;
+@synthesize quad;
 
 - (void) dealloc {
 
@@ -98,6 +102,7 @@ enum {
 
     self.texturePackages = nil;
     self.rendererHelper = nil;
+    self.quad = nil;
 
     [super dealloc];
 }
@@ -174,10 +179,7 @@ enum {
 
     [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
 
-
-
-
-
+    self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(.5, .5)] autorelease];
 
     EITexture *t = nil;
 
@@ -213,23 +215,19 @@ enum {
     glViewport(0, 0, _backingWidth, _backingHeight);
     
     glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-//    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	static float angle = 0.0;
     EISMatrix4x4 rotation;
-//	JLMMatrix3DSetRotationByDegrees(rotation, angle, 0.0, 0.0, 1.0);
     EISMatrix4x4SetZRotationUsingDegrees(rotation, angle);
 	angle += 1.0;	
 	
 	static float r = 0.0f;
     EISMatrix4x4 translation;
-//	JLMMatrix3DSetTranslation(translation, 0.0, 0.0, (1.0) * cosf(t/4.0));
     EISMatrix4x4SetTranslation(translation, 0, 0, (1.0) * cosf(r/4.0));
 	r += 0.075f/3.0;
 
     EISMatrix4x4 xform;
-//	JLMMatrix3DMultiply(translation, rotation, xform);
     EISMatrix4x4Multiply(translation, rotation, xform);
 
     glUseProgram(_shaderProgram);
@@ -252,20 +250,19 @@ enum {
 	glUniformMatrix4fv(uniforms[SurfaceNormalMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
 
 	// V * M - Eye space
-//	JLMMatrix3DMultiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
     EISMatrix4x4Multiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
 	glUniformMatrix4fv(uniforms[ViewModelMatrixUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
 	
 	// P * V * M - Projection space
-//	JLMMatrix3DMultiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
     EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
     glUniformMatrix4fv(uniforms[ProjectionViewModelUniformHandle], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
 
 	glEnableVertexAttribArray(VertexXYZAttributeHandle);
 	glEnableVertexAttribArray(VertexSTAttributeHandle);
 
-	glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, verticesXYZ);
-	glVertexAttribPointer(VertexSTAttributeHandle,		2, GL_FLOAT,			0, 0, verticesST);
+    glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, self.quad.vertices);
+//    glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, verticesXYZ);
+    glVertexAttribPointer(VertexSTAttributeHandle,		2, GL_FLOAT,			0, 0, verticesST);
 
 
 

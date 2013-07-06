@@ -479,16 +479,16 @@
         static GLfloat _verticesXYZ[] = {
 
                 // southeast - vertex 0
-                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, 0.0f,
 
                 // southwest - vertex 1
-                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, 0.0f,
 
                 // northeast - vertex 2
-                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, 0.0f,
 
                 // northwest - vertex 3
-                0.0f, 0.0f, -1.0f,
+                0.0f, 0.0f, 0.0f,
         };
 
 #define EISNorthY (1)
