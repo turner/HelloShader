@@ -8,7 +8,6 @@
 
 attribute highp vec4	myVertexXYZ;
 attribute highp vec2	myVertexST;
-attribute		vec4	myVertexRGBA;
 
 // M - World space
 uniform mediump mat4	myModelMatrix;
@@ -29,9 +28,6 @@ void main() {
 	gl_Position = myProjectionViewModelMatrix * myVertexXYZ;
 	
 	vec4 worldSpaceVertex = myModelMatrix * myVertexXYZ;
-	
-	// Ignore vertex colors
-	vec4 dev_null = myVertexRGBA;
 
 	v_st = myVertexST;
 

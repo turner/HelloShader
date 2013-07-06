@@ -27,13 +27,6 @@ static const GLfloat verticesXYZ[] = {
 	 0.5f,  0.5f, 0.0f,
 };
 
-static const GLubyte verticesRGBA[] = {
-	255, 255,   0, 255,
-	0,   255, 255, 255,
-	0,     0,   0, 255,
-	255,   0, 255, 255,
-};
-
 // uniform index
 enum {
 	ProjectionViewModelUniformHandle,
@@ -276,8 +269,7 @@ enum {
 		
 	glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, verticesXYZ);
 	glVertexAttribPointer(VertexSTAttributeHandle,		2, GL_FLOAT,			0, 0, verticesST);
-	glVertexAttribPointer(VertexRGBAAttributeHandle,	4, GL_UNSIGNED_BYTE,	1, 0, verticesRGBA);
-	
+
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	// This application only creates a single color renderbuffer which is already bound at this point.
@@ -364,7 +356,6 @@ enum {
 
     glBindAttribLocation(_shaderProgram, VertexXYZAttributeHandle,	"myVertexXYZ");
 	glBindAttribLocation(_shaderProgram, VertexSTAttributeHandle,	"myVertexST");
-    glBindAttribLocation(_shaderProgram, VertexRGBAAttributeHandle,	"myVertexRGBA");
 
 	if (![self linkProgram:_shaderProgram]) {
 

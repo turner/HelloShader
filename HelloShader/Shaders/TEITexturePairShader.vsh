@@ -6,7 +6,6 @@
 //  Copyright Douglass Turner Consulting 2010. All rights reserved.
 //
 
-attribute lowp		vec4	myVertexRGBA;
 attribute mediump	vec2	myVertexST;
 attribute highp		vec4	myVertexXYZ;
 
@@ -31,7 +30,4 @@ void main() {
 	vec4 worldSpaceVertex = myModelMatrix * myVertexXYZ;
 
 	v_st	= myVertexST;
-	
-	// Ignore vertex colors
-	vec4 dev_null = myVertexRGBA;
 }
