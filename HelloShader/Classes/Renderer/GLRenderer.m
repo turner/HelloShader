@@ -207,7 +207,8 @@ enum {
     [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
 
     // Rendering surface
-    self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease];
+    CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
+    self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
 
     glUseProgram(_shaderProgram);
