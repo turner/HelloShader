@@ -70,6 +70,11 @@
     return self;
 }
 
+-(void)awakeFromNib {
+
+    ALog(@"");
+}
+
 -(id)initializeEAGL {
 
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;

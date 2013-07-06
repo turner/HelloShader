@@ -38,7 +38,7 @@
 //    NSString *shaderPrefix = @"ShowST";
     (void)[self.renderer loadShaderWithPrefix:shaderPrefix];
 
-    GLView *glView = (GLView *)[self.view.subviews objectAtIndex:0];
+    GLView *glView = (GLView *)self.view;
     glView.renderer = self.renderer;
     
 	EITexture *texture_0 = [[ [EITexture alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
