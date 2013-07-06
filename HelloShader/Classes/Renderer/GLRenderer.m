@@ -13,21 +13,6 @@
 #import "Logging.h"
 #import "EIQuad.h"
 
-static const GLfloat verticesST[] = {
-	
-	0.0f, 0.0f,
-	1.0f, 0.0f,
-	0.0f, 1.0f,
-	1.0f, 1.0f,
-};
-
-static const GLfloat verticesXYZ[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	-0.5f,  0.5f, 0.0f,
-	 0.5f,  0.5f, 0.0f,
-};
-
 // uniform index
 enum {
 	ProjectionViewModelUniformHandle,
@@ -48,7 +33,6 @@ enum {
 
 @interface GLRenderer ()
 @property(nonatomic, retain) EIQuad *quad;
-
 - (void)setupGLWithFrameBufferSize:(CGSize)size;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
@@ -261,8 +245,7 @@ enum {
 	glEnableVertexAttribArray(VertexSTAttributeHandle);
 
     glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, self.quad.vertices);
-//    glVertexAttribPointer(VertexXYZAttributeHandle,		3, GL_FLOAT,			0, 0, verticesXYZ);
-    glVertexAttribPointer(VertexSTAttributeHandle,		2, GL_FLOAT,			0, 0, verticesST);
+    glVertexAttribPointer(VertexSTAttributeHandle,		2, GL_FLOAT,			0, 0, [EISRendererHelper verticesST]);
 
 
 
