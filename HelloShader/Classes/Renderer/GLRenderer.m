@@ -173,7 +173,8 @@ enum {
     EISVector3D eye;
     EISVector3D target;
     EISVector3D up;
-    EISVector3DSet(eye,	   0, 0,  2);
+
+    EISVector3DSet(eye,	   0, 0,  0);
     EISVector3DSet(target, 0, 0, -1);
     EISVector3DSet(up,	   0, 1,  0);
 
@@ -218,17 +219,16 @@ enum {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	static float angle = 0.0;
-    EISMatrix4x4 rotation;
-    EISMatrix4x4SetZRotationUsingDegrees(rotation, angle);
-	angle += 1.0;	
+    EISMatrix4x4 rotationMatrix;
+    EISMatrix4x4SetZRotationUsingDegrees(rotationMatrix, 0);
+//    EISMatrix4x4SetZRotationUsingDegrees(rotationMatrix, angle);
+	angle += 1.0;
 	
-	static float r = 0.0f;
-    EISMatrix4x4 translation;
-    EISMatrix4x4SetTranslation(translation, 0, 0, (1.0) * cosf(r/4.0));
-	r += 0.075f/3.0;
+    EISMatrix4x4 translationMatrix;
+    EISMatrix4x4SetTranslation(translationMatrix, 0, 0, 0);
 
     EISMatrix4x4 xform;
-    EISMatrix4x4Multiply(translation, rotation, xform);
+    EISMatrix4x4Multiply(translationMatrix, rotationMatrix, xform);
 
     glUseProgram(_shaderProgram);
 
