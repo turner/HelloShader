@@ -130,19 +130,20 @@ enum {
 
     glUseProgram(_shaderProgram);
 
+    // Get shader uniform pointers
     uniforms[ProjectionViewModelUniformHandle	] = glGetUniformLocation(_shaderProgram, "myProjectionViewModelMatrix");
     uniforms[ViewModelMatrixUniformHandle		] = glGetUniformLocation(_shaderProgram, "myViewModelMatrix");
     uniforms[ModelMatrixUniformHandle			] = glGetUniformLocation(_shaderProgram, "myModelMatrix");
     uniforms[SurfaceNormalMatrixUniformHandle	] = glGetUniformLocation(_shaderProgram, "mySurfaceNormalMatrix");
 
-
+    // GL futzing
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glFrontFace(GL_CCW);
     glEnable (GL_BLEND);
-
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // Build Projection
     GLfloat near					=   0.1;
     GLfloat far						= 100.0;
     GLfloat fieldOfViewInDegreesY	=  90.0;
@@ -153,7 +154,7 @@ enum {
                                                                     far:far];
 
 
-    // Aim the camera
+    // Aim Camera
     EISVector3D eye;
     EISVector3D target;
     EISVector3D up;
@@ -164,8 +165,10 @@ enum {
 
     [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
 
+    // Rendering surface
     self.quad = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(.5, .5)] autorelease];
 
+    // Attach texture(s) to shader
     EITexture *t = nil;
 
     // Texture unit 0
