@@ -11,10 +11,12 @@
 #import "EIQuad.h"
 #import "GLRenderer.h"
 #import "EISRendererHelper.h"
+#import "EISGLUtils.h"
 
 @interface FBOTextureRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic, retain) EISRendererHelper *rendererHelper;
+@property(nonatomic) GLint *uniforms;
 @end
 
 @implementation FBOTextureRenderer
@@ -23,8 +25,11 @@
 @synthesize fboTextureRenderTarget = _fboTextureRenderTarget;
 @synthesize renderSurface = _renderSurface;
 @synthesize rendererHelper = _rendererHelper;
+@synthesize uniforms = _uniforms;
 
 - (void)dealloc {
+
+    free(self.uniforms);
 
     self.renderSurface = nil;
     self.fboTextureRenderTarget = nil;
@@ -43,6 +48,8 @@
     self = [super init];
 
     if (nil != self) {
+
+        self.uniforms = (GLint *)malloc(UniformCount * sizeof(NSUInteger));
 
         self.renderSurface = renderSurface;
 

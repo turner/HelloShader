@@ -202,43 +202,60 @@
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
 
-    // Configure shader
-    glUseProgram(_shaderProgram);
+
+//    // Configure FBO
+//    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
+//    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
+//
+//    EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
+//    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:self.renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
+//
+//
+//    // Configure fbo shader - specifically for texture pair shader
+//    NSString *shaderPrefix = @"TEITexturePairShader";
+////    NSString *shaderPrefix = @"TEITextureShader";
+////    NSString *shaderPrefix = @"ShowST";
+//    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:shaderPrefix];
+//    glUseProgram(self.fboTextureRenderer.shaderProgram);
+//
+//    // Get shaderProgram uniform pointers
+//    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "projectionViewModelMatrix");
+//    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "viewModelMatrix");
+//    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "modelMatrix");
+//    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "normalMatrix");
+//
+//    // Attach textureTarget(s) to shaderProgram
+//    EITextureOldSchool *texas;
+//
+//    // Texture unit 0
+//    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+//    texas.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
+//    glUniform1i(texas.glslSampler, 0);
+//
+//    // Texture unit 1
+//    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+//    texas.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
+//    glUniform1i(texas.glslSampler, 1);
+
+
+    // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
+    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITextureShader"];
+    glUseProgram(self.shaderProgram);
 
     // Get shaderProgram uniform pointers
-    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(_shaderProgram, "projectionViewModelMatrix");
-    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(_shaderProgram, "viewModelMatrix");
-    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(_shaderProgram, "modelMatrix");
-    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "normalMatrix");
-
-    // Attach textureTarget(s) to shaderProgram
-    EITextureOldSchool *texas = nil;
-
-    // Texture unit 0
-    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    texas.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
-    glUniform1i(texas.glslSampler, 0);
-
-    // Texture unit 1
-    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    texas.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
-    glUniform1i(texas.glslSampler, 1);
-
-
-    // Configure FBO
-    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
-    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
-
-    EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
-    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:self.renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
-    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITexturePairShader"];
-
+    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.shaderProgram, "projectionViewModelMatrix");
+    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram, "viewModelMatrix");
+    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram, "modelMatrix");
+    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram, "normalMatrix");
 
 }
 
 - (void) render {
 
     [EAGLContext setCurrentContext:_context];
+
+    // clear all current texture bindings
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     glViewport(0, 0, _backingWidth, _backingHeight);
@@ -255,19 +272,26 @@
     EISMatrix4x4 xform;
     EISMatrix4x4Multiply(translationMatrix, rotationMatrix, xform);
 
-    // clear all current texture bindings
-    glBindTexture(GL_TEXTURE_2D, 0);
 
-    glUseProgram(_shaderProgram);
+
+
+
+
+    glUseProgram(self.shaderProgram);
 
     EITextureOldSchool *texture;
+    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    texture.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "myTexture_0");
+    glUniform1i(texture.glslSampler, 0);
+
     glActiveTexture(GL_TEXTURE0 + 0);
-    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     glBindTexture(GL_TEXTURE_2D, texture.name);
 
-    glActiveTexture(GL_TEXTURE0 + 1);
-    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    glBindTexture(GL_TEXTURE_2D, texture.name);
+
+
+
+
+
 
 
     // M - World space

@@ -18,5 +18,6 @@
 
 @property(nonatomic, retain) FBOTextureRenderTarget *fboTextureRenderTarget;
 @property(nonatomic) GLuint shaderProgram;
+
 - (void)render;
 @end
