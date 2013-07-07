@@ -16,7 +16,6 @@
 @interface FBOTextureRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic, retain) EISRendererHelper *rendererHelper;
-@property(nonatomic) GLint *uniforms;
 @end
 
 @implementation FBOTextureRenderer
