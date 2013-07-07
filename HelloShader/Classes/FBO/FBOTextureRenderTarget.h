@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const kFBOTextureRenderTargetTextureName;
+
 @class GLRenderer;
 @class EITextureOldSchool;
 

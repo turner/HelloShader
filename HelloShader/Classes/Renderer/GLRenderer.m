@@ -19,8 +19,8 @@
 @interface GLRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic) GLint *uniforms;
-
 - (void)setupGLWithFrameBufferSize:(CGSize)size;
+- (void)configureFBO;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
 - (BOOL)validateProgram:(GLuint)prog;
@@ -201,10 +201,23 @@
     CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
+    [self configureFBO];
 
+    // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
+    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITextureShader"];
+    glUseProgram(self.shaderProgram);
 
+    // Get shaderProgram uniform pointers
+    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.shaderProgram, "projectionViewModelMatrix");
+    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram, "viewModelMatrix");
+    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram, "modelMatrix");
+    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram, "normalMatrix");
 
-    // Configure FBO
+}
+
+- (void)configureFBO {
+
+// Configure FBO
     EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
     FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
 
@@ -236,23 +249,6 @@
     texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     texas.glslSampler = (GLuint)glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "myTexture_1");
     glUniform1i(texas.glslSampler, 1);
-
-
-
-
-
-
-
-    // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
-    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITextureShader"];
-    glUseProgram(self.shaderProgram);
-
-    // Get shaderProgram uniform pointers
-    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.shaderProgram, "projectionViewModelMatrix");
-    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram, "viewModelMatrix");
-    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram, "modelMatrix");
-    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram, "normalMatrix");
-
 }
 
 - (void) render {

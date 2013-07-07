@@ -12,6 +12,8 @@
 #import "EISGLUtils.h"
 #import "EIQuad.h"
 
+NSString *const kFBOTextureRenderTargetTextureName = @"FBOTextureRenderTargetTextureName";
+
 @implementation FBOTextureRenderTarget
 
 @synthesize textureTarget = _textureTarget;
@@ -28,6 +30,13 @@
 
     [super dealloc];
 }
+
+
+
+//self.texture = ...;
+//[self.renderer.texturePackages setObject:self.texture forKey:self.fboTextureTargetName];
+
+
 
 - (id)initWithTextureTarget:(EITextureOldSchool *)textureTarget {
 

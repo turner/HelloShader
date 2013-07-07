@@ -55,7 +55,10 @@
         self.fboTextureRenderTarget = fboTextureRenderTarget;
 
         self.rendererHelper = rendererHelper;
+
         [self.rendererHelper setupProjectionViewModelTransformWithRenderSurfaceHalfSize:self.renderSurface.halfSize];
+
+        [self.rendererHelper.renderables setObject:self.fboTextureRenderTarget.textureTarget forKey:kFBOTextureRenderTargetTextureName];
     }
 
     return self;
