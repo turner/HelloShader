@@ -81,6 +81,7 @@ enum {
 	if ([EAGLContext currentContext] == _context) [EAGLContext setCurrentContext:nil];
 	[_context release]; _context = nil;
 
+
     self.texturePackages = nil;
     self.rendererHelper = nil;
     self.renderSurface = nil;
@@ -241,47 +242,33 @@ enum {
     uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "normalMatrix");
 
     // Attach textureTarget(s) to shaderProgram
-    EITextureOldSchool *t = nil;
+    EITextureOldSchool *texas = nil;
 
     // Texture unit 0
-    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
-
-//    glActiveTexture(GL_TEXTURE0 + 0);
-//    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-//    glBindTexture(GL_TEXTURE_2D, t.name);
-    glUniform1i(t.glslSampler, 0);
+    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    texas.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
+    glUniform1i(texas.glslSampler, 0);
 
     // Texture unit 1
-    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
-
-//    glActiveTexture(GL_TEXTURE0 + 1);
-//    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-//    glBindTexture(GL_TEXTURE_2D, t.name);
-    glUniform1i(t.glslSampler, 1);
-
-    // clear all current texture bindings
-    glBindTexture(GL_TEXTURE_2D, 0);
-
+    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    texas.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
+    glUniform1i(texas.glslSampler, 1);
 
 }
 
 - (void) render {
 
     [EAGLContext setCurrentContext:_context];
+
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     glViewport(0, 0, _backingWidth, _backingHeight);
     
     glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	static float angle = 0.0;
     EISMatrix4x4 rotationMatrix;
     EISMatrix4x4SetZRotationUsingDegrees(rotationMatrix, 0);
-//    EISMatrix4x4SetZRotationUsingDegrees(rotationMatrix, angle);
-	angle += 1.0;
-	
+
     EISMatrix4x4 translationMatrix;
     EISMatrix4x4SetTranslation(translationMatrix, 0, 0, 0);
 
@@ -293,14 +280,14 @@ enum {
 
     glUseProgram(_shaderProgram);
 
-    EITextureOldSchool *t;
+    EITextureOldSchool *texture;
     glActiveTexture(GL_TEXTURE0 + 0);
-    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    glBindTexture(GL_TEXTURE_2D, t.name);
+    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    glBindTexture(GL_TEXTURE_2D, texture.name);
 
     glActiveTexture(GL_TEXTURE0 + 1);
-    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    glBindTexture(GL_TEXTURE_2D, t.name);
+    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    glBindTexture(GL_TEXTURE_2D, texture.name);
 
 
     // M - World space
@@ -321,15 +308,8 @@ enum {
 	glEnableVertexAttribArray(Attribute_VertexXYZ);
 	glEnableVertexAttribArray(Attribute_VertexST);
 
-    glVertexAttribPointer(Attribute_VertexXYZ,		3, GL_FLOAT,			0, 0, self.renderSurface.vertices);
-    glVertexAttribPointer(Attribute_VertexST,		2, GL_FLOAT,			0, 0, [EISRendererHelper verticesST]);
-
-
-
-
-
-
-
+    glVertexAttribPointer(Attribute_VertexXYZ, 3, GL_FLOAT, 0, 0, self.renderSurface.vertices);
+    glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

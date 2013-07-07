@@ -85,9 +85,9 @@
 - (float *) viewTransform; 
 - (void) setViewTransform:(EISMatrix4x4)input; 
 
-- (float *) cameraTransform; 
+- (float *) cameraTransform;
 
-
+- (void)setupProjectionViewModelTransformWithRenderSurfaceHalfSize:(CGSize)renderSurfaceHalfSize;
 
 - (void)placeCameraAtLocation:(EISVector3D)location target:(EISVector3D)target up:(EISVector3D)up;
 

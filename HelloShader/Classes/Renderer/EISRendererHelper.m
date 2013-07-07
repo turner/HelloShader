@@ -6,6 +6,8 @@
 //
 
 //#import <c++/v1/streambuf>
+#import "EIQuad.h"
+#import "FBOTextureRenderer.h"
 #import "EISRendererHelper.h"
 #import "Logging.h"
 
@@ -392,12 +394,29 @@
 	
 }
 
+- (void)setupProjectionViewModelTransformWithRenderSurfaceHalfSize:(CGSize)renderSurfaceHalfSize {
+
+    [self orthographicProjectionLeft:-(renderSurfaceHalfSize.width)
+                                              right: (renderSurfaceHalfSize.width)
+                                                top: (renderSurfaceHalfSize.height)
+                                             bottom:-(renderSurfaceHalfSize.height)
+                                               near:0.100
+                                                far:100.0];
+
+    // P * V -> PV
+    EISMatrix4x4Multiply([self projection], [self viewTransform], [self projectionViewTransform]);
+
+    // PV * M -> PVM
+    EISMatrix4x4Multiply([self projectionViewTransform], [self modelTransform], [self projectionViewModelTransform]);
+}
+
 // From "An Introduction to Ray Tracing" edited by Andrew Glassner
 // This is Eric Haines' derivation of uv using an lat/long approach
 //
 // Sp - north pole
 // Se - vector pointing to reference point on equator
 // Sn - outgoing ray from sphere origin to point of intersection on sphere
+
 #define kEricHainesSphericalInverseMappingZero (0.0001)
 + (CGPoint) EricHainesSphericalInverseMappingSp:(EISVector3D)Sp 
 											 Se:(EISVector3D)Se 

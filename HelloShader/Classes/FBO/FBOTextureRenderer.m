@@ -44,25 +44,12 @@
 
     if (nil != self) {
 
+        self.renderSurface = renderSurface;
+
         self.fboTextureRenderTarget = fboTextureRenderTarget;
 
-        // Create viewport and orthographic camera aligned to renderSurface
         self.rendererHelper = rendererHelper;
-
-        self.renderSurface = renderSurface;
-        [self.rendererHelper orthographicProjectionLeft:-(self.renderSurface.halfSize.width)
-                                                  right: (self.renderSurface.halfSize.width)
-                                                    top: (self.renderSurface.halfSize.height)
-                                                 bottom:-(self.renderSurface.halfSize.height)
-                                                   near:0.100
-                                                    far:100.0];
-
-        // P * V -> PV
-        EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewTransform], [self.rendererHelper projectionViewTransform]);
-
-        // PV * M -> PVM
-        EISMatrix4x4Multiply([self.rendererHelper projectionViewTransform], [self.rendererHelper modelTransform], [self.rendererHelper projectionViewModelTransform]);
-
+        [self.rendererHelper setupProjectionViewModelTransformWithRenderSurfaceHalfSize:self.renderSurface.halfSize];
     }
 
     return self;
@@ -74,6 +61,10 @@
 - (void) render {
 
     glBindFramebuffer(GL_FRAMEBUFFER, self.fboTextureRenderTarget.fbo);
+    glViewport(0, 0, (GLsizei)(2 * self.renderSurface.halfSize.width), (GLsizei)(2 * self.renderSurface.halfSize.height));
+
+    glClearColor(0.0f, 0.0f, .0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_TEXTURE_2D);
    	glEnable(GL_DEPTH_TEST);
@@ -83,10 +74,7 @@
    	glEnable (GL_BLEND);
    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glViewport(0, 0, (GLsizei)(2 * self.renderSurface.halfSize.width), (GLsizei)(2 * self.renderSurface.halfSize.height));
 
-    glClearColor(0.0f, 0.0f, .0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 
     // Bind shaderProgram program

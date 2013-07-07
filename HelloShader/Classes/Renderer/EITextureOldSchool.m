@@ -9,6 +9,10 @@
 #import "EITextureOldSchool.h"
 #import "EISGLHelpful.h"
 
+@interface EITextureOldSchool ()
+- (id)initWithTextureFile:(NSString *)name mipmap:(BOOL)mipmap;
+@end
+
 @implementation EITextureOldSchool
 
 @synthesize name = _name;
@@ -19,6 +23,7 @@
 - (void)dealloc {
 	
 	glDeleteTextures(1, &_name);
+
 	[super dealloc];
 }
 
