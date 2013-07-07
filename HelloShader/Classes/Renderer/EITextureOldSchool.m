@@ -1,15 +1,15 @@
 //
-//  EITexture.m
+//  EITextureOldSchool.m
 //  HelloTexture
 //
 //  Created by turner on 5/26/09.
 //  Copyright 2009 Douglass Turner Consulting. All rights reserved.
 //
 
-#import "EITexture.h"
+#import "EITextureOldSchool.h"
 #import "EISGLHelpful.h"
 
-@implementation EITexture
+@implementation EITextureOldSchool
 
 @synthesize name = _name;
 @synthesize glslSampler = _glslSampler;

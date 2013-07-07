@@ -21,7 +21,7 @@
 		3107EA031733DEFE007E8781 /* EIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107E9FE1733DEFE007E8781 /* EIViewController.m */; };
 		3107EA091733E01B007E8781 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA081733E01B007E8781 /* GLView.m */; };
 		3107EA161733E036007E8781 /* GLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0C1733E036007E8781 /* GLRenderer.m */; };
-		3107EA191733E036007E8781 /* EITexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA131733E036007E8781 /* EITexture.m */; };
+		3107EA191733E036007E8781 /* EITextureOldSchool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA131733E036007E8781 /* EITextureOldSchool.m */; };
 		3107EA601733E051007E8781 /* ShowST.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA281733E051007E8781 /* ShowST.fsh */; };
 		3107EA611733E051007E8781 /* ShowST.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA291733E051007E8781 /* ShowST.vsh */; };
 		3107EA641733E051007E8781 /* TEITexturePairShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */; };
@@ -78,8 +78,8 @@
 		3107EA0A1733E028007E8781 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
 		3107EA0B1733E036007E8781 /* GLRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderer.h; sourceTree = "<group>"; };
 		3107EA0C1733E036007E8781 /* GLRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLRenderer.m; sourceTree = "<group>"; };
-		3107EA121733E036007E8781 /* EITexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EITexture.h; sourceTree = "<group>"; };
-		3107EA131733E036007E8781 /* EITexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EITexture.m; sourceTree = "<group>"; };
+		3107EA121733E036007E8781 /* EITextureOldSchool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EITextureOldSchool.h; sourceTree = "<group>"; };
+		3107EA131733E036007E8781 /* EITextureOldSchool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EITextureOldSchool.m; sourceTree = "<group>"; };
 		3107EA281733E051007E8781 /* ShowST.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.fsh; sourceTree = "<group>"; };
 		3107EA291733E051007E8781 /* ShowST.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.vsh; sourceTree = "<group>"; };
 		3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITexturePairShader.fsh; sourceTree = "<group>"; };
@@ -246,8 +246,8 @@
 				318CA49817860F82000C0253 /* EISVectorMatrix.h */,
 				3107EA0B1733E036007E8781 /* GLRenderer.h */,
 				3107EA0C1733E036007E8781 /* GLRenderer.m */,
-				3107EA121733E036007E8781 /* EITexture.h */,
-				3107EA131733E036007E8781 /* EITexture.m */,
+				3107EA121733E036007E8781 /* EITextureOldSchool.h */,
+				3107EA131733E036007E8781 /* EITextureOldSchool.m */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -412,7 +412,7 @@
 				3107EA031733DEFE007E8781 /* EIViewController.m in Sources */,
 				3107EA091733E01B007E8781 /* GLView.m in Sources */,
 				3107EA161733E036007E8781 /* GLRenderer.m in Sources */,
-				3107EA191733E036007E8781 /* EITexture.m in Sources */,
+				3107EA191733E036007E8781 /* EITextureOldSchool.m in Sources */,
 				318CA484178605D3000C0253 /* FBOTextureRenderer.m in Sources */,
 				318CA485178605D3000C0253 /* FBOTextureRenderTarget.m in Sources */,
 				318CA4881786066E000C0253 /* EIQuad.m in Sources */,

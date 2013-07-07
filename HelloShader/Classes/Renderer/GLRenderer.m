@@ -9,7 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "GLRenderer.h"
 #import "EISRendererHelper.h"
-#import "EITexture.h"
+#import "EITextureOldSchool.h"
 #import "Logging.h"
 #import "EIQuad.h"
 #import "FBOTextureRenderTarget.h"
@@ -213,12 +213,12 @@ enum {
 
 
     // Construct two FBO. One for ease-west blurring and one for north-south blurring
-    EITexture *fboRenderTexture = [[[EITexture alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
+    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
     FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
 
     EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
     self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:self.renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
-    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithPrefix:@"TEITexturePairShader"];
+    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITexturePairShader"];
 
 
 
@@ -241,25 +241,25 @@ enum {
     uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "normalMatrix");
 
     // Attach textureTarget(s) to shaderProgram
-    EITexture *t = nil;
+    EITextureOldSchool *t = nil;
 
     // Texture unit 0
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
 
     glActiveTexture(GL_TEXTURE0 + 0);
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     glBindTexture(GL_TEXTURE_2D, t.name);
     glUniform1i(t.glslSampler, 0);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
     // Texture unit 1
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
 
     glActiveTexture(GL_TEXTURE0 + 1);
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     glBindTexture(GL_TEXTURE_2D, t.name);
     glUniform1i(t.glslSampler, 1);
 
@@ -291,13 +291,13 @@ enum {
 
     glUseProgram(_shaderProgram);
 
-    EITexture *t;
+    EITextureOldSchool *t;
     glActiveTexture(GL_TEXTURE0 + 0);
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     glBindTexture(GL_TEXTURE_2D, t.name);
 
     glActiveTexture(GL_TEXTURE0 + 1);
-    t = (EITexture *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     glBindTexture(GL_TEXTURE_2D, t.name);
 
 
@@ -337,7 +337,7 @@ enum {
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
-- (GLuint)shaderProgramWithPrefix:(NSString *)shaderPrefix {
+- (GLuint)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix {
 
     ALog(@"");
 

@@ -8,7 +8,7 @@
 
 #import "FBOTextureRenderTarget.h"
 #import "GLRenderer.h"
-#import "EITexture.h"
+#import "EITextureOldSchool.h"
 #import "EISGLHelpful.h"
 #import "EIQuad.h"
 
@@ -29,7 +29,7 @@
     [super dealloc];
 }
 
-- (id)initWithTextureTarget:(EITexture *)textureTarget {
+- (id)initWithTextureTarget:(EITextureOldSchool *)textureTarget {
 
     self = [super init];
 

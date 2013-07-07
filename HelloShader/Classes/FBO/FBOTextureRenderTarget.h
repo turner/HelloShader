@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @class GLRenderer;
-@class EITexture;
+@class EITextureOldSchool;
 
 @interface FBOTextureRenderTarget : NSObject
-- (id)initWithTextureTarget:(EITexture *)textureTarget;
-@property (nonatomic, retain) EITexture *textureTarget;
+- (id)initWithTextureTarget:(EITextureOldSchool *)textureTarget;
+@property (nonatomic, retain) EITextureOldSchool *textureTarget;
 @property(nonatomic) GLuint fbo;
 @end

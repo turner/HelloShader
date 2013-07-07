@@ -8,7 +8,7 @@
 
 #import "EIViewController.h"
 #import "GLView.h"
-#import "EITexture.h"
+#import "EITextureOldSchool.h"
 #import "GLRenderer.h"
 #import "EISRendererHelper.h"
 #import "FBOTextureRenderTarget.h"
@@ -37,16 +37,16 @@
 //    NSString *shaderPrefix = @"TEITexturePairShader";
     NSString *shaderPrefix = @"TEITextureShader";
 //    NSString *shaderPrefix = @"ShowST";
-    self.renderer.shaderProgram = [self.renderer shaderProgramWithPrefix:shaderPrefix];
+    self.renderer.shaderProgram = [self.renderer shaderProgramWithShaderPrefix:shaderPrefix];
 
 
     GLView *glView = (GLView *)self.view;
     glView.renderer = self.renderer;
     
-	EITexture *texture_0 = [[ [EITexture alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
+	EITextureOldSchool *texture_0 = [[ [EITextureOldSchool alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
 	[self.renderer.rendererHelper.renderables setObject:texture_0 forKey:@"texture_0"];
 	
-	EITexture *texture_1 = [[ [EITexture alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
+	EITextureOldSchool *texture_1 = [[ [EITextureOldSchool alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
 	[self.renderer.rendererHelper.renderables setObject:texture_1 forKey:@"texture_1"];
 }
 

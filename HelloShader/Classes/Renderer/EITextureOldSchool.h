@@ -1,5 +1,5 @@
 //
-//  EITexture.h
+//  EITextureOldSchool.h
 //  HelloTexture
 //
 //  Created by turner on 5/26/09.
@@ -10,7 +10,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-@interface EITexture : NSObject
+@interface EITextureOldSchool : NSObject
 
 - (id)initWithTextureFile:(NSString *)name mipmap:(BOOL)mipmap;
 - (id)initWithImageFile:(NSString *)name extension:(NSString *)extension mipmap:(BOOL)mipmap;
