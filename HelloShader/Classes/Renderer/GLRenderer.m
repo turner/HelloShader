@@ -20,7 +20,8 @@
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic) GLint *uniforms;
 - (void)setupGLWithFrameBufferSize:(CGSize)size;
-- (void)configureFBO;
+
+- (void)configureFBOWithRenderSurface:(EIQuad *)renderSurface;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
 - (BOOL)validateProgram:(GLuint)prog;
@@ -40,8 +41,8 @@
 @synthesize texturePackages = _texturePackages;
 @synthesize shaderProgram = _shaderProgram;
 @synthesize rendererHelper = _rendererHelper;
+@synthesize renderSurface = _renderSurface;
 @synthesize fboTextureRenderer;
-@synthesize renderSurface;
 
 - (void) dealloc {
 
@@ -115,7 +116,7 @@
     return _texturePackages;
 }
 
-- (BOOL) resizeFromLayer:(CAEAGLLayer *)layer {
+- (BOOL)resizeFromLayer:(CAEAGLLayer *)layer {
 
     if (_framebuffer) {
 
@@ -183,7 +184,6 @@
     [self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY
                                              aspectRatioWidthOverHeight:aspectRatioWidthOverHeight
                                                                    near:near
-
                                                                     far:far];
     // Aim camera
     EISVector3D eye;
@@ -201,7 +201,7 @@
     CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
-    [self configureFBO];
+    [self configureFBOWithRenderSurface:self.renderSurface];
 
     // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
     self.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITextureShader"];
@@ -215,20 +215,33 @@
 
 }
 
-- (void)configureFBO {
+- (void)configureFBOWithRenderSurface:(EIQuad *)renderSurface {
 
-// Configure FBO
-    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
-    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
+    EITextureOldSchool *texas;
 
     EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
-    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:self.renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
+    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"texture_0"] forKey:@"texture_0"];
+    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"texture_1"] forKey:@"texture_1"];
+
+
+    // We will use texture 1 for fbo resolution values
+    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+
+
+//    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * renderSurface.halfSize.width) height:(NSUInteger) (2 * renderSurface.halfSize.width)] autorelease];
+    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:512 height:512] autorelease];
+
+    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
+
+    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
+
 
     // Configure fbo shader - specifically for texture pair shader
     NSString *shaderPrefix = @"TEITexturePairShader";
 //    NSString *shaderPrefix = @"TEITextureShader";
 //    NSString *shaderPrefix = @"ShowST";
     self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:shaderPrefix];
+
     glUseProgram(self.fboTextureRenderer.shaderProgram);
 
     // Get shaderProgram uniform pointers
@@ -238,7 +251,6 @@
     self.fboTextureRenderer.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "normalMatrix");
 
     // Attach textureTarget(s) to shaderProgram
-    EITextureOldSchool *texas;
 
     // Texture unit 0
     texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
@@ -255,15 +267,34 @@
 
     [EAGLContext setCurrentContext:_context];
 
+
+    // render to texture
+    [self.fboTextureRenderer render];
+
+
     // clear all current texture bindings
     glBindTexture(GL_TEXTURE_2D, 0);
+
 
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     glViewport(0, 0, _backingWidth, _backingHeight);
     
     glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
+
+    glUseProgram(self.shaderProgram);
+
+    EITextureOldSchool *texas = self.fboTextureRenderer.fboTextureRenderTarget.textureTarget;
+//    EITextureOldSchool *texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    texas.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "myTexture_0");
+    glUniform1i(texas.glslSampler, 2);
+
+    glActiveTexture(GL_TEXTURE0 + 2);
+    glBindTexture(GL_TEXTURE_2D, texas.name);
+
+
+
     EISMatrix4x4 rotationMatrix;
     EISMatrix4x4SetZRotationUsingDegrees(rotationMatrix, 0);
 
@@ -272,27 +303,6 @@
 
     EISMatrix4x4 xform;
     EISMatrix4x4Multiply(translationMatrix, rotationMatrix, xform);
-
-
-
-
-
-
-    glUseProgram(self.shaderProgram);
-
-    EITextureOldSchool *texture;
-    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    texture.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "myTexture_0");
-    glUniform1i(texture.glslSampler, 0);
-
-    glActiveTexture(GL_TEXTURE0 + 0);
-    glBindTexture(GL_TEXTURE_2D, texture.name);
-
-
-
-
-
-
 
 
     // M - World space

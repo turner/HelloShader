@@ -12,6 +12,7 @@
 #import "GLRenderer.h"
 #import "EISRendererHelper.h"
 #import "EISGLUtils.h"
+#import "EITextureOldSchool.h"
 
 @interface FBOTextureRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
@@ -69,8 +70,11 @@
 
 - (void) render {
 
+    // clear all current texture bindings
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glBindFramebuffer(GL_FRAMEBUFFER, self.fboTextureRenderTarget.fbo);
-    glViewport(0, 0, (GLsizei)(2 * self.renderSurface.halfSize.width), (GLsizei)(2 * self.renderSurface.halfSize.height));
+    glViewport(0, 0, self.fboTextureRenderTarget.textureTarget.width, self.fboTextureRenderTarget.textureTarget.height);
 
     glClearColor(0.0f, 0.0f, .0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -84,23 +88,48 @@
    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-
-
     // Bind shaderProgram program
-    glUseProgram(_shaderProgram);
+    glUseProgram(self.shaderProgram);
 
-    int mat = [[[[self.shaderProgram objectForKey:@"uniforms"] objectForKey:@"projectionViewModelMatrix"] objectForKey:@"glslSampler"] intValue];
-    glUniformMatrix4fv(mat, 1, NO, [self.rendererHelper projectionViewModelTransform]);
+    EITextureOldSchool *texture;
+    glActiveTexture(GL_TEXTURE0 + 0);
+    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    glBindTexture(GL_TEXTURE_2D, texture.name);
 
-    GLuint xyz = (GLuint)[[[self.shaderProgram objectForKey:@"vertexAttributes"] objectForKey:@"vertexXYZ"] intValue];
-    glVertexAttribPointer(xyz, 3, GL_FLOAT, 0, 0, self.renderSurface.vertices);
-    glEnableVertexAttribArray(xyz);
+    glActiveTexture(GL_TEXTURE0 + 1);
+    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    glBindTexture(GL_TEXTURE_2D, texture.name);
 
-    GLuint st = (GLuint)[[[self.shaderProgram objectForKey:@"vertexAttributes"] objectForKey:@"vertexST"] intValue];
-    glVertexAttribPointer(st, 2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
-    glEnableVertexAttribArray(st);
+
+
+    // M - World space - this defaults to the identify matrix
+    glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
+
+    // The surface normal transform is the inverse of M
+    glUniformMatrix4fv(self.uniforms[Uniform_SurfaceNormalMatrix], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
+
+    // V * M - Eye space
+    EISMatrix4x4Multiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
+    glUniformMatrix4fv(self.uniforms[Uniform_ViewModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
+
+    // P * V * M - Projection space
+    EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
+    glUniformMatrix4fv(self.uniforms[Uniform_ProjectionViewModel], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
+
+    glEnableVertexAttribArray(Attribute_VertexXYZ);
+    glEnableVertexAttribArray(Attribute_VertexST);
+
+    glVertexAttribPointer(Attribute_VertexXYZ, 3, GL_FLOAT, 0, 0, self.renderSurface.vertices);
+    glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+
+
+
+
+
+
 
     // Unbind FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
