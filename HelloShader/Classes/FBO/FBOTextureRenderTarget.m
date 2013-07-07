@@ -9,7 +9,7 @@
 #import "FBOTextureRenderTarget.h"
 #import "GLRenderer.h"
 #import "EITextureOldSchool.h"
-#import "EISGLHelpful.h"
+#import "EISGLUtils.h"
 #import "EIQuad.h"
 
 @implementation FBOTextureRenderTarget
@@ -43,7 +43,7 @@
         // Attach textureTarget to FBO
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.textureTarget.name, 0);
 
-        [EISGLHelpful FBOStatus];
+        [EISGLUtils FBOStatus];
 
     }
     

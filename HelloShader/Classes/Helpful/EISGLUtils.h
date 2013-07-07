@@ -12,6 +12,21 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
+// uniform index
+enum {
+    Uniform_ProjectionViewModel,
+    Uniform_ViewModelMatrix,
+    Uniform_ModelMatrix,
+    Uniform_SurfaceNormalMatrix,
+    UniformCount
+};
+
+// attribute index
+enum {
+    Attribute_VertexXYZ,
+    Attribute_VertexST
+};
+
 #define GLDEBUG(x) \
 x; \
 { \
@@ -22,7 +37,7 @@ x; \
     } \
 }
 
-@interface EISGLHelpful : NSObject
+@interface EISGLUtils : NSObject
 + (void)clearErrors;
 + (void) FBOStatus;
 + (BOOL)error;

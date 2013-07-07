@@ -7,7 +7,7 @@
 //
 
 #import "EITextureOldSchool.h"
-#import "EISGLHelpful.h"
+#import "EISGLUtils.h"
 
 @interface EITextureOldSchool ()
 - (id)initWithTextureFile:(NSString *)name mipmap:(BOOL)mipmap;
@@ -327,20 +327,20 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 
         // bi-linear interpolation
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        [EISGLHelpful checkGLError];
+        [EISGLUtils checkGLError];
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        [EISGLHelpful checkGLError];
+        [EISGLUtils checkGLError];
 
         // clamp to edges
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        [EISGLHelpful checkGLError];
+        [EISGLUtils checkGLError];
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        [EISGLHelpful checkGLError];
+        [EISGLUtils checkGLError];
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.width, self.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-        [EISGLHelpful checkGLError];
+        [EISGLUtils checkGLError];
 
         glBindTexture(GL_TEXTURE_2D, 0);
 

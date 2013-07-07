@@ -14,26 +14,12 @@
 #import "EIQuad.h"
 #import "FBOTextureRenderTarget.h"
 #import "FBOTextureRenderer.h"
-
-// uniform index
-enum {
-    Uniform_ProjectionViewModel,
-    Uniform_ViewModelMatrix,
-    Uniform_ModelMatrix,
-    Uniform_SurfaceNormalMatrix,
-    UniformCount
-};
-
-GLint uniforms[UniformCount];
-
-// attribute index
-enum {
-    Attribute_VertexXYZ,
-    Attribute_VertexST
-};
+#import "EISGLUtils.h"
 
 @interface GLRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
+@property(nonatomic) GLint *uniforms;
+
 - (void)setupGLWithFrameBufferSize:(CGSize)size;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
@@ -50,6 +36,7 @@ enum {
     GLuint _depthbuffer;
 }
 
+@synthesize uniforms = _uniforms;
 @synthesize texturePackages = _texturePackages;
 @synthesize shaderProgram = _shaderProgram;
 @synthesize rendererHelper = _rendererHelper;
@@ -58,7 +45,9 @@ enum {
 
 - (void) dealloc {
 
-	if (_framebuffer) {
+    free(self.uniforms);
+
+    if (_framebuffer) {
 		glDeleteFramebuffers(1, &_framebuffer);
 		_framebuffer = 0;
 	}
@@ -81,7 +70,6 @@ enum {
 	if ([EAGLContext currentContext] == _context) [EAGLContext setCurrentContext:nil];
 	[_context release]; _context = nil;
 
-
     self.texturePackages = nil;
     self.rendererHelper = nil;
     self.renderSurface = nil;
@@ -95,6 +83,8 @@ enum {
     self = [super init];
 
     if (nil != self) {
+
+        self.uniforms = (GLint *)malloc(UniformCount * sizeof(NSUInteger));
 
         _context = context;
 
@@ -236,10 +226,10 @@ enum {
     glUseProgram(_shaderProgram);
 
     // Get shaderProgram uniform pointers
-    uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(_shaderProgram, "projectionViewModelMatrix");
-    uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(_shaderProgram, "viewModelMatrix");
-    uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(_shaderProgram, "modelMatrix");
-    uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "normalMatrix");
+    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(_shaderProgram, "projectionViewModelMatrix");
+    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(_shaderProgram, "viewModelMatrix");
+    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(_shaderProgram, "modelMatrix");
+    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(_shaderProgram, "normalMatrix");
 
     // Attach textureTarget(s) to shaderProgram
     EITextureOldSchool *texas = nil;
@@ -292,18 +282,18 @@ enum {
 
     // M - World space
 	[self.rendererHelper setModelTransform:xform];
-	glUniformMatrix4fv(uniforms[Uniform_ModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
+	glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
 	
 	// The surface normal transform is the inverse of M
-	glUniformMatrix4fv(uniforms[Uniform_SurfaceNormalMatrix], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
+	glUniformMatrix4fv(self.uniforms[Uniform_SurfaceNormalMatrix], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
 
 	// V * M - Eye space
     EISMatrix4x4Multiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
-	glUniformMatrix4fv(uniforms[Uniform_ViewModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
+	glUniformMatrix4fv(self.uniforms[Uniform_ViewModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
 	
 	// P * V * M - Projection space
     EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
-    glUniformMatrix4fv(uniforms[Uniform_ProjectionViewModel], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
+    glUniformMatrix4fv(self.uniforms[Uniform_ProjectionViewModel], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
 
 	glEnableVertexAttribArray(Attribute_VertexXYZ);
 	glEnableVertexAttribArray(Attribute_VertexST);
