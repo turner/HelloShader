@@ -19,9 +19,9 @@
 @interface GLRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic) GLint *uniforms;
-- (void)setupGLWithFrameBufferSize:(CGSize)size;
+- (void)setupGLWithFramebufferSize:(CGSize)framebufferSize;
 
-- (void)configureFBOWithSize:(CGSize)size;
+- (void)configureFBOWithFramebufferSize:(CGSize)framebufferSize;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
 - (BOOL)validateProgram:(GLuint)prog;
@@ -161,12 +161,12 @@
         return NO;
     }
 
-    [self setupGLWithFrameBufferSize:layer.bounds.size];
+    [self setupGLWithFramebufferSize:layer.bounds.size];
 
     return YES;
 }
 
-- (void)setupGLWithFrameBufferSize:(CGSize)size {
+- (void)setupGLWithFramebufferSize:(CGSize)framebufferSize {
 
     // GL shite
     glEnable(GL_TEXTURE_2D);
@@ -180,7 +180,7 @@
     GLfloat near					=   0.1;
     GLfloat far						= 100.0;
     GLfloat fieldOfViewInDegreesY	=  90.0;
-    CGFloat aspectRatioWidthOverHeight = size.width/size.height;
+    CGFloat aspectRatioWidthOverHeight = framebufferSize.width/ framebufferSize.height;
     [self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY
                                              aspectRatioWidthOverHeight:aspectRatioWidthOverHeight
                                                                    near:near
@@ -201,7 +201,7 @@
     CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
-    [self configureFBOWithSize:size];
+    [self configureFBOWithFramebufferSize:framebufferSize];
 
     // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
     self.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITextureShader"];
@@ -215,20 +215,19 @@
 
 }
 
-- (void)configureFBOWithSize:(CGSize)size {
+- (void)configureFBOWithFramebufferSize:(CGSize)framebufferSize {
 
-    EIQuad *renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease];
-
-    NSUInteger dimen = (NSUInteger)MIN(size.width, size.height);
+    NSUInteger dimen = (NSUInteger)MIN(framebufferSize.width, framebufferSize.height);
     EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:dimen height:dimen] autorelease];
-
     FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
 
     EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
     [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"texture_0"] forKey:@"texture_0"];
     [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"texture_1"] forKey:@"texture_1"];
 
-    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
+    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:[[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease]
+                                                          fboTextureRenderTarget:fboTextureRenderTarget
+                                                                  rendererHelper:rendererHelper] autorelease];
 
     // Configure fbo shader - specifically for texture pair shader
     NSString *shaderPrefix = @"TEITexturePairShader";
