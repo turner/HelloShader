@@ -167,14 +167,15 @@
 
 - (void)setupGLWithFrameBufferSize:(CGSize)size {
 
-    // GL futzing
+    // GL shite
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glFrontFace(GL_CCW);
     glEnable (GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Build Projection
+
+    // Configure Projection
     GLfloat near					=   0.1;
     GLfloat far						= 100.0;
     GLfloat fieldOfViewInDegreesY	=  90.0;
@@ -182,47 +183,26 @@
     [self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY
                                              aspectRatioWidthOverHeight:aspectRatioWidthOverHeight
                                                                    near:near
+
                                                                     far:far];
-
-
-    // Aim Camera
+    // Aim camera
     EISVector3D eye;
     EISVector3D target;
-    EISVector3D up;
+    EISVector3D approximateUp;
 
-    EISVector3DSet(eye,	   0, 0,  0);
-    EISVector3DSet(target, 0, 0, -1);
-    EISVector3DSet(up,	   0, 1,  0);
+    EISVector3DSet(eye,	          0, 0,  0);
+    EISVector3DSet(target,        0, 0, -1);
+    EISVector3DSet(approximateUp, 0, 1,  0);
 
-    [self.rendererHelper placeCameraAtLocation:eye target:target up:up];
+    [self.rendererHelper placeCameraAtLocation:eye target:target up:approximateUp];
 
-    // Rendering surface
+
+    // Configure rendering surface
     CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
 
-
-
-    // Construct two FBO. One for ease-west blurring and one for north-south blurring
-    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
-    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
-
-    EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
-    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:self.renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
-    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITexturePairShader"];
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Configure shader
     glUseProgram(_shaderProgram);
 
     // Get shaderProgram uniform pointers
@@ -243,6 +223,16 @@
     texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     texas.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
     glUniform1i(texas.glslSampler, 1);
+
+
+    // Configure FBO
+    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger) (2 * self.renderSurface.halfSize.width) height:(NSUInteger) (2 * self.renderSurface.halfSize.width)] autorelease];
+    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
+
+    EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
+    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:self.renderSurface fboTextureRenderTarget:fboTextureRenderTarget rendererHelper:rendererHelper] autorelease];
+    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITexturePairShader"];
+
 
 }
 
