@@ -280,28 +280,16 @@
 
     glUseProgram(self.shaderProgram);
 
+    // Use the fbo texture target as the texture map for the shader used to render
     EITextureOldSchool *texas = self.fboTextureRenderer.fboTextureRenderTarget.textureTarget;
-//    EITextureOldSchool *texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     texas.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "myTexture_0");
-    glUniform1i(texas.glslSampler, 2);
+    glUniform1i(texas.glslSampler, 0);
 
-    glActiveTexture(GL_TEXTURE0 + 2);
+    glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D, texas.name);
 
 
-
-    EISMatrix4x4 rotationMatrix;
-    EISMatrix4x4SetZRotationUsingDegrees(rotationMatrix, 0);
-
-    EISMatrix4x4 translationMatrix;
-    EISMatrix4x4SetTranslation(translationMatrix, 0, 0, 0);
-
-    EISMatrix4x4 xform;
-    EISMatrix4x4Multiply(translationMatrix, rotationMatrix, xform);
-
-
-    // M - World space
-	[self.rendererHelper setModelTransform:xform];
+    // M - World space - this defaults to the identify matrix
 	glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
 	
 	// The surface normal transform is the inverse of M
