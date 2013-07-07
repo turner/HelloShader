@@ -247,22 +247,21 @@ enum {
     t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
     t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_0");
 
-    glActiveTexture(GL_TEXTURE0 + 0);
-    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    glBindTexture(GL_TEXTURE_2D, t.name);
+//    glActiveTexture(GL_TEXTURE0 + 0);
+//    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+//    glBindTexture(GL_TEXTURE_2D, t.name);
     glUniform1i(t.glslSampler, 0);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
 
     // Texture unit 1
     t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
     t.glslSampler = (GLuint)glGetUniformLocation(_shaderProgram, "myTexture_1");
 
-    glActiveTexture(GL_TEXTURE0 + 1);
-    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    glBindTexture(GL_TEXTURE_2D, t.name);
+//    glActiveTexture(GL_TEXTURE0 + 1);
+//    t = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+//    glBindTexture(GL_TEXTURE_2D, t.name);
     glUniform1i(t.glslSampler, 1);
 
+    // clear all current texture bindings
     glBindTexture(GL_TEXTURE_2D, 0);
 
 
@@ -288,6 +287,9 @@ enum {
 
     EISMatrix4x4 xform;
     EISMatrix4x4Multiply(translationMatrix, rotationMatrix, xform);
+
+    // clear all current texture bindings
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glUseProgram(_shaderProgram);
 
@@ -338,8 +340,6 @@ enum {
 }
 
 - (GLuint)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix {
-
-    ALog(@"");
 
     GLuint shaderProgram = glCreateProgram();
 

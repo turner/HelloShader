@@ -24,19 +24,19 @@
 
         default:
         case GL_FRAMEBUFFER_COMPLETE:
-            DLog(@"FBO complete");
+            ALog(@"FBO complete");
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-			DLog(@"FBO incomplete - attachment");
+			ALog(@"FBO incomplete - attachment");
             break;
 
         case GL_FRAMEBUFFER_UNSUPPORTED:
-            DLog(@"FBO unsupported");
+            ALog(@"FBO unsupported");
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-            DLog(@"FBO incomplete - missing attachment");
+            ALog(@"FBO incomplete - missing attachment");
             break;
 
     }
