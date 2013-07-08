@@ -56,6 +56,30 @@
         GLint textureUnitIndex;
         glUseProgram(sh);
 
+        // matte
+        matte.glslSampler = (GLuint)glGetUniformLocation(sh, "matte");
+        glUniform1i(matte.glslSampler, 0);
+
+        glGetUniformiv(sh, matte.glslSampler, &textureUnitIndex);
+
+        glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
+        glBindTexture(GL_TEXTURE_2D, matte.name);
+
+        // hero
+        hero.glslSampler = (GLuint)glGetUniformLocation(sh, "hero");
+        glUniform1i(hero.glslSampler, 1);
+
+        glGetUniformiv(sh, hero.glslSampler, &textureUnitIndex);
+
+        glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
+        glBindTexture(GL_TEXTURE_2D, hero.name);
+    };
+
+    EIShaderGaussianBlurShaderSetup gaussianBlurShaderSetup = ^(GLuint sh, EITextureOldSchool *hero) {
+
+        GLint textureUnitIndex;
+        glUseProgram(sh);
+
         // hero
         hero.glslSampler = (GLuint)glGetUniformLocation(sh, "hero");
         glUniform1i(hero.glslSampler, 0);
@@ -65,30 +89,8 @@
         glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
         glBindTexture(GL_TEXTURE_2D, hero.name);
 
-        // matte
-        hero.glslSampler = (GLuint)glGetUniformLocation(sh, "matte");
-        glUniform1i(hero.glslSampler, 1);
-
-        glGetUniformiv(sh, hero.glslSampler, &textureUnitIndex);
-
-        glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
-        glBindTexture(GL_TEXTURE_2D, hero.name);
-    };
-
-    EIShaderGaussianBlurShaderSetup gaussianBlurShaderSetup = ^(GLuint sh, EITextureOldSchool *texture, float heroWidth, float heroHeight) {
-
-        GLint textureUnitIndex;
-        glUseProgram(sh);
-
-        // hero
-        texture.glslSampler = (GLuint)glGetUniformLocation(sh, "hero");
-        glUniform1i(texture.glslSampler, 0);
-
-        glGetUniformiv(sh, texture.glslSampler, &textureUnitIndex);
-
-        glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
-        glBindTexture(GL_TEXTURE_2D, texture.name);
-
+        float heroWidth = hero.width;
+        float heroHeight = hero.height;
         glGetUniformfv(sh, glGetUniformLocation(sh, "heroWidth" ), &heroWidth );
         glGetUniformfv(sh, glGetUniformLocation(sh, "heroHeight"), &heroHeight);
     };

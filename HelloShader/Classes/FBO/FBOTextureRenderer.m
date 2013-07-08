@@ -13,6 +13,7 @@
 #import "EISRendererHelper.h"
 #import "EISGLUtils.h"
 #import "EITextureOldSchool.h"
+#import "EIShader.h"
 
 @interface FBOTextureRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
@@ -87,30 +88,10 @@
    	glEnable (GL_BLEND);
    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-    // Active and bind texture(s) to shader program. This steps are
-    // 1) activate a texture unit
-    // 2) bind - make an instance of - an OpenGL texture.
+    EIShaderTexturePairShaderSetup texturePairShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
+    texturePairShaderSetup(self.shaderProgram, [self.rendererHelper.renderables objectForKey:@"matte"], [self.rendererHelper.renderables objectForKey:@"hero"]);
 
     glUseProgram(self.shaderProgram);
-
-    EITextureOldSchool *texture;
-    GLint textureUnitIndex;
-
-    // hero
-    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"hero"];
-    glGetUniformiv(self.shaderProgram, texture.glslSampler, &textureUnitIndex);
-
-    glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
-    glBindTexture(GL_TEXTURE_2D, texture.name);
-
-    // matte
-    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"matte"];
-    glGetUniformiv(self.shaderProgram, texture.glslSampler, &textureUnitIndex);
-
-    glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
-    glBindTexture(GL_TEXTURE_2D, texture.name);
-
 
     // M - World space - this defaults to the identify matrix
     glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, [self.rendererHelper modelTransform]);
@@ -133,13 +114,6 @@
     glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-
-
-
-
-
-
 
     // Unbind FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -15,6 +15,7 @@
 #import "FBOTextureRenderTarget.h"
 #import "FBOTextureRenderer.h"
 #import "EISGLUtils.h"
+#import "EIShader.h"
 
 @interface GLRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
@@ -240,19 +241,6 @@
     self.fboTextureRenderer.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "viewModelMatrix");
     self.fboTextureRenderer.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "modelMatrix");
     self.fboTextureRenderer.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "normalMatrix");
-
-    // Attach textureTarget(s) to shaderProgram
-    EITextureOldSchool *texas;
-
-    // Texture unit 0
-    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"hero"];
-    texas.glslSampler = (GLuint)glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "hero");
-    glUniform1i(texas.glslSampler, 0);
-
-    // Texture unit 1
-    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"matte"];
-    texas.glslSampler = (GLuint)glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "matte");
-    glUniform1i(texas.glslSampler, 1);
 }
 
 - (void) render {
@@ -276,19 +264,10 @@
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+    EIShaderTextureShaderSetup textureShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
+    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+
     glUseProgram(self.shaderProgram);
-
-
-    texas = self.fboTextureRenderer.fboTextureRenderTarget.textureTarget;
-
-    texas.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "hero");
-    glUniform1i(texas.glslSampler, 0);
-
-    glGetUniformiv(self.shaderProgram, texas.glslSampler, &textureUnitIndex);
-
-    glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
-    glBindTexture(GL_TEXTURE_2D, texas.name);
-
 
     // M - World space - this defaults to the identify matrix
 	glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, [self.rendererHelper modelTransform]);
