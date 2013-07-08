@@ -88,7 +88,10 @@
    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    // Bind shaderProgram program
+    // Active and bind texture(s) to shader program. This steps are
+    // 1) activate a texture unit
+    // 2) bind - make an instance of - an OpenGL texture.
+
     glUseProgram(self.shaderProgram);
 
     EITextureOldSchool *texture;
@@ -99,7 +102,6 @@
     glActiveTexture(GL_TEXTURE0 + 1);
     texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"matte"];
     glBindTexture(GL_TEXTURE_2D, texture.name);
-
 
 
     // M - World space - this defaults to the identify matrix
