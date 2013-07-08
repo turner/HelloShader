@@ -94,13 +94,24 @@
 
     glUseProgram(self.shaderProgram);
 
+
+
     EITextureOldSchool *texture;
-    glActiveTexture(GL_TEXTURE0 + 0);
+    GLint textureUnitIndex;
+
+
+    // hero
     texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"hero"];
+    glGetUniformiv(self.shaderProgram, texture.glslSampler, &textureUnitIndex);
+
+    glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
     glBindTexture(GL_TEXTURE_2D, texture.name);
 
-    glActiveTexture(GL_TEXTURE0 + 1);
+    // matte
     texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"matte"];
+    glGetUniformiv(self.shaderProgram, texture.glslSampler, &textureUnitIndex);
+
+    glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
     glBindTexture(GL_TEXTURE_2D, texture.name);
 
 

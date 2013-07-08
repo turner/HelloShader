@@ -277,12 +277,17 @@
 
     glUseProgram(self.shaderProgram);
 
-    // Use the fbo texture target as the texture map for the shader used to render
-    EITextureOldSchool *texas = self.fboTextureRenderer.fboTextureRenderTarget.textureTarget;
+    EITextureOldSchool *texas;
+    GLint textureUnitIndex;
+
+    texas = self.fboTextureRenderer.fboTextureRenderTarget.textureTarget;
+
     texas.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "hero");
     glUniform1i(texas.glslSampler, 0);
 
-    glActiveTexture(GL_TEXTURE0 + 0);
+    glGetUniformiv(self.shaderProgram, texas.glslSampler, &textureUnitIndex);
+
+    glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
     glBindTexture(GL_TEXTURE_2D, texas.name);
 
 
