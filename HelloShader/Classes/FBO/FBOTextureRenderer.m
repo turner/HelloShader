@@ -113,18 +113,18 @@
 
 
     // M - World space - this defaults to the identify matrix
-    glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper modelTransform]);
+    glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, [self.rendererHelper modelTransform]);
 
     // The surface normal transform is the inverse of M
-    glUniformMatrix4fv(self.uniforms[Uniform_SurfaceNormalMatrix], 1, NO, (GLfloat *)[self.rendererHelper surfaceNormalTransform]);
+    glUniformMatrix4fv(self.uniforms[Uniform_SurfaceNormalMatrix], 1, NO, [self.rendererHelper surfaceNormalTransform]);
 
     // V * M - Eye space
     EISMatrix4x4Multiply([self.rendererHelper viewTransform], [self.rendererHelper modelTransform], [self.rendererHelper viewModelTransform]);
-    glUniformMatrix4fv(self.uniforms[Uniform_ViewModelMatrix], 1, NO, (GLfloat *)[self.rendererHelper viewModelTransform]);
+    glUniformMatrix4fv(self.uniforms[Uniform_ViewModelMatrix], 1, NO, [self.rendererHelper viewModelTransform]);
 
     // P * V * M - Projection space
     EISMatrix4x4Multiply([self.rendererHelper projection], [self.rendererHelper viewModelTransform], [self.rendererHelper projectionViewModelTransform]);
-    glUniformMatrix4fv(self.uniforms[Uniform_ProjectionViewModel], 1, NO, (GLfloat *)[self.rendererHelper projectionViewModelTransform]);
+    glUniformMatrix4fv(self.uniforms[Uniform_ProjectionViewModel], 1, NO, [self.rendererHelper projectionViewModelTransform]);
 
     glEnableVertexAttribArray(Attribute_VertexXYZ);
     glEnableVertexAttribArray(Attribute_VertexST);
@@ -146,7 +146,7 @@
 
 }
 
-- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader interations:(NSUInteger)iterations {
+- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader passes:(NSUInteger)passes {
 
 //    //
 //    self.shaderProgram = seedShader;

@@ -23,5 +23,5 @@
 
 - (void)render;
 
-- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader interations:(NSUInteger)iterations;
+- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader passes:(NSUInteger)passes;
 @end
