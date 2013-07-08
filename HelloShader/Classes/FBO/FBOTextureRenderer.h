@@ -22,4 +22,6 @@
 @property(nonatomic) GLint *uniforms;
 
 - (void)render;
+
+- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader interations:(NSUInteger)iterations;
 @end

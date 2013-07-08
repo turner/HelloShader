@@ -257,12 +257,13 @@
 
 - (void) render {
 
-    [EAGLContext setCurrentContext:_context];
+    EITextureOldSchool *texas;
+    GLint textureUnitIndex;
 
+    [EAGLContext setCurrentContext:_context];
 
     // render to texture
     [self.fboTextureRenderer render];
-
 
     // clear all current texture bindings
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -277,8 +278,6 @@
 
     glUseProgram(self.shaderProgram);
 
-    EITextureOldSchool *texas;
-    GLint textureUnitIndex;
 
     texas = self.fboTextureRenderer.fboTextureRenderTarget.textureTarget;
 

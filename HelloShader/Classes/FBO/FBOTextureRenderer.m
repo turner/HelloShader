@@ -94,11 +94,8 @@
 
     glUseProgram(self.shaderProgram);
 
-
-
     EITextureOldSchool *texture;
     GLint textureUnitIndex;
-
 
     // hero
     texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"hero"];
@@ -146,6 +143,60 @@
 
     // Unbind FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+}
+
+- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader interations:(NSUInteger)iterations {
+
+//    //
+//    self.shaderProgram = seedShader;
+//
+//
+//
+//
+//
+//    EITexture *texture = [[self.texturePackages objectForKey:textureName] objectForKey:@"texture"];
+//
+//    self.fboPingRenderer = [[[FBOTextureRenderer alloc] initWith ...] autorelease];
+//    self.fboPingRenderer.shader = EISGaussianBlurEastWest;
+//
+//
+//    self.fboPongRenderer = [[[FBOTextureRenderer alloc] initWith ...] autorelease];
+//    self.fboPongRenderer.shader = EISGaussianBlurNorthSouth;
+//
+//
+//
+//
+//    // Render a series of passes. Blurring is achieved on two passes - horizontal then vertical. Over and over again.
+//    NSString *pingTextureName = self.fboPingRenderer.fboTextureRenderTarget.fboTextureTargetName;
+//    NSString *pongTextureName = self.fboPingRenderer.fboTextureRenderTarget.fboTextureTargetName;
+//
+//    NSArray *passes = [NSArray arrayWithObjects:
+//
+//                    // FBO 0 input                             FBO 1 input
+//                    [NSArray arrayWithObjects:@"hero",         pingTextureName, nil],
+//
+//                    // FBO 0 input                             FBO 1 input
+//                    [NSArray arrayWithObjects:pongTextureName, pingTextureName, nil],
+//
+//                    // FBO 0 input                             FBO 1 input
+//                    [NSArray arrayWithObjects:pongTextureName, pingTextureName, nil],
+//
+//                    // FBO 0 input                             FBO 1 input
+//                    [NSArray arrayWithObjects:pongTextureName, pingTextureName, nil],
+//
+//            nil];
+//
+//    for (NSArray *pass in passes) {
+//
+//        glUseProgram((GLuint)[[self.fboPingRenderer.shader objectForKey:@"program"] unsignedIntValue]);
+//        [self.fboPingRenderer.shader setTextureUniformName:@"hero" withTextureName:[pass objectAtIndex:0] renderer:self];
+//        [self.fboPingRenderer render];
+//
+//        glUseProgram((GLuint)[[self.fboPongRenderer.shader objectForKey:@"program"] unsignedIntValue]);
+//        [self.fboPongRenderer.shader setTextureUniformName:@"hero" withTextureName:[pass objectAtIndex:1] renderer:self];
+//        [self.fboPongRenderer render];
+//    }
 
 }
 
