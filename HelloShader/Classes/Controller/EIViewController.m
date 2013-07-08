@@ -37,11 +37,11 @@
     GLView *glView = (GLView *)self.view;
     glView.renderer = self.renderer;
     
-	EITextureOldSchool *texture_0 = [[ [EITextureOldSchool alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
-	[self.renderer.rendererHelper.renderables setObject:texture_0 forKey:@"texture_0"];
+	EITextureOldSchool *matte = [[ [EITextureOldSchool alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
+    [self.renderer.rendererHelper.renderables setObject:matte forKey:@"matte"];
 	
-	EITextureOldSchool *texture_1 = [[ [EITextureOldSchool alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
-	[self.renderer.rendererHelper.renderables setObject:texture_1 forKey:@"texture_1"];
+	EITextureOldSchool *hero = [[ [EITextureOldSchool alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
+    [self.renderer.rendererHelper.renderables setObject:hero forKey:@"hero"];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

@@ -22,12 +22,6 @@
 		3107EA091733E01B007E8781 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA081733E01B007E8781 /* GLView.m */; };
 		3107EA161733E036007E8781 /* GLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0C1733E036007E8781 /* GLRenderer.m */; };
 		3107EA191733E036007E8781 /* EITextureOldSchool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA131733E036007E8781 /* EITextureOldSchool.m */; };
-		3107EA601733E051007E8781 /* ShowST.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA281733E051007E8781 /* ShowST.fsh */; };
-		3107EA611733E051007E8781 /* ShowST.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA291733E051007E8781 /* ShowST.vsh */; };
-		3107EA641733E051007E8781 /* TEITexturePairShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */; };
-		3107EA651733E051007E8781 /* TEITexturePairShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2D1733E051007E8781 /* TEITexturePairShader.vsh */; };
-		3107EA661733E051007E8781 /* TEITextureShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2E1733E051007E8781 /* TEITextureShader.fsh */; };
-		3107EA671733E051007E8781 /* TEITextureShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA2F1733E051007E8781 /* TEITextureShader.vsh */; };
 		3107EA721733E051007E8781 /* candycane_scalar_disk.png in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA3C1733E051007E8781 /* candycane_scalar_disk.png */; };
 		3107EA731733E051007E8781 /* diagnostic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA3D1733E051007E8781 /* diagnostic.png */; };
 		3107EA741733E051007E8781 /* dylan.png in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA3E1733E051007E8781 /* dylan.png */; };
@@ -53,6 +47,18 @@
 		3199A8541734525400873A93 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A84C1734525400873A93 /* Icon.png */; };
 		3199A8561734525400873A93 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A84E1734525400873A93 /* Icon@2x.png */; };
 		3199A8571734525400873A93 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 3199A84F1734525400873A93 /* iTunesArtwork */; };
+		31A44501178AE0C5004858A6 /* EISGaussianBlurEastWest.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F5178AE0C5004858A6 /* EISGaussianBlurEastWest.fsh */; };
+		31A44502178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F6178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh */; };
+		31A44503178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F7178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh */; };
+		31A44504178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F8178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh */; };
+		31A44505178AE0C5004858A6 /* EISShowShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F9178AE0C5004858A6 /* EISShowShader.fsh */; };
+		31A44506178AE0C5004858A6 /* EISShowShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FA178AE0C5004858A6 /* EISShowShader.vsh */; };
+		31A44507178AE0C5004858A6 /* EISShowST.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FB178AE0C5004858A6 /* EISShowST.fsh */; };
+		31A44508178AE0C5004858A6 /* EISShowST.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FC178AE0C5004858A6 /* EISShowST.vsh */; };
+		31A44509178AE0C5004858A6 /* EISTexturePairShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FD178AE0C5004858A6 /* EISTexturePairShader.fsh */; };
+		31A4450A178AE0C5004858A6 /* EISTexturePairShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FE178AE0C5004858A6 /* EISTexturePairShader.vsh */; };
+		31A4450B178AE0C5004858A6 /* EISTextureShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FF178AE0C5004858A6 /* EISTextureShader.fsh */; };
+		31A4450C178AE0C5004858A6 /* EISTextureShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A44500178AE0C5004858A6 /* EISTextureShader.vsh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,12 +86,6 @@
 		3107EA0C1733E036007E8781 /* GLRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLRenderer.m; sourceTree = "<group>"; };
 		3107EA121733E036007E8781 /* EITextureOldSchool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EITextureOldSchool.h; sourceTree = "<group>"; };
 		3107EA131733E036007E8781 /* EITextureOldSchool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EITextureOldSchool.m; sourceTree = "<group>"; };
-		3107EA281733E051007E8781 /* ShowST.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.fsh; sourceTree = "<group>"; };
-		3107EA291733E051007E8781 /* ShowST.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShowST.vsh; sourceTree = "<group>"; };
-		3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITexturePairShader.fsh; sourceTree = "<group>"; };
-		3107EA2D1733E051007E8781 /* TEITexturePairShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITexturePairShader.vsh; sourceTree = "<group>"; };
-		3107EA2E1733E051007E8781 /* TEITextureShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITextureShader.fsh; sourceTree = "<group>"; };
-		3107EA2F1733E051007E8781 /* TEITextureShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TEITextureShader.vsh; sourceTree = "<group>"; };
 		3107EA3C1733E051007E8781 /* candycane_scalar_disk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = candycane_scalar_disk.png; sourceTree = "<group>"; };
 		3107EA3D1733E051007E8781 /* diagnostic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = diagnostic.png; sourceTree = "<group>"; };
 		3107EA3E1733E051007E8781 /* dylan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dylan.png; sourceTree = "<group>"; };
@@ -117,6 +117,18 @@
 		3199A84C1734525400873A93 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		3199A84E1734525400873A93 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		3199A84F1734525400873A93 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		31A444F5178AE0C5004858A6 /* EISGaussianBlurEastWest.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISGaussianBlurEastWest.fsh; sourceTree = "<group>"; };
+		31A444F6178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISGaussianBlurEastWest.vsh; sourceTree = "<group>"; };
+		31A444F7178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISGaussianBlurNorthSouth.fsh; sourceTree = "<group>"; };
+		31A444F8178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISGaussianBlurNorthSouth.vsh; sourceTree = "<group>"; };
+		31A444F9178AE0C5004858A6 /* EISShowShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowShader.fsh; sourceTree = "<group>"; };
+		31A444FA178AE0C5004858A6 /* EISShowShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowShader.vsh; sourceTree = "<group>"; };
+		31A444FB178AE0C5004858A6 /* EISShowST.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowST.fsh; sourceTree = "<group>"; };
+		31A444FC178AE0C5004858A6 /* EISShowST.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowST.vsh; sourceTree = "<group>"; };
+		31A444FD178AE0C5004858A6 /* EISTexturePairShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISTexturePairShader.fsh; sourceTree = "<group>"; };
+		31A444FE178AE0C5004858A6 /* EISTexturePairShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISTexturePairShader.vsh; sourceTree = "<group>"; };
+		31A444FF178AE0C5004858A6 /* EISTextureShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISTextureShader.fsh; sourceTree = "<group>"; };
+		31A44500178AE0C5004858A6 /* EISTextureShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISTextureShader.vsh; sourceTree = "<group>"; };
 		31EA2CE617343C6A00B01CF6 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -170,8 +182,8 @@
 			children = (
 				3199A8471734525400873A93 /* Icons */,
 				3107E9F81733DEFE007E8781 /* Classes */,
-				3107EA1B1733E051007E8781 /* Shaders */,
 				3107EA341733E051007E8781 /* Textures */,
+				31A444F4178AE0C5004858A6 /* Shaders */,
 				3107E9ED1733DD86007E8781 /* EIViewController_iPhone.xib */,
 				3107E9F01733DD86007E8781 /* EIViewController_iPad.xib */,
 				3107E9D91733DD86007E8781 /* Supporting Files */,
@@ -261,19 +273,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		3107EA1B1733E051007E8781 /* Shaders */ = {
-			isa = PBXGroup;
-			children = (
-				3107EA281733E051007E8781 /* ShowST.fsh */,
-				3107EA291733E051007E8781 /* ShowST.vsh */,
-				3107EA2C1733E051007E8781 /* TEITexturePairShader.fsh */,
-				3107EA2D1733E051007E8781 /* TEITexturePairShader.vsh */,
-				3107EA2E1733E051007E8781 /* TEITextureShader.fsh */,
-				3107EA2F1733E051007E8781 /* TEITextureShader.vsh */,
-			);
-			path = Shaders;
-			sourceTree = "<group>";
-		};
 		3107EA341733E051007E8781 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +313,25 @@
 				3199A84F1734525400873A93 /* iTunesArtwork */,
 			);
 			path = Icons;
+			sourceTree = "<group>";
+		};
+		31A444F4178AE0C5004858A6 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				31A444F5178AE0C5004858A6 /* EISGaussianBlurEastWest.fsh */,
+				31A444F6178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh */,
+				31A444F7178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh */,
+				31A444F8178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh */,
+				31A444F9178AE0C5004858A6 /* EISShowShader.fsh */,
+				31A444FA178AE0C5004858A6 /* EISShowShader.vsh */,
+				31A444FB178AE0C5004858A6 /* EISShowST.fsh */,
+				31A444FC178AE0C5004858A6 /* EISShowST.vsh */,
+				31A444FD178AE0C5004858A6 /* EISTexturePairShader.fsh */,
+				31A444FE178AE0C5004858A6 /* EISTexturePairShader.vsh */,
+				31A444FF178AE0C5004858A6 /* EISTextureShader.fsh */,
+				31A44500178AE0C5004858A6 /* EISTextureShader.vsh */,
+			);
+			path = Shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -368,13 +386,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3107EA601733E051007E8781 /* ShowST.fsh in Resources */,
-				3107EA611733E051007E8781 /* ShowST.vsh in Resources */,
-				3107EA641733E051007E8781 /* TEITexturePairShader.fsh in Resources */,
-				3107EA651733E051007E8781 /* TEITexturePairShader.vsh in Resources */,
-				3107EA661733E051007E8781 /* TEITextureShader.fsh in Resources */,
-				3107EA671733E051007E8781 /* TEITextureShader.vsh in Resources */,
 				3107E9DD1733DD86007E8781 /* InfoPlist.strings in Resources */,
+				31A44501178AE0C5004858A6 /* EISGaussianBlurEastWest.fsh in Resources */,
+				31A44502178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh in Resources */,
+				31A44503178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh in Resources */,
+				31A44504178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh in Resources */,
+				31A44505178AE0C5004858A6 /* EISShowShader.fsh in Resources */,
+				31A44506178AE0C5004858A6 /* EISShowShader.vsh in Resources */,
+				31A44507178AE0C5004858A6 /* EISShowST.fsh in Resources */,
+				31A44508178AE0C5004858A6 /* EISShowST.vsh in Resources */,
+				31A44509178AE0C5004858A6 /* EISTexturePairShader.fsh in Resources */,
+				31A4450A178AE0C5004858A6 /* EISTexturePairShader.vsh in Resources */,
+				31A4450B178AE0C5004858A6 /* EISTextureShader.fsh in Resources */,
+				31A4450C178AE0C5004858A6 /* EISTextureShader.vsh in Resources */,
 				3107E9E51733DD86007E8781 /* Default.png in Resources */,
 				3107E9E71733DD86007E8781 /* Default@2x.png in Resources */,
 				3107E9E91733DD86007E8781 /* Default-568h@2x.png in Resources */,

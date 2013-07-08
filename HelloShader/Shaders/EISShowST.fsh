@@ -1,13 +1,8 @@
 //
-//  ShowST.fsh
-//  HelloiPadGLSL
-//
-//  Created by turner on 2/25/10.
-//  Copyright Douglass Turner Consulting 2010. All rights reserved.
+//  EISShowST.fsh
 //
 precision highp float;
 
-//varying lowp	vec4 v_rgba;
 varying			vec2 v_st;
 void main() {
 	

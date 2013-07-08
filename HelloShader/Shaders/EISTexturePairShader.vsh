@@ -1,9 +1,5 @@
 //
-//  TEITextureShader.vsh
-//  HelloiPadGLSL
-//
-//  Created by turner on 2/25/10.
-//  Copyright Douglass Turner Consulting 2010. All rights reserved.
+//  EISOverShader.vsh
 //
 
 attribute mediump	vec2	vertexST;

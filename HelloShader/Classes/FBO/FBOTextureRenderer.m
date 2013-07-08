@@ -93,11 +93,11 @@
 
     EITextureOldSchool *texture;
     glActiveTexture(GL_TEXTURE0 + 0);
-    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
+    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"hero"];
     glBindTexture(GL_TEXTURE_2D, texture.name);
 
     glActiveTexture(GL_TEXTURE0 + 1);
-    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
+    texture = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"matte"];
     glBindTexture(GL_TEXTURE_2D, texture.name);
 
 

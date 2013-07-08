@@ -204,7 +204,7 @@
     [self configureFBOWithFramebufferSize:framebufferSize];
 
     // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
-    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"TEITextureShader"];
+    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISTextureShader"];
     glUseProgram(self.shaderProgram);
 
     // Get shaderProgram uniform pointers
@@ -222,17 +222,15 @@
     FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
 
     EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
-    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"texture_0"] forKey:@"texture_0"];
-    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"texture_1"] forKey:@"texture_1"];
+    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"hero" ] forKey:@"hero" ];
+    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"matte"] forKey:@"matte"];
 
     self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:[[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease]
                                                           fboTextureRenderTarget:fboTextureRenderTarget
                                                                   rendererHelper:rendererHelper] autorelease];
 
     // Configure fbo shader - specifically for texture pair shader
-    NSString *shaderPrefix = @"TEITexturePairShader";
-//    NSString *shaderPrefix = @"TEITextureShader";
-//    NSString *shaderPrefix = @"ShowST";
+    NSString *shaderPrefix = @"EISTexturePairShader";
     self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:shaderPrefix];
 
     glUseProgram(self.fboTextureRenderer.shaderProgram);
@@ -247,13 +245,13 @@
     EITextureOldSchool *texas;
 
     // Texture unit 0
-    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_0"];
-    texas.glslSampler = (GLuint)glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "myTexture_0");
+    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"hero"];
+    texas.glslSampler = (GLuint)glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "hero");
     glUniform1i(texas.glslSampler, 0);
 
     // Texture unit 1
-    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"texture_1"];
-    texas.glslSampler = (GLuint)glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "myTexture_1");
+    texas = (EITextureOldSchool *)[self.rendererHelper.renderables objectForKey:@"matte"];
+    texas.glslSampler = (GLuint)glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "matte");
     glUniform1i(texas.glslSampler, 1);
 }
 
@@ -281,7 +279,7 @@
 
     // Use the fbo texture target as the texture map for the shader used to render
     EITextureOldSchool *texas = self.fboTextureRenderer.fboTextureRenderTarget.textureTarget;
-    texas.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "myTexture_0");
+    texas.glslSampler = (GLuint)glGetUniformLocation(self.shaderProgram, "hero");
     glUniform1i(texas.glslSampler, 0);
 
     glActiveTexture(GL_TEXTURE0 + 0);

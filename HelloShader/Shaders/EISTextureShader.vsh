@@ -1,5 +1,5 @@
 //
-//  ShowST.vsh
+//  EISTextureShader.vsh
 //  HelloiPadGLSL
 //
 //  Created by turner on 2/25/10.
@@ -27,9 +27,8 @@ varying	mediump vec2 v_st;
 void main() {
 
 	gl_Position = projectionViewModelMatrix * vertexXYZ;
-	
+
 	vec4 worldSpaceVertex = modelMatrix * vertexXYZ;
 
-	v_st = vertexST;
-
+	v_st	= vertexST;
 }

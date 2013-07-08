@@ -1,9 +1,5 @@
 //
-//  TEITextureShader.vsh
-//  HelloiPadGLSL
-//
-//  Created by turner on 2/25/10.
-//  Copyright Douglass Turner Consulting 2010. All rights reserved.
+//  EISShowST.vsh
 //
 
 attribute mediump	vec2	vertexST;
@@ -27,8 +23,9 @@ varying	mediump vec2 v_st;
 void main() {
 
 	gl_Position = projectionViewModelMatrix * vertexXYZ;
-
+	
 	vec4 worldSpaceVertex = modelMatrix * vertexXYZ;
 
-	v_st	= vertexST;
+	v_st = vertexST;
+
 }
