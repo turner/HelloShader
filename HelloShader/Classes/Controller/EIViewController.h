@@ -11,5 +11,5 @@
 @class GLRenderer;
 
 @interface EIViewController : UIViewController
-
+@property(nonatomic, retain) GLRenderer *renderer;
 @end

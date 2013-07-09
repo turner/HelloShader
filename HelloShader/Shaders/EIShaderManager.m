@@ -8,20 +8,39 @@
 
 #import "EIShaderManager.h"
 #import "EITextureOldSchool.h"
+#import "EIAppDelegate.h"
+#import "Logging.h"
+#import "EIViewController.h"
+#import "GLRenderer.h"
+#import "EISRendererHelper.h"
 
 
 @interface EIShaderManager ()
+- (id)initWithRenderHelper:(EISRendererHelper *)renderHelper;
+@property(nonatomic, retain) EISRendererHelper *renderHelper;
 - (void)loadShaderSetupBlocks;
 @end
 
 @implementation EIShaderManager
 
 @synthesize shaderSetupBlocks = _shaderSetupBlocks;
+@synthesize renderHelper = _renderHelper;
 
 - (void)dealloc {
 
+    self.renderHelper = nil;
     self.shaderSetupBlocks = nil;
+
     [super dealloc];
+}
+
+- (id)initWithRenderHelper:(EISRendererHelper *)renderHelper {
+    
+    self = [super init];
+    if (nil != self) {
+        self.renderHelper = renderHelper;        
+    }
+    return self;
 }
 
 -(NSMutableDictionary *)shaderSetupBlocks {
@@ -112,7 +131,8 @@
 
     dispatch_once(&pred, ^{
 
-        shared = [[EIShaderManager alloc] init];
+        EIAppDelegate *appDelegate = (EIAppDelegate *)[UIApplication sharedApplication].delegate;
+        shared = [[EIShaderManager alloc] initWithRenderHelper:appDelegate.viewController.renderer.rendererHelper];
     });
 
     return shared;

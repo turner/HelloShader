@@ -15,7 +15,6 @@
 #import "FBOTextureRenderer.h"
 
 @interface EIViewController ()
-@property(nonatomic, retain) GLRenderer *renderer;
 @end
 
 @implementation EIViewController

@@ -287,6 +287,7 @@
     glVertexAttribPointer(Attribute_VertexXYZ, 3, GL_FLOAT, 0, 0, self.renderSurface.vertices);
     glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
 
+
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	// This application only creates a single color renderbuffer which is already bound at this point.

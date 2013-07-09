@@ -15,5 +15,7 @@ typedef void (^GaussianBlurShaderSetup)(GLuint shaderProgram, EITextureOldSchool
 
 @interface EIShaderManager : NSObject
 @property (nonatomic, retain) NSMutableDictionary *shaderSetupBlocks;
+
 + (EIShaderManager *)sharedShaderManager;
+
 @end
