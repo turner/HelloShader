@@ -12,7 +12,7 @@
 #import "EITextureOldSchool.h"
 #import "Logging.h"
 #import "EIQuad.h"
-#import "FBOTextureRenderTarget.h"
+#import "FBOTextureTarget.h"
 #import "FBOTextureRenderer.h"
 #import "EISGLUtils.h"
 #import "EIShaderManager.h"
@@ -169,15 +169,15 @@
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glFrontFace(GL_CCW);
-    glEnable (GL_BLEND);
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
     // Configure Projection
-    GLfloat near					=   0.1;
-    GLfloat far						= 100.0;
-    GLfloat fieldOfViewInDegreesY	=  90.0;
-    CGFloat aspectRatioWidthOverHeight = framebufferSize.width/ framebufferSize.height;
+    GLfloat near = 0.1;
+    GLfloat far = 100.0;
+    GLfloat fieldOfViewInDegreesY = 90.0;
+    CGFloat aspectRatioWidthOverHeight = framebufferSize.width / framebufferSize.height;
     [self.rendererHelper perspectiveProjectionWithFieldOfViewInDegreesY:fieldOfViewInDegreesY
                                              aspectRatioWidthOverHeight:aspectRatioWidthOverHeight
                                                                    near:near
@@ -187,9 +187,9 @@
     EISVector3D target;
     EISVector3D approximateUp;
 
-    EISVector3DSet(eye,	          0, 0,  0);
-    EISVector3DSet(target,        0, 0, -1);
-    EISVector3DSet(approximateUp, 0, 1,  0);
+    EISVector3DSet(eye, 0, 0, 0);
+    EISVector3DSet(target, 0, 0, -1);
+    EISVector3DSet(approximateUp, 0, 1, 0);
 
     [self.rendererHelper placeCameraAtLocation:eye target:target up:approximateUp];
 
@@ -204,24 +204,26 @@
 
     // Get shaderProgram uniform pointers
     self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.shaderProgram.programHandle, "projectionViewModelMatrix");
-    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram.programHandle, "viewModelMatrix");
-    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram.programHandle, "modelMatrix");
+    self.uniforms[Uniform_ViewModelMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "viewModelMatrix");
+    self.uniforms[Uniform_ModelMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "modelMatrix");
     self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "normalMatrix");
 
     // Configure FBO
     dimen = MIN(framebufferSize.width, framebufferSize.height);
-    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger)dimen
-                                                                                                height:(NSUInteger)dimen] autorelease];
+    EITextureOldSchool *fboTexture = [[[EITextureOldSchool alloc] initFBOTextureWidth:(NSUInteger) dimen
+                                                                               height:(NSUInteger) dimen] autorelease];
 
-    FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
+    FBOTextureTarget *fboTextureTarget = [[[FBOTextureTarget alloc] initWithTextureTarget:fboTexture] autorelease];
 
-    EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
-    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"hero" ] forKey:@"hero" ];
-    [rendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"matte"] forKey:@"matte"];
+    EIQuad *renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease];
 
-    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:[[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease]
-                                                          fboTextureRenderTarget:fboTextureRenderTarget
-                                                                  rendererHelper:rendererHelper] autorelease];
+    EISRendererHelper *fboRendererHelper = [[[EISRendererHelper alloc] init] autorelease];
+    [fboRendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"hero" ] forKey:@"hero" ];
+    [fboRendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"matte"] forKey:@"matte"];
+
+    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:renderSurface
+                                                                fboTextureTarget:fboTextureTarget
+                                                                  rendererHelper:fboRendererHelper] autorelease];
 
 }
 
@@ -244,10 +246,10 @@
 
 
     TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
-    textureShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+    textureShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureTarget.textureTarget);
 
 //    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
-//    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+//    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureTarget.textureTarget);
 
     glUseProgram(self.shaderProgram.programHandle);
 

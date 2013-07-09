@@ -35,7 +35,7 @@
 		3114349E1785FD7A00CCA0EC /* orientation.png in Resources */ = {isa = PBXBuildFile; fileRef = 3114349A1785FD7A00CCA0EC /* orientation.png */; };
 		3114349F1785FD7A00CCA0EC /* swirl.png in Resources */ = {isa = PBXBuildFile; fileRef = 3114349B1785FD7A00CCA0EC /* swirl.png */; };
 		318CA484178605D3000C0253 /* FBOTextureRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA481178605D3000C0253 /* FBOTextureRenderer.m */; };
-		318CA485178605D3000C0253 /* FBOTextureRenderTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA483178605D3000C0253 /* FBOTextureRenderTarget.m */; };
+		318CA485178605D3000C0253 /* FBOTextureTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA483178605D3000C0253 /* FBOTextureTarget.m */; };
 		318CA4881786066E000C0253 /* EIQuad.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA4871786066E000C0253 /* EIQuad.m */; };
 		318CA48E17860952000C0253 /* EISGLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA48C17860952000C0253 /* EISGLUtils.m */; };
 		318CA49917860F82000C0253 /* EISRendererHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA49517860F82000C0253 /* EISRendererHelper.m */; };
@@ -102,8 +102,8 @@
 		3114349B1785FD7A00CCA0EC /* swirl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = swirl.png; sourceTree = "<group>"; };
 		318CA480178605D3000C0253 /* FBOTextureRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBOTextureRenderer.h; sourceTree = "<group>"; };
 		318CA481178605D3000C0253 /* FBOTextureRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBOTextureRenderer.m; sourceTree = "<group>"; };
-		318CA482178605D3000C0253 /* FBOTextureRenderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBOTextureRenderTarget.h; sourceTree = "<group>"; };
-		318CA483178605D3000C0253 /* FBOTextureRenderTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBOTextureRenderTarget.m; sourceTree = "<group>"; };
+		318CA482178605D3000C0253 /* FBOTextureTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBOTextureTarget.h; sourceTree = "<group>"; };
+		318CA483178605D3000C0253 /* FBOTextureTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBOTextureTarget.m; sourceTree = "<group>"; };
 		318CA4861786066E000C0253 /* EIQuad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIQuad.h; sourceTree = "<group>"; };
 		318CA4871786066E000C0253 /* EIQuad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIQuad.m; sourceTree = "<group>"; };
 		318CA48C17860952000C0253 /* EISGLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISGLUtils.m; sourceTree = "<group>"; };
@@ -301,8 +301,8 @@
 			children = (
 				318CA480178605D3000C0253 /* FBOTextureRenderer.h */,
 				318CA481178605D3000C0253 /* FBOTextureRenderer.m */,
-				318CA482178605D3000C0253 /* FBOTextureRenderTarget.h */,
-				318CA483178605D3000C0253 /* FBOTextureRenderTarget.m */,
+				318CA482178605D3000C0253 /* FBOTextureTarget.h */,
+				318CA483178605D3000C0253 /* FBOTextureTarget.m */,
 			);
 			path = FBO;
 			sourceTree = "<group>";
@@ -448,7 +448,7 @@
 				3107EA161733E036007E8781 /* GLRenderer.m in Sources */,
 				3107EA191733E036007E8781 /* EITextureOldSchool.m in Sources */,
 				318CA484178605D3000C0253 /* FBOTextureRenderer.m in Sources */,
-				318CA485178605D3000C0253 /* FBOTextureRenderTarget.m in Sources */,
+				318CA485178605D3000C0253 /* FBOTextureTarget.m in Sources */,
 				318CA4881786066E000C0253 /* EIQuad.m in Sources */,
 				318CA48E17860952000C0253 /* EISGLUtils.m in Sources */,
 				318CA49917860F82000C0253 /* EISRendererHelper.m in Sources */,

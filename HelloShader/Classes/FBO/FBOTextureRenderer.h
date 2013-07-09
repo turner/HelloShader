@@ -8,21 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class FBOTextureRenderTarget;
-@class GLRenderer;
-@class EIQuad;
+@class FBOTextureTarget;
 @class EISRendererHelper;
 @class EIShader;
+@class EIQuad;
 
 @interface FBOTextureRenderer : NSObject
-- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureRenderTarget:(FBOTextureRenderTarget *)fboTextureRenderTarget rendererHelper:(EISRendererHelper *)rendererHelper;
-
-@property(nonatomic, retain) FBOTextureRenderTarget *fboTextureRenderTarget;
+- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureTarget:(FBOTextureTarget *)fboTextureTarget rendererHelper:(EISRendererHelper *)rendererHelper;
+@property(nonatomic, retain) FBOTextureTarget *fboTextureTarget;
 @property(nonatomic, retain) EIShader *shaderProgram;
-
-@property(nonatomic) GLint *uniforms;
-
 - (void)render;
-
-- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader passes:(NSUInteger)passes;
 @end

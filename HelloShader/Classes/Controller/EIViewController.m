@@ -11,7 +11,7 @@
 #import "EITextureOldSchool.h"
 #import "GLRenderer.h"
 #import "EISRendererHelper.h"
-#import "FBOTextureRenderTarget.h"
+#import "FBOTextureTarget.h"
 #import "FBOTextureRenderer.h"
 
 @interface EIViewController ()

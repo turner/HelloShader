@@ -1,20 +1,18 @@
 //
-//  FBOTextureRenderTarget.h
+//  FBOTextureTarget.h
 //  EISElasticImage
 //
 //  Created by Douglass Turner on 1/8/11.
 //  Copyright 2011 Elastic Image Software LLC. All rights reserved.
 //
 
-#import "FBOTextureRenderTarget.h"
+#import "FBOTextureTarget.h"
 #import "GLRenderer.h"
 #import "EITextureOldSchool.h"
 #import "EISGLUtils.h"
 #import "EIQuad.h"
 
-NSString *const kFBOTextureRenderTargetTextureName = @"FBOTextureRenderTargetTextureName";
-
-@implementation FBOTextureRenderTarget
+@implementation FBOTextureTarget
 
 @synthesize textureTarget = _textureTarget;
 @synthesize fbo = _fbo;

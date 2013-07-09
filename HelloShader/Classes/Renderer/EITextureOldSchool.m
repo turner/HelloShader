@@ -313,7 +313,7 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 	return self;
 }
 
-- (id)initFBORenderTextureRGBA8Width:(NSUInteger)width height:(NSUInteger)height {
+- (id)initFBOTextureWidth:(NSUInteger)width height:(NSUInteger)height {
 
     self = [super init];
 

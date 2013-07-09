@@ -7,7 +7,7 @@
 //
 
 #import "FBOTextureRenderer.h"
-#import "FBOTextureRenderTarget.h"
+#import "FBOTextureTarget.h"
 #import "EIQuad.h"
 #import "GLRenderer.h"
 #import "EISRendererHelper.h"
@@ -19,11 +19,12 @@
 @interface FBOTextureRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic, retain) EISRendererHelper *rendererHelper;
+@property(nonatomic) GLint *uniforms;
 @end
 
 @implementation FBOTextureRenderer
 
-@synthesize fboTextureRenderTarget = _fboTextureRenderTarget;
+@synthesize fboTextureTarget = _fboTextureTarget;
 @synthesize renderSurface = _renderSurface;
 @synthesize rendererHelper = _rendererHelper;
 @synthesize uniforms = _uniforms;
@@ -34,14 +35,14 @@
     free(self.uniforms);
 
     self.renderSurface = nil;
-    self.fboTextureRenderTarget = nil;
+    self.fboTextureTarget = nil;
     self.rendererHelper = nil;
     self.shaderProgram = nil;
 
     [super dealloc];
 }
 
-- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureRenderTarget:(FBOTextureRenderTarget *)fboTextureRenderTarget rendererHelper:(EISRendererHelper *)rendererHelper {
+- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureTarget:(FBOTextureTarget *)fboTextureTarget rendererHelper:(EISRendererHelper *)rendererHelper {
 
     self = [super init];
 
@@ -51,14 +52,11 @@
 
         self.renderSurface = renderSurface;
 
-        self.fboTextureRenderTarget = fboTextureRenderTarget;
+        self.fboTextureTarget = fboTextureTarget;
 
         self.rendererHelper = rendererHelper;
 
         [self.rendererHelper setupProjectionViewModelTransformWithRenderSurfaceHalfSize:self.renderSurface.halfSize];
-
-        [self.rendererHelper.renderables setObject:self.fboTextureRenderTarget.textureTarget forKey:kFBOTextureRenderTargetTextureName];
-
 
         // Configure fbo shader - specifically for texture pair shader
         NSString *shaderPrefix = @"EISTexturePairShader";
@@ -85,8 +83,8 @@
     // clear all current texture bindings
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, self.fboTextureRenderTarget.fbo);
-    glViewport(0, 0, self.fboTextureRenderTarget.textureTarget.width, self.fboTextureRenderTarget.textureTarget.height);
+    glBindFramebuffer(GL_FRAMEBUFFER, self.fboTextureTarget.fbo);
+    glViewport(0, 0, self.fboTextureTarget.textureTarget.width, self.fboTextureTarget.textureTarget.height);
 
     glClearColor(0.0f, 0.0f, .0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -128,60 +126,6 @@
 
     // Unbind FBO
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-}
-
-- (void)pingPongWithSeedShader:(GLuint)seedShader pingShader:(GLuint)pingShader pongShader:(GLuint)pongShader passes:(NSUInteger)passes {
-
-//    //
-//    self.shaderProgram = seedShader;
-//
-//
-//
-//
-//
-//    EITexture *texture = [[self.texturePackages objectForKey:textureName] objectForKey:@"texture"];
-//
-//    self.fboPingRenderer = [[[FBOTextureRenderer alloc] initWith ...] autorelease];
-//    self.fboPingRenderer.shader = EISGaussianBlurEastWest;
-//
-//
-//    self.fboPongRenderer = [[[FBOTextureRenderer alloc] initWith ...] autorelease];
-//    self.fboPongRenderer.shader = EISGaussianBlurNorthSouth;
-//
-//
-//
-//
-//    // Render a series of passes. Blurring is achieved on two passes - horizontal then vertical. Over and over again.
-//    NSString *pingTextureName = self.fboPingRenderer.fboTextureRenderTarget.fboTextureTargetName;
-//    NSString *pongTextureName = self.fboPingRenderer.fboTextureRenderTarget.fboTextureTargetName;
-//
-//    NSArray *passes = [NSArray arrayWithObjects:
-//
-//                    // FBO 0 input                             FBO 1 input
-//                    [NSArray arrayWithObjects:@"hero",         pingTextureName, nil],
-//
-//                    // FBO 0 input                             FBO 1 input
-//                    [NSArray arrayWithObjects:pongTextureName, pingTextureName, nil],
-//
-//                    // FBO 0 input                             FBO 1 input
-//                    [NSArray arrayWithObjects:pongTextureName, pingTextureName, nil],
-//
-//                    // FBO 0 input                             FBO 1 input
-//                    [NSArray arrayWithObjects:pongTextureName, pingTextureName, nil],
-//
-//            nil];
-//
-//    for (NSArray *pass in passes) {
-//
-//        glUseProgram((GLuint)[[self.fboPingRenderer.shader objectForKey:@"program"] unsignedIntValue]);
-//        [self.fboPingRenderer.shader setTextureUniformName:@"hero" withTextureName:[pass objectAtIndex:0] renderer:self];
-//        [self.fboPingRenderer render];
-//
-//        glUseProgram((GLuint)[[self.fboPongRenderer.shader objectForKey:@"program"] unsignedIntValue]);
-//        [self.fboPongRenderer.shader setTextureUniformName:@"hero" withTextureName:[pass objectAtIndex:1] renderer:self];
-//        [self.fboPongRenderer render];
-//    }
 
 }
 

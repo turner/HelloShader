@@ -13,7 +13,7 @@
 @interface EITextureOldSchool : NSObject
 
 - (id)initWithImageFile:(NSString *)name extension:(NSString *)extension mipmap:(BOOL)mipmap;
-- (id)initFBORenderTextureRGBA8Width:(NSUInteger)width height:(NSUInteger)height;
+- (id)initFBOTextureWidth:(NSUInteger)width height:(NSUInteger)height;
 
 @property(nonatomic,assign)GLuint name;
 @property(nonatomic,assign)GLuint glslSampler;

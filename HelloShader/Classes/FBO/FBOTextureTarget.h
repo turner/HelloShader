@@ -1,5 +1,5 @@
 ///
-//  FBOTextureRenderTarget.h
+//  FBOTextureTarget.h
 //  EISElasticImage
 //
 //  Created by Douglass Turner on 1/8/11.
@@ -8,12 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *const kFBOTextureRenderTargetTextureName;
-
 @class GLRenderer;
 @class EITextureOldSchool;
 
-@interface FBOTextureRenderTarget : NSObject
+@interface FBOTextureTarget : NSObject
 - (id)initWithTextureTarget:(EITextureOldSchool *)textureTarget;
 @property (nonatomic, retain) EITextureOldSchool *textureTarget;
 @property(nonatomic) GLuint fbo;
