@@ -285,7 +285,7 @@
 
 + (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix {
 
-    EIShader *shaderProgram = [[[EIShader alloc] initWithProgramHandle:glCreateProgram()] autorelease];
+    EIShader *shaderProgram = [[[EIShader alloc] initWithShaderPrefix:shaderPrefix programHandle:glCreateProgram()] autorelease];
 
 	// Compile vertex and fragment shaders
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface EIShader : NSObject
-- (id)initWithProgramHandle:(GLuint)programHandle;
+- (id)initWithShaderPrefix:(NSString *)shaderPrefix programHandle:(GLuint)programHandle;
 @property(nonatomic) GLuint programHandle;
+@property(nonatomic, copy) NSString *shaderPrefix;
 @end

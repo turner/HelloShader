@@ -12,19 +12,21 @@
 @implementation EIShader
 
 @synthesize programHandle = _programHandle;
+@synthesize shaderPrefix = _shaderPrefix;
 
 - (void)dealloc {
 
+    self.shaderPrefix = nil;
     glDeleteProgram(_programHandle);
 
     [super dealloc];
 }
 
-- (id)initWithProgramHandle:(GLuint)programHandle {
+- (id)initWithShaderPrefix:(NSString *)shaderPrefix programHandle:(GLuint)programHandle {
     
     self = [super init];
     if (nil != self) {
-
+        self.shaderPrefix = shaderPrefix;
         self.programHandle = programHandle;
     }
     return self;
