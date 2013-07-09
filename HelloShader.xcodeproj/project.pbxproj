@@ -59,7 +59,8 @@
 		31A4450A178AE0C5004858A6 /* EISTexturePairShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FE178AE0C5004858A6 /* EISTexturePairShader.vsh */; };
 		31A4450B178AE0C5004858A6 /* EISTextureShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FF178AE0C5004858A6 /* EISTextureShader.fsh */; };
 		31A4450C178AE0C5004858A6 /* EISTextureShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A44500178AE0C5004858A6 /* EISTextureShader.vsh */; };
-		CC9866533DE8C5125E1EC07C /* EIShaderProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98644C4137B98577C68B22 /* EIShaderProgram.m */; };
+		CC9866533DE8C5125E1EC07C /* EIShaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98644C4137B98577C68B22 /* EIShaderManager.m */; };
+		CC986DB8B9E6726F30A25BE0 /* EIShader.m in Sources */ = {isa = PBXBuildFile; fileRef = CC986E7BED40E90B7E440413 /* EIShader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -131,8 +132,10 @@
 		31A444FF178AE0C5004858A6 /* EISTextureShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISTextureShader.fsh; sourceTree = "<group>"; };
 		31A44500178AE0C5004858A6 /* EISTextureShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISTextureShader.vsh; sourceTree = "<group>"; };
 		31EA2CE617343C6A00B01CF6 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
-		CC98635A931F2B4755720654 /* EIShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIShaderProgram.h; sourceTree = "<group>"; };
-		CC98644C4137B98577C68B22 /* EIShaderProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIShaderProgram.m; sourceTree = "<group>"; };
+		CC98635A931F2B4755720654 /* EIShaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIShaderManager.h; sourceTree = "<group>"; };
+		CC98644C4137B98577C68B22 /* EIShaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIShaderManager.m; sourceTree = "<group>"; };
+		CC986E7BED40E90B7E440413 /* EIShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIShader.m; sourceTree = "<group>"; };
+		CC986F82706A81C8F97C6FE3 /* EIShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIShader.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -333,8 +336,10 @@
 				31A444FE178AE0C5004858A6 /* EISTexturePairShader.vsh */,
 				31A444FF178AE0C5004858A6 /* EISTextureShader.fsh */,
 				31A44500178AE0C5004858A6 /* EISTextureShader.vsh */,
-				CC98644C4137B98577C68B22 /* EIShaderProgram.m */,
-				CC98635A931F2B4755720654 /* EIShaderProgram.h */,
+				CC98644C4137B98577C68B22 /* EIShaderManager.m */,
+				CC98635A931F2B4755720654 /* EIShaderManager.h */,
+				CC986E7BED40E90B7E440413 /* EIShader.m */,
+				CC986F82706A81C8F97C6FE3 /* EIShader.h */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -448,7 +453,8 @@
 				318CA48E17860952000C0253 /* EISGLUtils.m in Sources */,
 				318CA49917860F82000C0253 /* EISRendererHelper.m in Sources */,
 				318CA49A17860F82000C0253 /* EISVectorMatrix.cpp in Sources */,
-				CC9866533DE8C5125E1EC07C /* EIShaderProgram.m in Sources */,
+				CC9866533DE8C5125E1EC07C /* EIShaderManager.m in Sources */,
+				CC986DB8B9E6726F30A25BE0 /* EIShader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

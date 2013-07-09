@@ -15,7 +15,8 @@
 #import "FBOTextureRenderTarget.h"
 #import "FBOTextureRenderer.h"
 #import "EISGLUtils.h"
-#import "EIShaderProgram.h"
+#import "EIShaderManager.h"
+#import "EIShader.h"
 
 @interface GLRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
@@ -40,9 +41,9 @@
 
 @synthesize uniforms = _uniforms;
 @synthesize texturePackages = _texturePackages;
-@synthesize shaderProgram = _shaderProgram;
 @synthesize rendererHelper = _rendererHelper;
 @synthesize renderSurface = _renderSurface;
+@synthesize shaderProgram = _shaderProgram;
 @synthesize fboTextureRenderer;
 
 - (void) dealloc {
@@ -63,12 +64,7 @@
 		glDeleteRenderbuffers(1, &_depthbuffer);
 		_depthbuffer = 0;
 	}
-	
-	if (_shaderProgram) {
-		glDeleteProgram(_shaderProgram);
-		_shaderProgram = 0;
-	}
-	
+
 	if ([EAGLContext currentContext] == _context) [EAGLContext setCurrentContext:nil];
 	[_context release]; _context = nil;
 
@@ -76,6 +72,7 @@
     self.rendererHelper = nil;
     self.renderSurface = nil;
     self.fboTextureRenderer = nil;
+    self.shaderProgram = nil;
 
     [super dealloc];
 }
@@ -207,13 +204,13 @@
     // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
 //    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISTextureShader"];
     self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISGaussianBlurEastWest"];
-    glUseProgram(self.shaderProgram);
+    glUseProgram(self.shaderProgram.programHandle);
 
     // Get shaderProgram uniform pointers
-    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.shaderProgram, "projectionViewModelMatrix");
-    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram, "viewModelMatrix");
-    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram, "modelMatrix");
-    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram, "normalMatrix");
+    self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.shaderProgram.programHandle, "projectionViewModelMatrix");
+    self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram.programHandle, "viewModelMatrix");
+    self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram.programHandle, "modelMatrix");
+    self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "normalMatrix");
 
 }
 
@@ -235,13 +232,13 @@
     NSString *shaderPrefix = @"EISTexturePairShader";
     self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:shaderPrefix];
 
-    glUseProgram(self.fboTextureRenderer.shaderProgram);
+    glUseProgram(self.fboTextureRenderer.shaderProgram.programHandle);
 
     // Get shaderProgram uniform pointers
-    self.fboTextureRenderer.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "projectionViewModelMatrix");
-    self.fboTextureRenderer.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "viewModelMatrix");
-    self.fboTextureRenderer.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "modelMatrix");
-    self.fboTextureRenderer.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram, "normalMatrix");
+    self.fboTextureRenderer.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "projectionViewModelMatrix");
+    self.fboTextureRenderer.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "viewModelMatrix");
+    self.fboTextureRenderer.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "modelMatrix");
+    self.fboTextureRenderer.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "normalMatrix");
 }
 
 - (void) render {
@@ -262,13 +259,13 @@
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-//    TextureShaderSetup textureShaderSetup = [[EIShaderProgram sharedShaderProgram].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
+//    TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
 //    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
-    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderProgram sharedShaderProgram].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
-    gaussianBlurShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
+    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
-    glUseProgram(self.shaderProgram);
+    glUseProgram(self.shaderProgram.programHandle);
 
     // M - World space - this defaults to the identify matrix
 	glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, [self.rendererHelper modelTransform]);
@@ -298,9 +295,9 @@
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
-- (GLuint)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix {
+- (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix {
 
-    GLuint shaderProgram = glCreateProgram();
+    EIShader *shaderProgram = [[[EIShader alloc] initWithProgramHandle:glCreateProgram()] autorelease];
 
 	// Compile vertex and fragment shaders
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];
@@ -308,7 +305,7 @@
 	if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
 
         ALog(@"Failed to compile vertex shaderProgram");
-		return FALSE;
+		return nil;
 	}
 	
 	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"fsh"];
@@ -316,19 +313,19 @@
 	if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
 
         ALog(@"Failed to compile fragment shaderProgram");
-		return FALSE;
+		return nil;
 	}
 
-    glAttachShader(shaderProgram, vertShader);
-    glAttachShader(shaderProgram, fragShader);
+    glAttachShader(shaderProgram.programHandle, vertShader);
+    glAttachShader(shaderProgram.programHandle, fragShader);
 
-    glBindAttribLocation(shaderProgram, Attribute_VertexXYZ, "vertexXYZ");
-	glBindAttribLocation(shaderProgram, Attribute_VertexST,	 "vertexST");
+    glBindAttribLocation(shaderProgram.programHandle, Attribute_VertexXYZ, "vertexXYZ");
+	glBindAttribLocation(shaderProgram.programHandle, Attribute_VertexST,	 "vertexST");
 
-	if (![self linkProgram:shaderProgram]) {
+	if (![self linkProgram:shaderProgram.programHandle]) {
 
-        ALog(@"Failed to link program: %d", shaderProgram);
-		return FALSE;
+        ALog(@"Failed to link program: %d", shaderProgram.programHandle);
+		return nil;
 	}
 
     if (vertShader) glDeleteShader(vertShader);
@@ -357,7 +354,7 @@
     glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0)
     {
-        GLchar *log = (GLchar *)malloc(logLength);
+        GLchar *log = (GLchar *)malloc((size_t) logLength);
         glGetShaderInfoLog(*shader, logLength, &logLength, log);
         NSLog(@"Shader compile log:\n%s", log);
         free(log);
@@ -384,7 +381,7 @@
     glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0)
     {
-        GLchar *log = (GLchar *)malloc(logLength);
+        GLchar *log = (GLchar *)malloc((size_t) logLength);
         glGetProgramInfoLog(prog, logLength, &logLength, log);
         NSLog(@"Program link log:\n%s", log);
         free(log);
@@ -405,7 +402,7 @@
     glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
     if (logLength > 0)
     {
-        GLchar *log = (GLchar *)malloc(logLength);
+        GLchar *log = (GLchar *)malloc((size_t) logLength);
         glGetProgramInfoLog(prog, logLength, &logLength, log);
         NSLog(@"Program validate log:\n%s", log);
         free(log);

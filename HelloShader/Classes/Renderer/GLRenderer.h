@@ -13,6 +13,7 @@
 @class CAEAGLLayer;
 @class EIQuad;
 @class FBOTextureRenderer;
+@class EIShader;
 
 @interface GLRenderer : NSObject
 
@@ -20,11 +21,11 @@
 
 @property (nonatomic, retain) EISRendererHelper *rendererHelper;
 @property (nonatomic, retain) NSMutableDictionary *texturePackages;
-@property(nonatomic) GLuint shaderProgram;
-@property(nonatomic, retain) FBOTextureRenderer *fboTextureRenderer;
+@property (nonatomic, retain) FBOTextureRenderer *fboTextureRenderer;
+@property (nonatomic, retain) EIShader *shaderProgram;
 
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
 - (void) render;
-- (GLuint)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix;
+- (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix;
 @end
 

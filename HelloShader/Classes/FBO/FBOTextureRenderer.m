@@ -13,7 +13,8 @@
 #import "EISRendererHelper.h"
 #import "EISGLUtils.h"
 #import "EITextureOldSchool.h"
-#import "EIShaderProgram.h"
+#import "EIShaderManager.h"
+#import "EIShader.h"
 
 @interface FBOTextureRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
@@ -22,11 +23,11 @@
 
 @implementation FBOTextureRenderer
 
-@synthesize shaderProgram = _shaderProgram;
 @synthesize fboTextureRenderTarget = _fboTextureRenderTarget;
 @synthesize renderSurface = _renderSurface;
 @synthesize rendererHelper = _rendererHelper;
 @synthesize uniforms = _uniforms;
+@synthesize shaderProgram = _shaderProgram;
 
 - (void)dealloc {
 
@@ -35,11 +36,7 @@
     self.renderSurface = nil;
     self.fboTextureRenderTarget = nil;
     self.rendererHelper = nil;
-
-    if (_shaderProgram) {
-        glDeleteProgram(_shaderProgram);
-        _shaderProgram = 0;
-    }
+    self.shaderProgram = nil;
 
     [super dealloc];
 }
@@ -88,10 +85,10 @@
    	glEnable (GL_BLEND);
    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    TexturePairShaderSetup texturePairShaderSetup = [[EIShaderProgram sharedShaderProgram].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
-    texturePairShaderSetup(self.shaderProgram, [self.rendererHelper.renderables objectForKey:@"matte"], [self.rendererHelper.renderables objectForKey:@"hero"]);
+    TexturePairShaderSetup texturePairShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
+    texturePairShaderSetup(self.shaderProgram.programHandle, [self.rendererHelper.renderables objectForKey:@"matte"], [self.rendererHelper.renderables objectForKey:@"hero"]);
 
-    glUseProgram(self.shaderProgram);
+    glUseProgram(self.shaderProgram.programHandle);
 
     // M - World space - this defaults to the identify matrix
     glUniformMatrix4fv(self.uniforms[Uniform_ModelMatrix], 1, NO, [self.rendererHelper modelTransform]);

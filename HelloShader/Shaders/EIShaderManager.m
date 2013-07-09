@@ -6,22 +6,21 @@
 //
 
 
-#import "EIShaderProgram.h"
+#import "EIShaderManager.h"
 #import "EITextureOldSchool.h"
 
 
-@interface EIShaderProgram ()
+@interface EIShaderManager ()
 - (void)loadShaderSetupBlocks;
 @end
 
-@implementation EIShaderProgram
+@implementation EIShaderManager
 
 @synthesize shaderSetupBlocks = _shaderSetupBlocks;
 
 - (void)dealloc {
 
     self.shaderSetupBlocks = nil;
-
     [super dealloc];
 }
 
@@ -106,14 +105,14 @@
 
 }
 
-+(EIShaderProgram *)sharedShaderProgram {
++(EIShaderManager *)sharedShaderManager {
 
     static dispatch_once_t pred;
-    static EIShaderProgram *shared = nil;
+    static EIShaderManager *shared = nil;
 
     dispatch_once(&pred, ^{
 
-        shared = [[EIShaderProgram alloc] init];
+        shared = [[EIShaderManager alloc] init];
     });
 
     return shared;

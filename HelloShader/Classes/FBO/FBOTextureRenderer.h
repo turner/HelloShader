@@ -12,12 +12,13 @@
 @class GLRenderer;
 @class EIQuad;
 @class EISRendererHelper;
+@class EIShader;
 
 @interface FBOTextureRenderer : NSObject
 - (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureRenderTarget:(FBOTextureRenderTarget *)fboTextureRenderTarget rendererHelper:(EISRendererHelper *)rendererHelper;
 
 @property(nonatomic, retain) FBOTextureRenderTarget *fboTextureRenderTarget;
-@property(nonatomic) GLuint shaderProgram;
+@property(nonatomic, retain) EIShader *shaderProgram;
 
 @property(nonatomic) GLint *uniforms;
 

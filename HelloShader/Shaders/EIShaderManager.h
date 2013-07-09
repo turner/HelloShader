@@ -13,8 +13,7 @@ typedef void (^TextureShaderSetup)(GLuint shaderProgram, EITextureOldSchool *her
 typedef void (^TexturePairShaderSetup)(GLuint shaderProgram, EITextureOldSchool *matte, EITextureOldSchool *hero);
 typedef void (^GaussianBlurShaderSetup)(GLuint shaderProgram, EITextureOldSchool *hero);
 
-@interface EIShaderProgram : NSObject
+@interface EIShaderManager : NSObject
 @property (nonatomic, retain) NSMutableDictionary *shaderSetupBlocks;
-
-+ (EIShaderProgram *)sharedShaderProgram;
++ (EIShaderManager *)sharedShaderManager;
 @end
