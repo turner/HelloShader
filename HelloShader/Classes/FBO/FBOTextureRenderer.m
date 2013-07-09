@@ -58,6 +58,20 @@
         [self.rendererHelper setupProjectionViewModelTransformWithRenderSurfaceHalfSize:self.renderSurface.halfSize];
 
         [self.rendererHelper.renderables setObject:self.fboTextureRenderTarget.textureTarget forKey:kFBOTextureRenderTargetTextureName];
+
+
+        // Configure fbo shader - specifically for texture pair shader
+        NSString *shaderPrefix = @"EISTexturePairShader";
+        self.shaderProgram = [GLRenderer shaderProgramWithShaderPrefix:shaderPrefix];
+
+        glUseProgram(self.shaderProgram.programHandle);
+
+        // Get shaderProgram uniform pointers
+        self.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.shaderProgram.programHandle, "projectionViewModelMatrix");
+        self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram.programHandle, "viewModelMatrix");
+        self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram.programHandle, "modelMatrix");
+        self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "normalMatrix");
+
     }
 
     return self;

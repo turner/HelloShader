@@ -26,6 +26,6 @@
 
 - (BOOL) resizeFromLayer:(CAEAGLLayer *)layer;
 - (void) render;
-- (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix;
++ (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix;
 @end
 

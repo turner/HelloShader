@@ -23,10 +23,9 @@
 @property(nonatomic) GLint *uniforms;
 - (void)setupGLWithFramebufferSize:(CGSize)framebufferSize;
 
-- (void)configureFBOWithFramebufferSize:(CGSize)framebufferSize;
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
-- (BOOL)linkProgram:(GLuint)prog;
-- (BOOL)validateProgram:(GLuint)prog;
++ (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
++ (BOOL)linkProgram:(GLuint)prog;
++ (BOOL)validateProgram:(GLuint)prog;
 @end
 
 @implementation GLRenderer {
@@ -199,8 +198,8 @@
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
     // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
-    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISTextureShader"];
-//    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISGaussianBlurEastWest"];
+    self.shaderProgram = [GLRenderer shaderProgramWithShaderPrefix:@"EISTextureShader"];
+//    self.shaderProgram = [GLRender shaderProgramWithShaderPrefix:@"EISGaussianBlurEastWest"];
     glUseProgram(self.shaderProgram.programHandle);
 
     // Get shaderProgram uniform pointers
@@ -209,14 +208,11 @@
     self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram.programHandle, "modelMatrix");
     self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "normalMatrix");
 
-    [self configureFBOWithFramebufferSize:framebufferSize];
+    // Configure FBO
+    dimen = MIN(framebufferSize.width, framebufferSize.height);
+    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:(NSUInteger)dimen
+                                                                                                height:(NSUInteger)dimen] autorelease];
 
-}
-
-- (void)configureFBOWithFramebufferSize:(CGSize)framebufferSize {
-
-    NSUInteger dimen = (NSUInteger)MIN(framebufferSize.width, framebufferSize.height);
-    EITextureOldSchool *fboRenderTexture = [[[EITextureOldSchool alloc] initFBORenderTextureRGBA8Width:dimen height:dimen] autorelease];
     FBOTextureRenderTarget *fboTextureRenderTarget = [[[FBOTextureRenderTarget alloc] initWithTextureTarget:fboRenderTexture] autorelease];
 
     EISRendererHelper *rendererHelper = [[[EISRendererHelper alloc] init] autorelease];
@@ -227,17 +223,6 @@
                                                           fboTextureRenderTarget:fboTextureRenderTarget
                                                                   rendererHelper:rendererHelper] autorelease];
 
-    // Configure fbo shader - specifically for texture pair shader
-    NSString *shaderPrefix = @"EISTexturePairShader";
-    self.fboTextureRenderer.shaderProgram = [self shaderProgramWithShaderPrefix:shaderPrefix];
-
-    glUseProgram(self.fboTextureRenderer.shaderProgram.programHandle);
-
-    // Get shaderProgram uniform pointers
-    self.fboTextureRenderer.uniforms[Uniform_ProjectionViewModel] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "projectionViewModelMatrix");
-    self.fboTextureRenderer.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "viewModelMatrix");
-    self.fboTextureRenderer.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "modelMatrix");
-    self.fboTextureRenderer.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.fboTextureRenderer.shaderProgram.programHandle, "normalMatrix");
 }
 
 - (void) render {
@@ -259,7 +244,7 @@
 
 
     TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
-    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+    textureShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
 //    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
 //    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
@@ -295,14 +280,14 @@
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
-- (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix {
++ (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix {
 
     EIShader *shaderProgram = [[[EIShader alloc] initWithProgramHandle:glCreateProgram()] autorelease];
 
 	// Compile vertex and fragment shaders
 	NSString *vertShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"vsh"];
 	GLuint vertShader;
-	if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
+	if (![GLRenderer compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
 
         ALog(@"Failed to compile vertex shaderProgram");
 		return nil;
@@ -310,7 +295,7 @@
 	
 	NSString *fragShaderPathname = [[NSBundle mainBundle] pathForResource:shaderPrefix ofType:@"fsh"];
 	GLuint fragShader;
-	if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
+	if (![GLRenderer compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
 
         ALog(@"Failed to compile fragment shaderProgram");
 		return nil;
@@ -322,7 +307,7 @@
     glBindAttribLocation(shaderProgram.programHandle, Attribute_VertexXYZ, "vertexXYZ");
 	glBindAttribLocation(shaderProgram.programHandle, Attribute_VertexST,	 "vertexST");
 
-	if (![self linkProgram:shaderProgram.programHandle]) {
+	if (![GLRenderer linkProgram:shaderProgram.programHandle]) {
 
         ALog(@"Failed to link program: %d", shaderProgram.programHandle);
 		return nil;
@@ -334,7 +319,7 @@
 	return shaderProgram;
 }
 
-- (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file {
++ (BOOL) compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file {
 	GLint status;
 	const GLchar *source;
 	
@@ -371,7 +356,7 @@
 	return TRUE;
 }
 
-- (BOOL) linkProgram:(GLuint)prog {
++ (BOOL) linkProgram:(GLuint)prog {
 	GLint status;
 	
 	glLinkProgram(prog);
@@ -395,7 +380,7 @@
 	return TRUE;
 }
 
-- (BOOL) validateProgram:(GLuint)prog {
++ (BOOL) validateProgram:(GLuint)prog {
 	GLint logLength, status;
 	
 	glValidateProgram(prog);
