@@ -194,16 +194,13 @@
 
     [self.rendererHelper placeCameraAtLocation:eye target:target up:approximateUp];
 
-
     // Configure rendering surface
     CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
-    [self configureFBOWithFramebufferSize:framebufferSize];
-
     // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
-//    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISTextureShader"];
-    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISGaussianBlurEastWest"];
+    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISTextureShader"];
+//    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISGaussianBlurEastWest"];
     glUseProgram(self.shaderProgram.programHandle);
 
     // Get shaderProgram uniform pointers
@@ -211,6 +208,8 @@
     self.uniforms[Uniform_ViewModelMatrix    ] = glGetUniformLocation(self.shaderProgram.programHandle, "viewModelMatrix");
     self.uniforms[Uniform_ModelMatrix        ] = glGetUniformLocation(self.shaderProgram.programHandle, "modelMatrix");
     self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "normalMatrix");
+
+    [self configureFBOWithFramebufferSize:framebufferSize];
 
 }
 
@@ -259,11 +258,11 @@
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-//    TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
-//    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+    TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
+    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
-    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
-    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+//    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
+//    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
     glUseProgram(self.shaderProgram.programHandle);
 

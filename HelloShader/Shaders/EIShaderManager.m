@@ -16,7 +16,6 @@
 
 
 @interface EIShaderManager ()
-- (id)initWithRenderHelper:(EISRendererHelper *)renderHelper;
 @property(nonatomic, retain) EISRendererHelper *renderHelper;
 - (void)loadShaderSetupBlocks;
 @end
@@ -32,15 +31,6 @@
     self.shaderSetupBlocks = nil;
 
     [super dealloc];
-}
-
-- (id)initWithRenderHelper:(EISRendererHelper *)renderHelper {
-    
-    self = [super init];
-    if (nil != self) {
-        self.renderHelper = renderHelper;        
-    }
-    return self;
 }
 
 -(NSMutableDictionary *)shaderSetupBlocks {
@@ -131,8 +121,7 @@
 
     dispatch_once(&pred, ^{
 
-        EIAppDelegate *appDelegate = (EIAppDelegate *)[UIApplication sharedApplication].delegate;
-        shared = [[EIShaderManager alloc] initWithRenderHelper:appDelegate.viewController.renderer.rendererHelper];
+        shared = [[EIShaderManager alloc] init];
     });
 
     return shared;

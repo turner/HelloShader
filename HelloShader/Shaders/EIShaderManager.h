@@ -9,7 +9,6 @@
 
 @class EITextureOldSchool;
 
-typedef void (^GenericShaderSetup)(GLuint shaderProgram, NSDictionary *dictionary);
 typedef void (^TextureShaderSetup)(GLuint shaderProgram, EITextureOldSchool *hero);
 typedef void (^TexturePairShaderSetup)(GLuint shaderProgram, EITextureOldSchool *matte, EITextureOldSchool *hero);
 typedef void (^GaussianBlurShaderSetup)(GLuint shaderProgram, EITextureOldSchool *hero);
