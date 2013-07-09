@@ -14,12 +14,12 @@
 
 @implementation FBOTextureTarget
 
-@synthesize textureTarget = _textureTarget;
+@synthesize fboTexture = _fboTexture;
 @synthesize fbo = _fbo;
 
 - (void)dealloc {
 
-    self.textureTarget = nil;
+    self.fboTexture = nil;
 
     if (_fbo) {
         glDeleteFramebuffers(1, &_fbo);
@@ -36,19 +36,19 @@
 
 
 
-- (id)initWithTextureTarget:(EITextureOldSchool *)textureTarget {
+- (id)initWithFBOTexture:(EITextureOldSchool *)fboTexture {
 
     self = [super init];
 
     if (nil != self) {
 
-        self.textureTarget = textureTarget;
+        self.fboTexture = fboTexture;
 
         glGenFramebuffers(1, &_fbo);
         glBindFramebuffer(GL_FRAMEBUFFER, self.fbo);
 
-        // Attach textureTarget to FBO
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.textureTarget.name, 0);
+        // Attach fboTexture to FBO
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.fboTexture.name, 0);
 
         [EISGLUtils FBOStatus];
 

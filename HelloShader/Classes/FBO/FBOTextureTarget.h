@@ -12,7 +12,7 @@
 @class EITextureOldSchool;
 
 @interface FBOTextureTarget : NSObject
-- (id)initWithTextureTarget:(EITextureOldSchool *)textureTarget;
-@property (nonatomic, retain) EITextureOldSchool *textureTarget;
+- (id)initWithFBOTexture:(EITextureOldSchool *)fboTexture;
+@property (nonatomic, retain) EITextureOldSchool *fboTexture;
 @property(nonatomic) GLuint fbo;
 @end

@@ -1,5 +1,5 @@
 //
-//  FBOTextureRenderer.h
+//  FBOTextureTargetRenderer.h
 //  EISElasticImage
 //
 //  Created by Douglass Turner on 1/31/11.
@@ -13,7 +13,7 @@
 @class EIShader;
 @class EIQuad;
 
-@interface FBOTextureRenderer : NSObject
+@interface FBOTextureTargetRenderer : NSObject
 - (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureTarget:(FBOTextureTarget *)fboTextureTarget rendererHelper:(EISRendererHelper *)rendererHelper;
 @property(nonatomic, retain) FBOTextureTarget *fboTextureTarget;
 @property(nonatomic, retain) EIShader *shaderProgram;

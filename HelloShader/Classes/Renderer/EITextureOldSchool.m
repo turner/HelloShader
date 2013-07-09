@@ -270,7 +270,7 @@ static uint8_t *GetImageData(CGImageRef image, NGTextureFormat format) {
 			glGenTextures(1, &_name);
 			glBindTexture(GL_TEXTURE_2D, _name);
 
-			// Wrap at textureTarget boundaries
+			// Wrap at fboTexture boundaries
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			

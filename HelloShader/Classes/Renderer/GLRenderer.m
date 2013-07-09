@@ -13,7 +13,7 @@
 #import "Logging.h"
 #import "EIQuad.h"
 #import "FBOTextureTarget.h"
-#import "FBOTextureRenderer.h"
+#import "FBOTextureTargetRenderer.h"
 #import "EISGLUtils.h"
 #import "EIShaderManager.h"
 #import "EIShader.h"
@@ -43,7 +43,7 @@
 @synthesize rendererHelper = _rendererHelper;
 @synthesize renderSurface = _renderSurface;
 @synthesize shaderProgram = _shaderProgram;
-@synthesize fboTextureRenderer;
+@synthesize fboTextureTargetRenderer;
 
 - (void) dealloc {
 
@@ -70,7 +70,7 @@
     self.texturePackages = nil;
     self.rendererHelper = nil;
     self.renderSurface = nil;
-    self.fboTextureRenderer = nil;
+    self.fboTextureTargetRenderer = nil;
     self.shaderProgram = nil;
 
     [super dealloc];
@@ -197,7 +197,7 @@
     CGFloat dimen = (aspectRatioWidthOverHeight < 1) ? aspectRatioWidthOverHeight : 1;
     self.renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(dimen, dimen)] autorelease];
 
-    // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
+    // Configure shader
     self.shaderProgram = [GLRenderer shaderProgramWithShaderPrefix:@"EISTextureShader"];
 //    self.shaderProgram = [GLRender shaderProgramWithShaderPrefix:@"EISGaussianBlurEastWest"];
     glUseProgram(self.shaderProgram.programHandle);
@@ -208,12 +208,13 @@
     self.uniforms[Uniform_ModelMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "modelMatrix");
     self.uniforms[Uniform_SurfaceNormalMatrix] = glGetUniformLocation(self.shaderProgram.programHandle, "normalMatrix");
 
+
     // Configure FBO
     dimen = MIN(framebufferSize.width, framebufferSize.height);
     EITextureOldSchool *fboTexture = [[[EITextureOldSchool alloc] initFBOTextureWidth:(NSUInteger) dimen
                                                                                height:(NSUInteger) dimen] autorelease];
 
-    FBOTextureTarget *fboTextureTarget = [[[FBOTextureTarget alloc] initWithTextureTarget:fboTexture] autorelease];
+    FBOTextureTarget *fboTextureTarget = [[[FBOTextureTarget alloc] initWithFBOTexture:fboTexture] autorelease];
 
     EIQuad *renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease];
 
@@ -221,9 +222,9 @@
     [fboRendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"hero" ] forKey:@"hero" ];
     [fboRendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"matte"] forKey:@"matte"];
 
-    self.fboTextureRenderer = [[[FBOTextureRenderer alloc] initWithRenderSurface:renderSurface
-                                                                fboTextureTarget:fboTextureTarget
-                                                                  rendererHelper:fboRendererHelper] autorelease];
+    self.fboTextureTargetRenderer = [[[FBOTextureTargetRenderer alloc] initWithRenderSurface:renderSurface
+                                                                            fboTextureTarget:fboTextureTarget
+                                                                              rendererHelper:fboRendererHelper] autorelease];
 
 }
 
@@ -232,7 +233,7 @@
     [EAGLContext setCurrentContext:_context];
 
     // render to texture
-    [self.fboTextureRenderer render];
+    [self.fboTextureTargetRenderer render];
 
     // clear all current texture bindings
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -246,10 +247,10 @@
 
 
     TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
-    textureShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureTarget.textureTarget);
+    textureShaderSetup(self.shaderProgram.programHandle, self.fboTextureTargetRenderer.fboTextureTarget.fboTexture);
 
 //    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
-//    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureRenderer.fboTextureTarget.textureTarget);
+//    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureTargetRenderer.fboTextureTarget.fboTexture);
 
     glUseProgram(self.shaderProgram.programHandle);
 

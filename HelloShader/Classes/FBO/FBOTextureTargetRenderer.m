@@ -1,12 +1,12 @@
 //
-//  FBOTextureRenderer.m
+//  FBOTextureTargetRenderer.m
 //  EISElasticImage
 //
 //  Created by Douglass Turner on 1/31/11.
 //  Copyright 2011 Elastic Image Software LLC. All rights reserved.
 //
 
-#import "FBOTextureRenderer.h"
+#import "FBOTextureTargetRenderer.h"
 #import "FBOTextureTarget.h"
 #import "EIQuad.h"
 #import "GLRenderer.h"
@@ -16,13 +16,13 @@
 #import "EIShaderManager.h"
 #import "EIShader.h"
 
-@interface FBOTextureRenderer ()
+@interface FBOTextureTargetRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic, retain) EISRendererHelper *rendererHelper;
 @property(nonatomic) GLint *uniforms;
 @end
 
-@implementation FBOTextureRenderer
+@implementation FBOTextureTargetRenderer
 
 @synthesize fboTextureTarget = _fboTextureTarget;
 @synthesize renderSurface = _renderSurface;
@@ -84,7 +84,7 @@
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glBindFramebuffer(GL_FRAMEBUFFER, self.fboTextureTarget.fbo);
-    glViewport(0, 0, self.fboTextureTarget.textureTarget.width, self.fboTextureTarget.textureTarget.height);
+    glViewport(0, 0, self.fboTextureTarget.fboTexture.width, self.fboTextureTarget.fboTexture.height);
 
     glClearColor(0.0f, 0.0f, .0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);

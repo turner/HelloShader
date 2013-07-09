@@ -7,13 +7,13 @@
 
 //#import <c++/v1/streambuf>
 #import "EIQuad.h"
-#import "FBOTextureRenderer.h"
+#import "FBOTextureTargetRenderer.h"
 #import "EISRendererHelper.h"
 #import "Logging.h"
 
 @implementation EISRendererHelper
 
-//@synthesize textureTarget;
+//@synthesize fboTexture;
 @synthesize renderables;
 @synthesize viewportSize;
 
@@ -596,7 +596,7 @@
         
     } // for (12)
 
-   	// setup vertices of textureTarget surface
+   	// setup vertices of fboTexture surface
    	NSUInteger stride = 3;
    	NSUInteger xOffset = 0;
    	NSUInteger yOffset = 1;
