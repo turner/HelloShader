@@ -6,15 +6,15 @@
 //
 
 
-#import "EIShader.h"
+#import "EIShaderProgram.h"
 #import "EITextureOldSchool.h"
 
 
-@interface EIShader ()
+@interface EIShaderProgram ()
 - (void)loadShaderSetupBlocks;
 @end
 
-@implementation EIShader
+@implementation EIShaderProgram
 
 @synthesize shaderSetupBlocks = _shaderSetupBlocks;
 
@@ -37,7 +37,7 @@
 
 - (void)loadShaderSetupBlocks {
 
-    EIShaderTextureShaderSetup textureShaderSetup = ^(GLuint sh, EITextureOldSchool *hero) {
+    TextureShaderSetup textureShaderSetup = ^(GLuint sh, EITextureOldSchool *hero) {
 
         GLint textureUnitIndex;
         glUseProgram(sh);
@@ -51,7 +51,7 @@
         glBindTexture(GL_TEXTURE_2D, hero.name);
     };
 
-    EIShaderTexturePairShaderSetup texturePairShaderSetup = ^(GLuint sh, EITextureOldSchool *matte, EITextureOldSchool *hero) {
+    TexturePairShaderSetup texturePairShaderSetup = ^(GLuint sh, EITextureOldSchool *matte, EITextureOldSchool *hero) {
 
         GLint textureUnitIndex;
         glUseProgram(sh);
@@ -75,7 +75,7 @@
         glBindTexture(GL_TEXTURE_2D, hero.name);
     };
 
-    EIShaderGaussianBlurShaderSetup gaussianBlurShaderSetup = ^(GLuint sh, EITextureOldSchool *hero) {
+    GaussianBlurShaderSetup gaussianBlurShaderSetup = ^(GLuint sh, EITextureOldSchool *hero) {
 
         GLint location;
         GLint textureUnitIndex;
@@ -106,14 +106,14 @@
 
 }
 
-+(EIShader *)sharedEIShader {
++(EIShaderProgram *)sharedShaderProgram {
 
     static dispatch_once_t pred;
-    static EIShader *shared = nil;
+    static EIShaderProgram *shared = nil;
 
     dispatch_once(&pred, ^{
 
-        shared = [[EIShader alloc] init];
+        shared = [[EIShaderProgram alloc] init];
     });
 
     return shared;

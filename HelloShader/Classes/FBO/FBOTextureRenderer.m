@@ -13,7 +13,7 @@
 #import "EISRendererHelper.h"
 #import "EISGLUtils.h"
 #import "EITextureOldSchool.h"
-#import "EIShader.h"
+#import "EIShaderProgram.h"
 
 @interface FBOTextureRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
@@ -88,7 +88,7 @@
    	glEnable (GL_BLEND);
    	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    EIShaderTexturePairShaderSetup texturePairShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
+    TexturePairShaderSetup texturePairShaderSetup = [[EIShaderProgram sharedShaderProgram].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
     texturePairShaderSetup(self.shaderProgram, [self.rendererHelper.renderables objectForKey:@"matte"], [self.rendererHelper.renderables objectForKey:@"hero"]);
 
     glUseProgram(self.shaderProgram);

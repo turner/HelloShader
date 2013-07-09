@@ -15,7 +15,7 @@
 #import "FBOTextureRenderTarget.h"
 #import "FBOTextureRenderer.h"
 #import "EISGLUtils.h"
-#import "EIShader.h"
+#import "EIShaderProgram.h"
 
 @interface GLRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
@@ -246,9 +246,6 @@
 
 - (void) render {
 
-    EITextureOldSchool *texas;
-    GLint textureUnitIndex;
-
     [EAGLContext setCurrentContext:_context];
 
     // render to texture
@@ -265,10 +262,10 @@
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-//    EIShaderTextureShaderSetup textureShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
+//    TextureShaderSetup textureShaderSetup = [[EIShaderProgram sharedShaderProgram].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
 //    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
-    EIShaderGaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
+    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderProgram sharedShaderProgram].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
     gaussianBlurShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
     glUseProgram(self.shaderProgram);
