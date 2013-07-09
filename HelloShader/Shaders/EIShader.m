@@ -77,6 +77,7 @@
 
     EIShaderGaussianBlurShaderSetup gaussianBlurShaderSetup = ^(GLuint sh, EITextureOldSchool *hero) {
 
+        GLint location;
         GLint textureUnitIndex;
         glUseProgram(sh);
 
@@ -89,10 +90,14 @@
         glActiveTexture((GLenum)(GL_TEXTURE0 + textureUnitIndex));
         glBindTexture(GL_TEXTURE_2D, hero.name);
 
-        float heroWidth = hero.width;
+        float heroWidth  = hero.width;
         float heroHeight = hero.height;
-        glGetUniformfv(sh, glGetUniformLocation(sh, "heroWidth" ), &heroWidth );
-        glGetUniformfv(sh, glGetUniformLocation(sh, "heroHeight"), &heroHeight);
+
+        location = glGetUniformLocation(sh, "heroWidth");
+        glUniform1f(location, heroWidth);
+
+        location = glGetUniformLocation(sh, "heroHeight");
+        glUniform1f(location, heroHeight);
     };
 
     [self.shaderSetupBlocks setObject:textureShaderSetup      forKey:@"textureShaderSetup"];

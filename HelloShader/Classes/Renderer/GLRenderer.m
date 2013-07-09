@@ -205,7 +205,8 @@
     [self configureFBOWithFramebufferSize:framebufferSize];
 
     // Configure shader - this shader will just pass through whatever shading happens in the fbo shader
-    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISTextureShader"];
+//    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISTextureShader"];
+    self.shaderProgram = [self shaderProgramWithShaderPrefix:@"EISGaussianBlurEastWest"];
     glUseProgram(self.shaderProgram);
 
     // Get shaderProgram uniform pointers
@@ -264,8 +265,11 @@
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-    EIShaderTextureShaderSetup textureShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
-    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+//    EIShaderTextureShaderSetup textureShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
+//    textureShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
+
+    EIShaderGaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShader sharedEIShader].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
+    gaussianBlurShaderSetup(self.shaderProgram, self.fboTextureRenderer.fboTextureRenderTarget.textureTarget);
 
     glUseProgram(self.shaderProgram);
 

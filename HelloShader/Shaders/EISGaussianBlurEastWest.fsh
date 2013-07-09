@@ -20,9 +20,9 @@ void main() {
     offset[3] = 3.0; weight[3] = 0.0540540541;
     offset[4] = 4.0; weight[4] = 0.0162162162;
 	
-    vec4 raw = texture2D(hero, v_st);
-	vec3 rgb = texture2D(hero, v_st).rgb;
-     
+    vec4 raw = texture2D(hero, v_st);    
+    vec3 rgb = texture2D(hero, v_st).rgb;
+
     rgb *= weight[0];
 		
 	vec2 st;	
