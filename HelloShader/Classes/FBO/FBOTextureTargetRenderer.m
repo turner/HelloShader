@@ -60,7 +60,7 @@
 
         // Configure fbo shader - specifically for texture pair shader
         NSString *shaderPrefix = @"EISTexturePairShader";
-        self.shaderProgram = [GLRenderer shaderProgramWithShaderPrefix:shaderPrefix];
+        self.shaderProgram = [EIShaderManager shaderProgramWithShaderPrefix:shaderPrefix];
 
         glUseProgram(self.shaderProgram.programHandle);
 

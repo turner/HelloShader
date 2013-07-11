@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 @class EITextureOldSchool;
+@class EIShader;
 
 typedef void (^TextureShaderSetup)(GLuint shaderProgram, EITextureOldSchool *hero);
 typedef void (^TexturePairShaderSetup)(GLuint shaderProgram, EITextureOldSchool *matte, EITextureOldSchool *hero);
@@ -18,4 +19,5 @@ typedef void (^GaussianBlurShaderSetup)(GLuint shaderProgram, EITextureOldSchool
 
 + (EIShaderManager *)sharedShaderManager;
 
++ (EIShader *)shaderProgramWithShaderPrefix:(NSString *)shaderPrefix;
 @end
