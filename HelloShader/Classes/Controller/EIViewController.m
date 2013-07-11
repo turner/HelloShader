@@ -13,6 +13,7 @@
 #import "EISRendererHelper.h"
 #import "FBOTextureTarget.h"
 #import "FBOTextureTargetRenderer.h"
+#import "Logging.h"
 
 @interface EIViewController ()
 @end
@@ -29,6 +30,25 @@
 }
 
 - (void)viewDidLoad {
+
+//    NSString * resourcePath = [[NSBundle mainBundle] resourcePath];
+//
+//    NSError * error = nil;
+//    NSArray * contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:&error];
+//
+//    if (nil != error) {
+//        ALog(@"Error: %@", [error localizedDescription]);
+//    } else {
+//
+//        for (NSString *string in contents) {
+//
+//            if (YES == [string hasSuffix:@"fsh"]) {
+//                ALog(@"%@", string);
+//            }
+//
+//        }
+//
+//    }
 
     self.renderer = [[[GLRenderer alloc] initWithContext:[[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease]
                                             renderHelper:[[[EISRendererHelper alloc] init] autorelease]] autorelease];

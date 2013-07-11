@@ -51,8 +51,6 @@
 		31A44502178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F6178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh */; };
 		31A44503178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F7178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh */; };
 		31A44504178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F8178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh */; };
-		31A44505178AE0C5004858A6 /* EISShowShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444F9178AE0C5004858A6 /* EISShowShader.fsh */; };
-		31A44506178AE0C5004858A6 /* EISShowShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FA178AE0C5004858A6 /* EISShowShader.vsh */; };
 		31A44507178AE0C5004858A6 /* EISShowST.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FB178AE0C5004858A6 /* EISShowST.fsh */; };
 		31A44508178AE0C5004858A6 /* EISShowST.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FC178AE0C5004858A6 /* EISShowST.vsh */; };
 		31A44509178AE0C5004858A6 /* EISTexturePairShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FD178AE0C5004858A6 /* EISTexturePairShader.fsh */; };
@@ -123,8 +121,6 @@
 		31A444F6178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISGaussianBlurEastWest.vsh; sourceTree = "<group>"; };
 		31A444F7178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISGaussianBlurNorthSouth.fsh; sourceTree = "<group>"; };
 		31A444F8178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISGaussianBlurNorthSouth.vsh; sourceTree = "<group>"; };
-		31A444F9178AE0C5004858A6 /* EISShowShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowShader.fsh; sourceTree = "<group>"; };
-		31A444FA178AE0C5004858A6 /* EISShowShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowShader.vsh; sourceTree = "<group>"; };
 		31A444FB178AE0C5004858A6 /* EISShowST.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowST.fsh; sourceTree = "<group>"; };
 		31A444FC178AE0C5004858A6 /* EISShowST.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISShowST.vsh; sourceTree = "<group>"; };
 		31A444FD178AE0C5004858A6 /* EISTexturePairShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EISTexturePairShader.fsh; sourceTree = "<group>"; };
@@ -328,8 +324,6 @@
 				31A444F6178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh */,
 				31A444F7178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh */,
 				31A444F8178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh */,
-				31A444F9178AE0C5004858A6 /* EISShowShader.fsh */,
-				31A444FA178AE0C5004858A6 /* EISShowShader.vsh */,
 				31A444FB178AE0C5004858A6 /* EISShowST.fsh */,
 				31A444FC178AE0C5004858A6 /* EISShowST.vsh */,
 				31A444FD178AE0C5004858A6 /* EISTexturePairShader.fsh */,
@@ -401,8 +395,6 @@
 				31A44502178AE0C5004858A6 /* EISGaussianBlurEastWest.vsh in Resources */,
 				31A44503178AE0C5004858A6 /* EISGaussianBlurNorthSouth.fsh in Resources */,
 				31A44504178AE0C5004858A6 /* EISGaussianBlurNorthSouth.vsh in Resources */,
-				31A44505178AE0C5004858A6 /* EISShowShader.fsh in Resources */,
-				31A44506178AE0C5004858A6 /* EISShowShader.vsh in Resources */,
 				31A44507178AE0C5004858A6 /* EISShowST.fsh in Resources */,
 				31A44508178AE0C5004858A6 /* EISShowST.vsh in Resources */,
 				31A44509178AE0C5004858A6 /* EISTexturePairShader.fsh in Resources */,
