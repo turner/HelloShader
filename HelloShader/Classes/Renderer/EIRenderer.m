@@ -225,28 +225,31 @@
 
     [EAGLContext setCurrentContext:_context];
 
-    // render to texture
-    [self.fboTextureTargetRenderer render];
-
     // clear all current texture bindings
     glBindTexture(GL_TEXTURE_2D, 0);
-
 
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     glViewport(0, 0, _backingWidth, _backingHeight);
 
     glEnable(GL_BLEND);
 
+    // Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // Porter-Duff "over" operation
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFuncSeparate(GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // Using this produces a dark rim at the alpha edge.
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+
+    glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
     TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
-    textureShaderSetup(self.shaderProgram.programHandle, self.fboTextureTargetRenderer.fboTextureTarget.fboTexture);
+    textureShaderSetup(self.shaderProgram.programHandle, [self.rendererHelper.renderables objectForKey:@"hero"]);
 
 //    GaussianBlurShaderSetup gaussianBlurShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"gaussianBlurShaderSetup"];
 //    gaussianBlurShaderSetup(self.shaderProgram.programHandle, self.fboTextureTargetRenderer.fboTextureTarget.fboTexture);

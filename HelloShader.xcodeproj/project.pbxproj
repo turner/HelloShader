@@ -57,6 +57,7 @@
 		31A4450A178AE0C5004858A6 /* EISTexturePairShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FE178AE0C5004858A6 /* EISTexturePairShader.vsh */; };
 		31A4450B178AE0C5004858A6 /* EISTextureShader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A444FF178AE0C5004858A6 /* EISTextureShader.fsh */; };
 		31A4450C178AE0C5004858A6 /* EISTextureShader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 31A44500178AE0C5004858A6 /* EISTextureShader.vsh */; };
+		CC9860E574AF2BF85943AF95 /* alpha_test.png in Resources */ = {isa = PBXBuildFile; fileRef = CC986A123D927F5B660AFA54 /* alpha_test.png */; };
 		CC9866533DE8C5125E1EC07C /* EIShaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98644C4137B98577C68B22 /* EIShaderManager.m */; };
 		CC986DB8B9E6726F30A25BE0 /* EIShader.m in Sources */ = {isa = PBXBuildFile; fileRef = CC986E7BED40E90B7E440413 /* EIShader.m */; };
 /* End PBXBuildFile section */
@@ -129,6 +130,7 @@
 		31EA2CE617343C6A00B01CF6 /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
 		CC98635A931F2B4755720654 /* EIShaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIShaderManager.h; sourceTree = "<group>"; };
 		CC98644C4137B98577C68B22 /* EIShaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIShaderManager.m; sourceTree = "<group>"; };
+		CC986A123D927F5B660AFA54 /* alpha_test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alpha_test.png; sourceTree = "<group>"; };
 		CC986E7BED40E90B7E440413 /* EIShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIShader.m; sourceTree = "<group>"; };
 		CC986F82706A81C8F97C6FE3 /* EIShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIShader.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -286,6 +288,7 @@
 				3107EA3F1733E051007E8781 /* lena.png */,
 				3107EA521733E051007E8781 /* twitter_fail_whale.png */,
 				3107EA531733E051007E8781 /* twitter_fail_whale_red_channnel_knockout.png */,
+				CC986A123D927F5B660AFA54 /* alpha_test.png */,
 			);
 			path = Textures;
 			sourceTree = "<group>";
@@ -421,6 +424,7 @@
 				3114349D1785FD7A00CCA0EC /* mandrill.png in Resources */,
 				3114349E1785FD7A00CCA0EC /* orientation.png in Resources */,
 				3114349F1785FD7A00CCA0EC /* swirl.png in Resources */,
+				CC9860E574AF2BF85943AF95 /* alpha_test.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
