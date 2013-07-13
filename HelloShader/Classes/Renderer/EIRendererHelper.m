@@ -1,19 +1,15 @@
 //
-//  EISRendererHelper.m
+//  EIRendererHelper.m
 //
 //  Created by turner on 3/4/10.
 //  Copyright 2010 Douglass Turner Consulting. All rights reserved.
 //
 
-//#import <c++/v1/streambuf>
-#import "EIQuad.h"
-#import "FBOTextureTargetRenderer.h"
-#import "EISRendererHelper.h"
+#import "EIRendererHelper.h"
 #import "Logging.h"
 
-@implementation EISRendererHelper
+@implementation EIRendererHelper
 
-//@synthesize fboTexture;
 @synthesize renderables;
 @synthesize viewportSize;
 
@@ -121,7 +117,7 @@
 												  near:(GLfloat)near 
 												   far:(GLfloat)far {
 	
-	GLfloat top		= near * tanf( EISDegreeToRadian(fieldOfViewInDegreesY)/2.0 );
+	GLfloat top		= near * tanf( EIDegreeToRadian(fieldOfViewInDegreesY)/2.0 );
 	GLfloat bottom	= -top;
 	
 	GLfloat left	= bottom * aspectRatioWidthOverHeight;
@@ -589,7 +585,7 @@
         return;
     } // if (...)
 
-    GLfloat *template = [EISRendererHelper verticesXYZ_Template];
+    GLfloat *template = [EIRendererHelper verticesXYZ_Template];
     for(NSInteger i = 0; i < 12; i++) {
         
         quadXYZ[i] = template[i];
@@ -642,7 +638,7 @@
 
 + (float) saturate:(float)value {
 
-	return [EISRendererHelper clampValue:value lower:0.0 upper:1.0];
+	return [EIRendererHelper clampValue:value lower:0.0 upper:1.0];
 }
 
 + (float) smoothStepWithValue:(float)value lower:(float)lower upper:(float)upper {
@@ -659,7 +655,7 @@
 	//	// Normalize to 0:1
 	//    value = (value - lower)/(upper - lower);
 
-	value = [EISRendererHelper saturate:(value - lower) / (upper - lower)];
+	value = [EIRendererHelper saturate:(value - lower) / (upper - lower)];
 
     return (value * value * (3.0 - 2.0 * value));
 
@@ -682,7 +678,7 @@
 
 + (float) repeatValue:(float)value frequency:(float)frequency {
 
-	return [EISRendererHelper modWithValue:value * frequency divisor:1.0];
+	return [EIRendererHelper modWithValue:value * frequency divisor:1.0];
 
 }
 
@@ -694,8 +690,8 @@
 
 + (float) pulseWithValue:(float)value leadingEdge:(float)leadingEdge trailingEdge:(float)trailingEdge {
 
-	float  stepLeading = [EISRendererHelper stepWithValue:value edge:leadingEdge];
-	float stepTrailing = [EISRendererHelper stepWithValue:value edge:trailingEdge];
+	float  stepLeading = [EIRendererHelper stepWithValue:value edge:leadingEdge];
+	float stepTrailing = [EIRendererHelper stepWithValue:value edge:trailingEdge];
 
 	return stepLeading - stepTrailing;
 

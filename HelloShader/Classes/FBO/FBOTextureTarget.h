@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class GLRenderer;
+@class EIRenderer;
 @class EITextureOldSchool;
 
 @interface FBOTextureTarget : NSObject

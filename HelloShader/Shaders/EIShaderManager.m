@@ -11,14 +11,14 @@
 #import "EIAppDelegate.h"
 #import "Logging.h"
 #import "EIViewController.h"
-#import "GLRenderer.h"
-#import "EISRendererHelper.h"
+#import "EIRenderer.h"
+#import "EIRendererHelper.h"
 #import "EIShader.h"
-#import "EISGLUtils.h"
+#import "EIGLUtils.h"
 
 
 @interface EIShaderManager ()
-@property(nonatomic, retain) EISRendererHelper *renderHelper;
+@property(nonatomic, retain) EIRendererHelper *renderHelper;
 - (void)loadShaderSetupBlocks;
 @end
 

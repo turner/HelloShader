@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @class FBOTextureTarget;
-@class EISRendererHelper;
+@class EIRendererHelper;
 @class EIShader;
 @class EIQuad;
 
 @interface FBOTextureTargetRenderer : NSObject
-- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureTarget:(FBOTextureTarget *)fboTextureTarget rendererHelper:(EISRendererHelper *)rendererHelper;
+- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureTarget:(FBOTextureTarget *)fboTextureTarget rendererHelper:(EIRendererHelper *)rendererHelper;
 @property(nonatomic, retain) FBOTextureTarget *fboTextureTarget;
 @property(nonatomic, retain) EIShader *shaderProgram;
 - (void)render;

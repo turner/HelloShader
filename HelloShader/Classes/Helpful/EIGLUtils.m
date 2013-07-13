@@ -6,10 +6,10 @@
 //  Copyright 2010 Elastic Image Software LLC. All rights reserved.
 //
 
-#import "EISGLUtils.h"
+#import "EIGLUtils.h"
 #import "Logging.h"
 
-@implementation EISGLUtils
+@implementation EIGLUtils
 
 + (void)clearErrors {
 

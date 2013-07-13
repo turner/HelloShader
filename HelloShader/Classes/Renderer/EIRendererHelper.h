@@ -1,5 +1,5 @@
 //
-//  EISRendererHelper.h
+//  EIRendererHelper.h
 //
 //  Created by turner on 3/4/10.
 //  Copyright 2010 Douglass Turner Consulting. All rights reserved.
@@ -8,9 +8,9 @@
 #import <Foundation/Foundation.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
-#import "EISVectorMatrix.h"
+#import "EIVectorMatrix.h"
 
-@interface EISRendererHelper : NSObject {
+@interface EIRendererHelper : NSObject {
 
 	EISVector3D		m_eye;
 	EISVector3D		m_target;

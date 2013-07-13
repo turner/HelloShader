@@ -40,7 +40,7 @@
 
     self.vertices = (float *)malloc(4 * 3 * sizeof(float));
 
-    GLfloat *template = [EISRendererHelper verticesXYZ_Template];
+    GLfloat *template = [EIRendererHelper verticesXYZ_Template];
     for(NSInteger i = 0; i < 12; i++) self.vertices[i] = template[i];
 
    	// setup vertices of fboTexture surface

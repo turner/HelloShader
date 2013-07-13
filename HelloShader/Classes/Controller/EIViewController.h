@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class GLRenderer;
+@class EIRenderer;
 
 @interface EIViewController : UIViewController
-@property(nonatomic, retain) GLRenderer *renderer;
+@property(nonatomic, retain) EIRenderer *renderer;
 @end

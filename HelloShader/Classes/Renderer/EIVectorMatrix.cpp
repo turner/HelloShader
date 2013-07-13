@@ -9,7 +9,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
-#include "EISVectorMatrix.h"
+#include "EIVectorMatrix.h"
 
 static inline float EISAbs(float x) { 
 	return (x < 0) ? -x : x; 
@@ -221,7 +221,7 @@ void EISMatrix4x4SetXRotationUsingRadians(EISMatrix4x4 matrix, float rad) {
 
 void EISMatrix4x4SetXRotationUsingDegrees(EISMatrix4x4 matrix, float deg) {
 	
-    EISMatrix4x4SetXRotationUsingRadians(matrix, EISDegreeToRadian(deg));
+    EISMatrix4x4SetXRotationUsingRadians(matrix, EIDegreeToRadian(deg));
 }
 
 void EISMatrix4x4SetYRotationUsingRadians(EISMatrix4x4 matrix, float rad) {
@@ -255,7 +255,7 @@ void EISMatrix4x4SetYRotationUsingRadians(EISMatrix4x4 matrix, float rad) {
 
 void EISMatrix4x4SetYRotationUsingDegrees(EISMatrix4x4 matrix, float deg) {
 	
-    EISMatrix4x4SetYRotationUsingRadians(matrix, EISDegreeToRadian(deg));
+    EISMatrix4x4SetYRotationUsingRadians(matrix, EIDegreeToRadian(deg));
 }
 
 void EISMatrix4x4SetZRotationUsingRadians(EISMatrix4x4 matrix, float rad) {
@@ -289,7 +289,7 @@ void EISMatrix4x4SetZRotationUsingRadians(EISMatrix4x4 matrix, float rad) {
 
 void EISMatrix4x4SetZRotationUsingDegrees(EISMatrix4x4 matrix, float deg) {
 	
-    EISMatrix4x4SetZRotationUsingRadians(matrix, EISDegreeToRadian(deg));
+    EISMatrix4x4SetZRotationUsingRadians(matrix, EIDegreeToRadian(deg));
 }
 
 void EISUIViewToWorldSpaceRay (CGPoint inScreenSpace, float *projViewModel, CGSize viewportSize, EISMatrix4x4 inWorldSpace) {

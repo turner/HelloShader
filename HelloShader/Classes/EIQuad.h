@@ -5,7 +5,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EISRendererHelper.h"
+#import "EIRendererHelper.h"
 
 @interface EIQuad : NSObject
 - (id)initWithHalfSize:(CGSize)aHalfSize;

@@ -9,8 +9,8 @@
 #import "EIViewController.h"
 #import "GLView.h"
 #import "EITextureOldSchool.h"
-#import "GLRenderer.h"
-#import "EISRendererHelper.h"
+#import "EIRenderer.h"
+#import "EIRendererHelper.h"
 #import "FBOTextureTarget.h"
 #import "FBOTextureTargetRenderer.h"
 #import "Logging.h"
@@ -50,8 +50,8 @@
 //
 //    }
 
-    self.renderer = [[[GLRenderer alloc] initWithContext:[[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease]
-                                            renderHelper:[[[EISRendererHelper alloc] init] autorelease]] autorelease];
+    self.renderer = [[[EIRenderer alloc] initWithContext:[[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease]
+                                            renderHelper:[[[EIRendererHelper alloc] init] autorelease]] autorelease];
 
     GLView *glView = (GLView *)self.view;
     glView.renderer = self.renderer;

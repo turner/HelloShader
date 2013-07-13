@@ -1,5 +1,5 @@
 //
-//  GLRenderer.h
+//  EIRenderer.h
 //  HelloiPhoneiPodTouchPanorama
 //
 //  Created by turner on 2/25/10.
@@ -9,17 +9,17 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-@class EISRendererHelper;
+@class EIRendererHelper;
 @class CAEAGLLayer;
 @class EIQuad;
 @class FBOTextureTargetRenderer;
 @class EIShader;
 
-@interface GLRenderer : NSObject
+@interface EIRenderer : NSObject
 
-- (id)initWithContext:(EAGLContext *)context renderHelper:(EISRendererHelper *)aRenderHelper;
+- (id)initWithContext:(EAGLContext *)context renderHelper:(EIRendererHelper *)aRenderHelper;
 
-@property (nonatomic, retain) EISRendererHelper *rendererHelper;
+@property (nonatomic, retain) EIRendererHelper *rendererHelper;
 @property (nonatomic, retain) NSMutableDictionary *texturePackages;
 @property (nonatomic, retain) FBOTextureTargetRenderer *fboTextureTargetRenderer;
 @property (nonatomic, retain) EIShader *shaderProgram;

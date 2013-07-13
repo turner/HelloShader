@@ -20,7 +20,7 @@
 		3107EA021733DEFE007E8781 /* EIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107E9FB1733DEFE007E8781 /* EIAppDelegate.m */; };
 		3107EA031733DEFE007E8781 /* EIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107E9FE1733DEFE007E8781 /* EIViewController.m */; };
 		3107EA091733E01B007E8781 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA081733E01B007E8781 /* GLView.m */; };
-		3107EA161733E036007E8781 /* GLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0C1733E036007E8781 /* GLRenderer.m */; };
+		3107EA161733E036007E8781 /* EIRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA0C1733E036007E8781 /* EIRenderer.m */; };
 		3107EA191733E036007E8781 /* EITextureOldSchool.m in Sources */ = {isa = PBXBuildFile; fileRef = 3107EA131733E036007E8781 /* EITextureOldSchool.m */; };
 		3107EA721733E051007E8781 /* candycane_scalar_disk.png in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA3C1733E051007E8781 /* candycane_scalar_disk.png */; };
 		3107EA731733E051007E8781 /* diagnostic.png in Resources */ = {isa = PBXBuildFile; fileRef = 3107EA3D1733E051007E8781 /* diagnostic.png */; };
@@ -37,9 +37,9 @@
 		318CA484178605D3000C0253 /* FBOTextureTargetRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA481178605D3000C0253 /* FBOTextureTargetRenderer.m */; };
 		318CA485178605D3000C0253 /* FBOTextureTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA483178605D3000C0253 /* FBOTextureTarget.m */; };
 		318CA4881786066E000C0253 /* EIQuad.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA4871786066E000C0253 /* EIQuad.m */; };
-		318CA48E17860952000C0253 /* EISGLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA48C17860952000C0253 /* EISGLUtils.m */; };
-		318CA49917860F82000C0253 /* EISRendererHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA49517860F82000C0253 /* EISRendererHelper.m */; };
-		318CA49A17860F82000C0253 /* EISVectorMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 318CA49717860F82000C0253 /* EISVectorMatrix.cpp */; };
+		318CA48E17860952000C0253 /* EIGLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA48C17860952000C0253 /* EIGLUtils.m */; };
+		318CA49917860F82000C0253 /* EIRendererHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 318CA49517860F82000C0253 /* EIRendererHelper.m */; };
+		318CA49A17860F82000C0253 /* EIVectorMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 318CA49717860F82000C0253 /* EIVectorMatrix.cpp */; };
 		3199A8501734525400873A93 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A8481734525400873A93 /* Icon-72.png */; };
 		3199A8511734525400873A93 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A8491734525400873A93 /* Icon-Small-50.png */; };
 		3199A8521734525400873A93 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3199A84A1734525400873A93 /* Icon-Small.png */; };
@@ -81,9 +81,8 @@
 		3107E9FE1733DEFE007E8781 /* EIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIViewController.m; sourceTree = "<group>"; };
 		3107EA071733E01B007E8781 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
 		3107EA081733E01B007E8781 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
-		3107EA0A1733E028007E8781 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
-		3107EA0B1733E036007E8781 /* GLRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderer.h; sourceTree = "<group>"; };
-		3107EA0C1733E036007E8781 /* GLRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLRenderer.m; sourceTree = "<group>"; };
+		3107EA0B1733E036007E8781 /* EIRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIRenderer.h; sourceTree = "<group>"; };
+		3107EA0C1733E036007E8781 /* EIRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIRenderer.m; sourceTree = "<group>"; };
 		3107EA121733E036007E8781 /* EITextureOldSchool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EITextureOldSchool.h; sourceTree = "<group>"; };
 		3107EA131733E036007E8781 /* EITextureOldSchool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EITextureOldSchool.m; sourceTree = "<group>"; };
 		3107EA3C1733E051007E8781 /* candycane_scalar_disk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = candycane_scalar_disk.png; sourceTree = "<group>"; };
@@ -104,12 +103,12 @@
 		318CA483178605D3000C0253 /* FBOTextureTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBOTextureTarget.m; sourceTree = "<group>"; };
 		318CA4861786066E000C0253 /* EIQuad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIQuad.h; sourceTree = "<group>"; };
 		318CA4871786066E000C0253 /* EIQuad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIQuad.m; sourceTree = "<group>"; };
-		318CA48C17860952000C0253 /* EISGLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISGLUtils.m; sourceTree = "<group>"; };
-		318CA48D17860952000C0253 /* EISGLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISGLUtils.h; sourceTree = "<group>"; };
-		318CA49517860F82000C0253 /* EISRendererHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EISRendererHelper.m; sourceTree = "<group>"; };
-		318CA49617860F82000C0253 /* EISRendererHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISRendererHelper.h; sourceTree = "<group>"; };
-		318CA49717860F82000C0253 /* EISVectorMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EISVectorMatrix.cpp; sourceTree = "<group>"; };
-		318CA49817860F82000C0253 /* EISVectorMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EISVectorMatrix.h; sourceTree = "<group>"; };
+		318CA48C17860952000C0253 /* EIGLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIGLUtils.m; sourceTree = "<group>"; };
+		318CA48D17860952000C0253 /* EIGLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIGLUtils.h; sourceTree = "<group>"; };
+		318CA49517860F82000C0253 /* EIRendererHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EIRendererHelper.m; sourceTree = "<group>"; };
+		318CA49617860F82000C0253 /* EIRendererHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIRendererHelper.h; sourceTree = "<group>"; };
+		318CA49717860F82000C0253 /* EIVectorMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EIVectorMatrix.cpp; sourceTree = "<group>"; };
+		318CA49817860F82000C0253 /* EIVectorMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EIVectorMatrix.h; sourceTree = "<group>"; };
 		3199A8481734525400873A93 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		3199A8491734525400873A93 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		3199A84A1734525400873A93 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -243,10 +242,9 @@
 		3107E9FF1733DEFE007E8781 /* Helpful */ = {
 			isa = PBXGroup;
 			children = (
-				318CA48C17860952000C0253 /* EISGLUtils.m */,
-				318CA48D17860952000C0253 /* EISGLUtils.h */,
+				318CA48C17860952000C0253 /* EIGLUtils.m */,
+				318CA48D17860952000C0253 /* EIGLUtils.h */,
 				31EA2CE617343C6A00B01CF6 /* Logging.h */,
-				3107EA0A1733E028007E8781 /* ConstantsAndMacros.h */,
 			);
 			path = Helpful;
 			sourceTree = "<group>";
@@ -254,12 +252,12 @@
 		3107EA001733DEFE007E8781 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
-				318CA49517860F82000C0253 /* EISRendererHelper.m */,
-				318CA49617860F82000C0253 /* EISRendererHelper.h */,
-				318CA49717860F82000C0253 /* EISVectorMatrix.cpp */,
-				318CA49817860F82000C0253 /* EISVectorMatrix.h */,
-				3107EA0B1733E036007E8781 /* GLRenderer.h */,
-				3107EA0C1733E036007E8781 /* GLRenderer.m */,
+				318CA49517860F82000C0253 /* EIRendererHelper.m */,
+				318CA49617860F82000C0253 /* EIRendererHelper.h */,
+				318CA49717860F82000C0253 /* EIVectorMatrix.cpp */,
+				318CA49817860F82000C0253 /* EIVectorMatrix.h */,
+				3107EA0B1733E036007E8781 /* EIRenderer.h */,
+				3107EA0C1733E036007E8781 /* EIRenderer.m */,
 				3107EA121733E036007E8781 /* EITextureOldSchool.h */,
 				3107EA131733E036007E8781 /* EITextureOldSchool.m */,
 			);
@@ -437,14 +435,14 @@
 				3107EA021733DEFE007E8781 /* EIAppDelegate.m in Sources */,
 				3107EA031733DEFE007E8781 /* EIViewController.m in Sources */,
 				3107EA091733E01B007E8781 /* GLView.m in Sources */,
-				3107EA161733E036007E8781 /* GLRenderer.m in Sources */,
+				3107EA161733E036007E8781 /* EIRenderer.m in Sources */,
 				3107EA191733E036007E8781 /* EITextureOldSchool.m in Sources */,
 				318CA484178605D3000C0253 /* FBOTextureTargetRenderer.m in Sources */,
 				318CA485178605D3000C0253 /* FBOTextureTarget.m in Sources */,
 				318CA4881786066E000C0253 /* EIQuad.m in Sources */,
-				318CA48E17860952000C0253 /* EISGLUtils.m in Sources */,
-				318CA49917860F82000C0253 /* EISRendererHelper.m in Sources */,
-				318CA49A17860F82000C0253 /* EISVectorMatrix.cpp in Sources */,
+				318CA48E17860952000C0253 /* EIGLUtils.m in Sources */,
+				318CA49917860F82000C0253 /* EIRendererHelper.m in Sources */,
+				318CA49A17860F82000C0253 /* EIVectorMatrix.cpp in Sources */,
 				CC9866533DE8C5125E1EC07C /* EIShaderManager.m in Sources */,
 				CC986DB8B9E6726F30A25BE0 /* EIShader.m in Sources */,
 			);

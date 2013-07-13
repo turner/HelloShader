@@ -6,18 +6,17 @@
  *
  */
 
-#ifndef _EIS_VECTOR_MATRIX_
-#define _EIS_VECTOR_MATRIX_
+#ifndef _EI_VECTOR_MATRIX_
+#define _EI_VECTOR_MATRIX_
 
 #include <CoreGraphics/CGGeometry.h>
 
-#define EIS_2PI (2.0 * M_PI)
-#define EIS_PI_DIV_180 (0.017453292519943296)
-#define EIS_INV_PI_DIV_180 (57.2957795130823229)
+#define EI_2PI (2.0 * M_PI)
+#define EI_PI_DIV_180 (0.017453292519943296)
+#define EI_180_DIV_PI (57.2957795130823229)
 
-#define EISDegreeToRadian(x)	((x) *     EIS_PI_DIV_180)
-#define EISRadianToDegree(x)	((x) * EIS_INV_PI_DIV_180)
-
+#define EIDegreeToRadian(x)	((x) * EI_PI_DIV_180)
+#define EIRadianToDegree(x)	((x) * EI_180_DIV_PI)
 
 // Handy for 4x4 matrices
 #define _11 0

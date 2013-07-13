@@ -37,7 +37,7 @@ x; \
     } \
 }
 
-@interface EISGLUtils : NSObject
+@interface EIGLUtils : NSObject
 + (void)clearErrors;
 + (void) FBOStatus;
 + (BOOL)error;

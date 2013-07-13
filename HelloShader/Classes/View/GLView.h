@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-@class GLRenderer;
+@class EIRenderer;
 
 @interface GLView : UIView
-@property(nonatomic, retain) GLRenderer *renderer;
+@property(nonatomic, retain) EIRenderer *renderer;
 @end

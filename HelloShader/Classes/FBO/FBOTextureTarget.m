@@ -7,9 +7,9 @@
 //
 
 #import "FBOTextureTarget.h"
-#import "GLRenderer.h"
+#import "EIRenderer.h"
 #import "EITextureOldSchool.h"
-#import "EISGLUtils.h"
+#import "EIGLUtils.h"
 #import "EIQuad.h"
 
 @implementation FBOTextureTarget
@@ -50,7 +50,7 @@
         // Attach fboTexture to FBO
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self.fboTexture.name, 0);
 
-        [EISGLUtils FBOStatus];
+        [EIGLUtils FBOStatus];
 
     }
     

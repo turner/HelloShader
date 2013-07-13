@@ -9,16 +9,16 @@
 #import "FBOTextureTargetRenderer.h"
 #import "FBOTextureTarget.h"
 #import "EIQuad.h"
-#import "GLRenderer.h"
-#import "EISRendererHelper.h"
-#import "EISGLUtils.h"
+#import "EIRenderer.h"
+#import "EIRendererHelper.h"
+#import "EIGLUtils.h"
 #import "EITextureOldSchool.h"
 #import "EIShaderManager.h"
 #import "EIShader.h"
 
 @interface FBOTextureTargetRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
-@property(nonatomic, retain) EISRendererHelper *rendererHelper;
+@property(nonatomic, retain) EIRendererHelper *rendererHelper;
 @property(nonatomic) GLint *uniforms;
 @end
 
@@ -42,7 +42,7 @@
     [super dealloc];
 }
 
-- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureTarget:(FBOTextureTarget *)fboTextureTarget rendererHelper:(EISRendererHelper *)rendererHelper {
+- (id)initWithRenderSurface:(EIQuad *)renderSurface fboTextureTarget:(FBOTextureTarget *)fboTextureTarget rendererHelper:(EIRendererHelper *)rendererHelper {
 
     self = [super init];
 
@@ -58,10 +58,7 @@
 
         [self.rendererHelper setupProjectionViewModelTransformWithRenderSurfaceHalfSize:self.renderSurface.halfSize];
 
-        // Configure fbo shader - specifically for texture pair shader
-        NSString *shaderPrefix = @"EISTexturePairShader";
-        self.shaderProgram = [EIShaderManager shaderProgramWithShaderPrefix:shaderPrefix];
-
+        self.shaderProgram = [EIShaderManager shaderProgramWithShaderPrefix:@"EISTexturePairShader"];
         glUseProgram(self.shaderProgram.programHandle);
 
         // Get shaderProgram uniform pointers
@@ -120,7 +117,7 @@
     glEnableVertexAttribArray(Attribute_VertexST);
 
     glVertexAttribPointer(Attribute_VertexXYZ, 3, GL_FLOAT, 0, 0, self.renderSurface.vertices);
-    glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
+    glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EIRendererHelper verticesST]);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

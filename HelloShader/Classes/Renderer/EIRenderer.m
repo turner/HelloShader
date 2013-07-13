@@ -1,5 +1,5 @@
 //
-//  GLRenderer.m
+//  EIRenderer.m
 //  HelloShader
 //
 //  Created by turner on 2/25/10.
@@ -7,24 +7,24 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import "GLRenderer.h"
-#import "EISRendererHelper.h"
+#import "EIRenderer.h"
+#import "EIRendererHelper.h"
 #import "EITextureOldSchool.h"
 #import "Logging.h"
 #import "EIQuad.h"
 #import "FBOTextureTarget.h"
 #import "FBOTextureTargetRenderer.h"
-#import "EISGLUtils.h"
+#import "EIGLUtils.h"
 #import "EIShaderManager.h"
 #import "EIShader.h"
 
-@interface GLRenderer ()
+@interface EIRenderer ()
 @property(nonatomic, retain) EIQuad *renderSurface;
 @property(nonatomic) GLint *uniforms;
 - (void)setupGLWithFramebufferSize:(CGSize)framebufferSize;
 @end
 
-@implementation GLRenderer {
+@implementation EIRenderer {
 
     EAGLContext *_context;
     GLint _backingWidth;
@@ -72,7 +72,7 @@
     [super dealloc];
 }
 
--(id)initWithContext:(EAGLContext *)context renderHelper:(EISRendererHelper *)aRenderHelper {
+-(id)initWithContext:(EAGLContext *)context renderHelper:(EIRendererHelper *)aRenderHelper {
 
     self = [super init];
 
@@ -214,7 +214,7 @@
 
     EIQuad *renderSurface = [[[EIQuad alloc] initWithHalfSize:CGSizeMake(1, 1)] autorelease];
 
-    EISRendererHelper *fboRendererHelper = [[[EISRendererHelper alloc] init] autorelease];
+    EIRendererHelper *fboRendererHelper = [[[EIRendererHelper alloc] init] autorelease];
     [fboRendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"hero" ] forKey:@"hero" ];
     [fboRendererHelper.renderables setObject:[self.rendererHelper.renderables objectForKey:@"matte"] forKey:@"matte"];
 
@@ -268,7 +268,7 @@
 	glEnableVertexAttribArray(Attribute_VertexST);
 
     glVertexAttribPointer(Attribute_VertexXYZ, 3, GL_FLOAT, 0, 0, self.renderSurface.vertices);
-    glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EISRendererHelper verticesST]);
+    glVertexAttribPointer(Attribute_VertexST,  2, GL_FLOAT, 0, 0, [EIRendererHelper verticesST]);
 
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

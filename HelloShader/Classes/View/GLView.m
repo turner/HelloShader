@@ -7,9 +7,9 @@
 //
 
 #import "GLView.h"
-#import "GLRenderer.h"
+#import "EIRenderer.h"
 #import "Logging.h"
-#import "EISRendererHelper.h"
+#import "EIRendererHelper.h"
 
 @interface GLView ()
 @property(nonatomic,retain)                    id displayLink;
