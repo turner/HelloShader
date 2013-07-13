@@ -58,8 +58,9 @@
     
 	EITextureOldSchool *matte = [[ [EITextureOldSchool alloc] initWithImageFile:@"twitter_fail_whale_red_channnel_knockout" extension:@"png" mipmap:YES ] autorelease];
     [self.renderer.rendererHelper.renderables setObject:matte forKey:@"matte"];
-	
-	EITextureOldSchool *hero = [[ [EITextureOldSchool alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
+
+    EITextureOldSchool *hero = [[ [EITextureOldSchool alloc] initWithImageFile:@"candycane_scalar_disk" extension:@"png" mipmap:YES ] autorelease];
+//    EITextureOldSchool *hero = [[ [EITextureOldSchool alloc] initWithImageFile:@"mandrill" extension:@"png" mipmap:YES ] autorelease];
     [self.renderer.rendererHelper.renderables setObject:hero forKey:@"hero"];
 }
 

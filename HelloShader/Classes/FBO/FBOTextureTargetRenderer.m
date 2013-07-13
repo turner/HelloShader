@@ -83,19 +83,22 @@
     glBindFramebuffer(GL_FRAMEBUFFER, self.fboTextureTarget.fbo);
     glViewport(0, 0, self.fboTextureTarget.fboTexture.width, self.fboTextureTarget.fboTexture.height);
 
-    glClearColor(0.0f, 0.0f, .0f, 1.0f);
+    glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_TEXTURE_2D);
    	glEnable(GL_DEPTH_TEST);
    	glFrontFace(GL_CCW);
 
-    // Pre-multiplied Alpha. This is what is produced by Photoshop when a mask is applied.
    	glEnable (GL_BLEND);
-   	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendFuncSeparateOES(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-    TexturePairShaderSetup texturePairShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
-    texturePairShaderSetup(self.shaderProgram.programHandle, [self.rendererHelper.renderables objectForKey:@"matte"], [self.rendererHelper.renderables objectForKey:@"hero"]);
+//    TexturePairShaderSetup texturePairShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
+//    texturePairShaderSetup(self.shaderProgram.programHandle, [self.rendererHelper.renderables objectForKey:@"matte"], [self.rendererHelper.renderables objectForKey:@"hero"]);
+
+    TextureShaderSetup textureShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"textureShaderSetup"];
+    textureShaderSetup(self.shaderProgram.programHandle, [self.rendererHelper.renderables objectForKey:@"hero"]);
 
     glUseProgram(self.shaderProgram.programHandle);
 
