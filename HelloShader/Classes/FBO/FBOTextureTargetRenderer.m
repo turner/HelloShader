@@ -91,8 +91,11 @@
    	glFrontFace(GL_CCW);
 
    	glEnable (GL_BLEND);
-//    glBlendFuncSeparateOES(GL_ONE, GL_ONE_MINUS_SRC_ALPHA)
-    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+
+//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+    glBlendFuncSeparate(GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
     TexturePairShaderSetup texturePairShaderSetup = [[EIShaderManager sharedShaderManager].shaderSetupBlocks objectForKey:@"texturePairShaderSetup"];
     texturePairShaderSetup(self.shaderProgram.programHandle, [self.rendererHelper.renderables objectForKey:@"matte"], [self.rendererHelper.renderables objectForKey:@"hero"]);

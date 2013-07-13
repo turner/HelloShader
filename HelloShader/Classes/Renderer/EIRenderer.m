@@ -237,11 +237,18 @@
 
     glEnable(GL_BLEND);
 
+    // Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // Porter-Duff "over" operation
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendFuncSeparate(GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // Using this produces a dark rim at the alpha edge.
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+    // DO NOT Use with Photoshop created transparent PNG images which have pre-multiplied alpha
+
+    glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
