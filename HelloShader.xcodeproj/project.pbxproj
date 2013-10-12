@@ -368,6 +368,11 @@
 				CLASSPREFIX = EI;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Elastic Image Software";
+				TargetAttributes = {
+					3107E9CE1733DD86007E8781 = {
+						DevelopmentTeam = NCTVS5F8E2;
+					};
+				};
 			};
 			buildConfigurationList = 3107E9CA1733DD86007E8781 /* Build configuration list for PBXProject "HelloShader" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -545,13 +550,14 @@
 		3107E9F61733DD86007E8781 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Douglass Turner (5K744GLAW9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloShader/HelloShader-Prefix.pch";
 				INFOPLIST_FILE = "HelloShader/HelloShader-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "656F3658-875D-4EEA-B65C-A2ABFF32F71C";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -559,13 +565,14 @@
 		3107E9F71733DD86007E8781 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Douglass Turner (5K744GLAW9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloShader/HelloShader-Prefix.pch";
 				INFOPLIST_FILE = "HelloShader/HelloShader-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "656F3658-875D-4EEA-B65C-A2ABFF32F71C";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
